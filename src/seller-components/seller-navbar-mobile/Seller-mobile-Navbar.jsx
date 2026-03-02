@@ -33,7 +33,19 @@ export default function SellermobileNavbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [tokenPresent, setTokenPresent] = useState(false);
     const router = useRouter();
+    const routeData = [
+        { label: "DashBoard", link: "/seller" },
+        { label: "Products", link: "/seller/products" },
+        { label: "Orders", link: "/seller/orders" },
+        { label: "Create Products", link: "/seller/products/create"},
+        { label: "Check Delivery Status", link: "/" },
+        { label: "Profile", link: "/seller/profile" },
+        
 
+    ];
+     const handleLogOut=()=>{
+        router.push("/")
+    }
 
     // useEffect(() => {  
     //   const usertoken=Cookies.get("usertoken");
@@ -76,26 +88,18 @@ export default function SellermobileNavbar() {
 
                             <div className="space-y-6 border-t border-gray-200 px-4 py-6">
                                 <div className="flex flex-col space-y-3">
-                                    <a
-                                        href="/account"
-                                        className="font-md text-md text-gray-800 hover:text-yellow transition"
-                                    >
-                                        Profile
-                                    </a>
-                                    <a
-                                        href="/setting"
-                                        className="font-md text-md text-gray-800 hover:text-yellow transition"
-                                    >
-                                        Setting
-                                    </a>
-                                    <a
-                                        href="/orders"
-                                        className="font-md text-md text-gray-800 hover:text-yellow transition"
-                                    >
-                                        Orders
-                                    </a>
+                                    {routeData.map((item, index) => (
+                                        <a
+                                            key={index}
+                                            href={item.link}
+                                            className="font-md text-md text-gray-800 hover:text-yellow transition"
+                                        >
+                                            {item.label}
+                                        </a>
+                                    ))}
+                                  
                                     <button
-                                        onClick={() => { setTokenPresent(false) }}
+                                        onClick={() => {handleLogOut() }}
                                         className="font-md text-md text-red-600 hover:text-red-800 transition text-left"
                                     >
                                         Logout

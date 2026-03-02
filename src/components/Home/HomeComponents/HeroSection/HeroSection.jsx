@@ -29,7 +29,7 @@ export default function HeroSection() {
                     </div>
                 </div>
                 <div className=" grid grid-cols-1 place-items-center md:p-5 ">
-                    <img src="/HomeheroSection.png" alt="Hero Image" className="w-full h-auto md:h-screen border rounded border-2 " />
+                    <img src="/HomeheroSection.png" alt="Hero Image" className="w-full h-auto lg:h-screen border rounded border-2 " />
 
                 </div>
             </div>
