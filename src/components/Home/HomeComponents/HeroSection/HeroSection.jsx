@@ -4,11 +4,11 @@ export default function HeroSection() {
 
             <div className=" grid grid-cols-1  p-5 gap-10 ">
                 <div className=" grid grid-cols-1  place-items-center gap-10 md:p-5 lg:p-20">
-                    <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold ">
+                    <h1 className="lg:text-6xl md:text-5xl text-4xl font-bold  text-center">
                         Sell Your Products Online in{" "}
                         <span className="text-yellow-300">Minutes</span>
                     </h1>
-                    <p className="text-lg text-gray-600 text-justify">
+                    <p className="text-lg text-gray-600 text-justify text-center">
                         Launch your own online store with our powerful and easy-to-use platform.
                         No technical skills required. Start selling, manage orders, and grow your business — all in one place.
                     </p>

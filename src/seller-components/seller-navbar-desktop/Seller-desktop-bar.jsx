@@ -1,4 +1,5 @@
 "use client";
+import Cookies from "js-cookie";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
@@ -16,7 +17,8 @@ export default function SellerDesktopBar() {
         { label: "Check Delivery Status", link: "/", icon: FaAdjust },
     ]
     const handleLogOut=()=>{
-        router.push("/")
+        Cookies.remove("sellerToken");
+        router.push("/seller");
     }
     return (
         <>

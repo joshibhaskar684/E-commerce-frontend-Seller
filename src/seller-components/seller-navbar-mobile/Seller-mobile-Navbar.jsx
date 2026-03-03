@@ -92,7 +92,7 @@ export default function SellermobileNavbar() {
                                         <a
                                             key={index}
                                             href={item.link}
-                                            className="font-md text-md text-gray-800 hover:text-yellow transition"
+                                            className="font-md text-md text-foreground hover:text-yellow transition"
                                         >
                                             {item.label}
                                         </a>
