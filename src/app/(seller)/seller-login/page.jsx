@@ -1,29 +1,50 @@
 "use client";
+import { LoginSeller } from "@/redux-store/authstore/user/action";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
+import { useDispatch } from "react-redux";
 
 export default function page({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
     const router=useRouter();
 
 
-    const handlesubmit = (e) => {
-        e.preventDefault();
-        console.log("ghhghgfhf")
-        const formData = new FormData(e.target);
-        const data = {
-            name: formData.get('name'),
-            mobile: formData.get('mobile'),
-            email: formData.get('email'),
-            password: formData.get('password')
+    const dispatch = useDispatch();
+        const handlesubmit = async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                email: formData.get('email'),
+                password: formData.get('password'),
+                router
+            }
+            setLoading(true);
+            try {
+                await dispatch(LoginSeller(data));
+            } catch (e) {
+                
+            } finally {
+                setLoading(false);
+            }
+    
         }
-        if(data.email=="joshibhaskar684@gmail.com"&&data.password==="admin123"){
-            Cookies.set("sellerToken", "2434");
-        }
-        router.push("/seller");
-    }
+    // const handlesubmit = (e) => {
+    //     e.preventDefault();
+    //     console.log("ghhghgfhf")
+    //     const formData = new FormData(e.target);
+    //     const data = {
+    //         name: formData.get('name'),
+    //         mobile: formData.get('mobile'),
+    //         email: formData.get('email'),
+    //         password: formData.get('password')
+    //     }
+    //     if(data.email=="joshibhaskar684@gmail.com"&&data.password==="admin123"){
+    //         Cookies.set("sellerToken", "2434");
+    //     }
+    //     router.push("/seller");
+    // }
 
     return (
         <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
@@ -61,14 +82,15 @@ export default function page({ handleClose, setPage }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                         <button
                             type="submit"
-                            className="py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold hover:opacity-90 transition"
+                            disabled={loading}
+                            className={loading?"py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold opacity-50 transition":"py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold hover:opacity-90 transition"}
                         >
                             {loading ? "Submitting..." : "Submit"}
                         </button>
 
                         <button
                             type="button"
-                            // onClick={() => handleClose()}
+                            onClick={() => router.back()}
                             className="py-2 rounded-lg border cursor-pointer border-foreground text-foreground hover:bg-background hover:text-foreground transition"
                         >
                            Back
@@ -89,7 +111,7 @@ export default function page({ handleClose, setPage }) {
                         Continue with Google
                     </button> */}
                      <p className="text-xs text-foreground/70 text-center mt-4 ">
-                        By clicking, you agree to our<a href="/legal/term" className=" text-yellow-400 cursor-pointer hover:underline"> terms & conditions </a>  and <a className=" text-yellow-400 cursor-pointer hover:underline" href="legal/privacy">privacy policy</a>
+                        By clicking, you agree to our<a href="/legal/terms" className=" text-yellow-400 cursor-pointer hover:underline"> terms & conditions </a>  and <a className=" text-yellow-400 cursor-pointer hover:underline" href="legal/privacy">privacy policy</a>
                     </p>
 
                     {/* <p className="text-sm text-background text-center">

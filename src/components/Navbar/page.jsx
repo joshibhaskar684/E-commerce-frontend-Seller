@@ -45,6 +45,19 @@ export default function Navbar() {
   const [openModal, setOpenModal] = useState(false);
   const [page, setPage] = useState('');
 
+  const NavData = [{ label: "Home", link: "/" },
+  { label: "About", link: "/about" },
+  ];
+
+  useEffect(() => {
+    const usertoken = Cookies.get('sellerToken');
+    if (usertoken) {
+      setTokenPresent(true);
+    } else {
+      setTokenPresent(false);
+    }
+  }, []);
+
   const handleClose = () => {
     setOpenModal(false);
   };
@@ -75,53 +88,49 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {
-                tokenPresent?(
-               <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-  <div className="flex flex-col space-y-3">
-    <a
-      href="/account"
-      className="font-bold text-xl text-gray-800 hover:text-yellow transition"
-    >
-      Profile
-    </a>
-    <a
-      href="/setting"
-      className="font-bold text-xl text-gray-800 hover:text-yellow transition"
-    >
-      Setting
-    </a>
-    <a
-      href="/orders"
-      className="font-bold text-xl text-gray-800 hover:text-yellow transition"
-    >
-      Orders
-    </a>
-    <button
-      onClick={() => {setTokenPresent(false)}}
-      className="font-bold text-xl text-red-600 hover:text-red-800 transition text-left"
-    >
-      Logout
-    </button>
-  </div>
-</div>
-
-            ):( 
-                <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-              <div className="flow-root">
-                <button  onClick={()=>{setOpenModal(true), setPage('login')}} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
-                  Sign in
-                </button>
+              <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                <div className="flow-root">
+                  {
+                    NavData.map((item, index) => (
+                      <a key={index} href={item.link} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
+                        {item.label}
+                      </a>
+                    ))
+                  }
+                </div>
               </div>
-              {/* <div className="flow-root">
-                <button onClick={()=>{setOpenModal(true), setPage('signup')}} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
-                  Create account
-                </button>
-              </div> */}
-            </div>)
+
+              {
+                tokenPresent ? (
+                  <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                    <div className="flex flex-col space-y-3">
+                      <a
+                        href="/seller"
+                        className="font-bold text-xl text-gray-800 hover:text-yellow transition"
+                      >
+                        Seller
+                      </a>
+                      <button
+                        onClick={() => { setTokenPresent(false) }}
+                        className="font-bold text-xl text-red-600 hover:text-red-800 transition text-left"
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+
+                ) : (
+                  <div className="space-y-6 border-t border-gray-200 px-4 py-6">
+                    <div className="flow-root">
+                      <button onClick={() => { setOpenModal(true), setPage('login') }} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
+                        Sign in
+                      </button>
+                    </div>
+
+                  </div>)
               }
 
-             
+
 
             </DialogPanel>
           </div>
@@ -155,89 +164,91 @@ export default function Navbar() {
                   </a>
                 </div>
 
-              
+
 
                 <div className="ml-auto flex justify-end items-center">
-                  {tokenPresent ? (<div className="hidden lg:flex">
-                    <Menu as="div" className="relative ml-3 ">
-                      <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">Open user menu</span>
-                        {/* <img
-                  alt=""
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                  className="size-8 rounded-full bg-gray-800 outline -outline-offset-1 outline-white/10"
-                /> */}
-                        <Avatar
-                          sx={{ bgcolor: 'yellow' }} // MUI theme color
-                          className="w-8 h-8 rounded-full outline outline-1 outline-white/10 text-white font-bold text-2xl"
+
+                  <div className="flex flex-row hidden lg:flex px-5 gap-5">
+                    {
+                      NavData.map((item, index) => (
+                        <a key={index} href={item.link} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
+                          {item.label}
+                        </a>
+                      ))
+                    }
+                  </div>
+                  {
+                    tokenPresent ? (
+                      <div className="hidden lg:flex">
+                        <Menu as="div" className="relative ml-3 ">
+                          <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
+                            <span className="absolute -inset-1.5" />
+                            <span className="sr-only">Open user menu</span>
+
+                            <Avatar
+                              sx={{ bgcolor: 'yellow' }} // MUI theme color
+                              className="w-8 h-8 rounded-full outline outline-1 outline-white/10 text-white font-bold text-2xl"
+                            >
+                              B
+                            </Avatar>
+
+                          </MenuButton>
+                          <MenuItems
+                            transition
+                            className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                          >
+                            
+                            <MenuItem>
+                              <a
+                                href="#"
+                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                              >
+                                Seller
+                              </a>
+                            </MenuItem>
+                            <MenuItem>
+                              <button
+                                // onClick={handleLogOut}
+                                href="#"
+                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                              >
+                                Log out
+                              </button>
+                            </MenuItem>
+                          </MenuItems>
+                        </Menu></div>
+                    ) : (
+                      <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                        <button
+                          onClick={() => {
+                            setOpenModal(true);
+                            setPage('login');
+                          }}
+                          className="text-sm font-medium text-foreground cursor-pointer hover:text-foreground"
                         >
-                          B
-                        </Avatar>
-                      </MenuButton>
-                      <MenuItems
-                        transition
-                        className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                      >
-                        <MenuItem>
-                          <Link
-                            href="/account/order"
-                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                          >
-                            Order
-                          </Link>
-                        </MenuItem>
-                        <MenuItem>
-                          <a
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                          >
-                            Settings
-                          </a>
-                        </MenuItem>
-                        <MenuItem>
-                          <button
-                            // onClick={handleLogOut}
-                            href="#"
-                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                          >
-                            Log out
-                          </button>
-                        </MenuItem>
-                      </MenuItems>
-                    </Menu></div>
-                  ) : (
-                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-                      <button
-                        onClick={() => {
-                          setOpenModal(true);
-                          setPage('login');
-                        }}
-                        className="text-sm font-medium text-foreground cursor-pointer hover:text-foreground"
-                      >
-                        Sign in
-                      </button>
-                      <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                      <a
-                       href="/register"
-                        className="text-sm font-medium cursor-pointer text-foreground hover:text-foreground bg-yellow-500 p-2 rounded font-bold"
-                      >
-                       Start Selling
-                      </a>
-                    </div>
-                  )}
+                          Sign in
+                        </button>
+                        <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
+                        <a
+                          href="/register"
+                          className="text-sm font-medium cursor-pointer text-foreground hover:text-foreground bg-yellow-500 p-2 rounded font-bold"
+                        >
+                          Start Selling
+                        </a>
+                      </div>
+                    )}
 
 
 
-                   {/* Cart */}
-                   <div className='md:hidden'> 
+                  {/* Cart */}
+                  <div className='md:hidden'>
                     <a
-                        href="/register"
-                        className="text-sm font-medium cursor-pointer text-foreground hover:text-foreground bg-yellow-500 p-2 rounded font-bold"
-                      >
-                       Start Selling
-                      </a></div>
-                 
+                      href="/register"
+                      className="text-sm font-medium cursor-pointer text-foreground hover:text-foreground bg-yellow-500 p-2 rounded font-bold"
+                    >
+                      Start Selling
+                    </a></div>
+
                 </div>
               </div>
             </div>
