@@ -9,7 +9,7 @@ export default function layout({children}){
 
             <SellerDesktopBar/>
 
-            <div className="div md:overflow-hidden md:overflow-y-auto w-full p-5"> {children}</div>
+            <div className="div md:overflow-hidden md:overflow-y-auto w-full p-5 hide-scrollbar"> {children}</div>
         </div>
         </>
     )

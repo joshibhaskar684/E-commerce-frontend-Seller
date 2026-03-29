@@ -26,6 +26,7 @@ import Cookies from 'js-cookie'
 import { FaUserCircle } from 'react-icons/fa'
 import Link from 'next/link'
 import AuthModal from '@/components/Modal/AuthModal'
+import { NavRoute } from './../NavRoute';
 
 
 export default function SellermobileNavbar() {
@@ -33,16 +34,7 @@ export default function SellermobileNavbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [tokenPresent, setTokenPresent] = useState(false);
     const router = useRouter();
-    const routeData = [
-        { label: "DashBoard", link: "/seller" },
-        { label: "Products", link: "/seller/products" },
-        { label: "Orders", link: "/seller/orders" },
-        { label: "Create Products", link: "/seller/products/create"},
-        { label: "Check Delivery Status", link: "/" },
-        { label: "Profile", link: "/seller/profile" },
-        
-
-    ];
+    const routeData = NavRoute;
      const handleLogOut=()=>{
         router.push("/")
     }
@@ -62,6 +54,7 @@ export default function SellermobileNavbar() {
     return (
         <>
             <div className="bg-background text-foreground  sticky top-0 z-1 md:hidden">
+                
                 {/* Mobile menu */}
                 <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden">
                     <DialogBackdrop
@@ -71,7 +64,7 @@ export default function SellermobileNavbar() {
                     <div className="fixed inset-0 z-40 flex">
                         <DialogPanel
                             transition
-                            className="relative flex w-full max-w-xs transform flex-col overflow-y-auto bg-background text-foreground  pb-12 shadow-xl transition duration-300 ease-in-out data-closed:-translate-x-full"
+                            className="relative flex w-full max-w-xs transform flex-col hide-scrollbar overflow-y-auto bg-background text-foreground  pb-12 shadow-xl transition duration-300 ease-in-out data-closed:-translate-x-full"
                         >
                             <div className="flex px-4 pt-5 pb-2">
                                 <button

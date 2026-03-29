@@ -8,7 +8,7 @@ export default function HeroSection() {
                         Sell Your Products Online in{" "}
                         <span className="text-yellow-300">Minutes</span>
                     </h1>
-                    <p className="text-lg text-gray-600 text-justify text-center">
+                    <p className="text-lg text-gray-600  w-full text-center">
                         Launch your own online store with our powerful and easy-to-use platform.
                         No technical skills required. Start selling, manage orders, and grow your business — all in one place.
                     </p>
