@@ -18,7 +18,7 @@ export default function page({ handleClose, setPage }) {
             const data = {
                 email: formData.get('email'),
                 password: formData.get('password'),
-                router
+               
             }
             setLoading(true);
             try {
@@ -27,6 +27,7 @@ export default function page({ handleClose, setPage }) {
                 
             } finally {
                 setLoading(false);
+                    router.push("/seller");
             }
     
         }

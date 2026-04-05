@@ -48,15 +48,15 @@ export const getUserDetails=(data)=>async(dispatch)=>{
 
 
 export const LoginSeller=(data)=>async(dispatch)=>{
-    const router=data.router;
+ 
     try{
         dispatch({
             type:LOGIN_USER_REQUEST,
             payload:data
         })
-        const res=await axios.post(`${backend_url}/api/user/getuserdetails`,data);
+        const res=await axios.post(`${backend_url}/auth/login`,data);
         console.log(res);
-        router.push("/seller");
+    
         dispatch({
             type:LOGIN_USER_SUCCESS,
             payload:res.data

@@ -23,11 +23,15 @@
   display: none;
 }
 
+/* Hide scrollbar for IE, Edge */
 .hide-scrollbar {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
 }
 
+/* Hide scrollbar for Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+}
 .jost {
   font-family: "Jost", sans-serif;
   font-optical-sizing: auto;
