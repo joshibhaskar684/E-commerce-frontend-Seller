@@ -2,12 +2,14 @@ import { configureStore } from '@reduxjs/toolkit';
 // import authreducer from "./auth/reducer";
 import { combineReducers } from 'redux';
 import userReducer from './user/reducer';
+import categoryReducer from './category/reducer';
 // import adminauthreducer from "./adminauth/reducer";
 // import AdminComponentsReducer from"./admincomponents/reducer";
 // import { PurchaseReducer } from './purchase/reducer';
 
 const rootReducer = combineReducers({
   userReducer:userReducer,
+  categoryReducer:categoryReducer,
 //   auth: authreducer,
 //   adminauth:adminauthreducer,
 // AdminCR:AdminComponentsReducer,

@@ -15,6 +15,7 @@ DELETE_CATEGORY_FAILURE            } from "./actiontype";
 
 const initialState = {
     categories: [],
+    maincategories:[],
     loading: false,
     error: null,
 };
@@ -40,7 +41,7 @@ const categoryReducer = (state = initialState, action) => {
             return {
                 ...state,
                 loading: false, 
-                categories: action.payload,
+                maincategories: action.payload,
             };
         case UPDATE_CATEGORY_SUCCESS:
             return {

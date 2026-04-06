@@ -23,6 +23,68 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 export const createCategory = (categoryData) => async (dispatch) => {
     dispatch({ type: CREATE_CATEGORY_REQUEST });
     try {
+        // const token = Cookies.get("token");
+        const respose= await axios.post(`${backend_url}/products/category`, categoryData
+            //  {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },}
+        );
+        dispatch({ type: CREATE_CATEGORY_SUCCESS, payload: respose.data.category });
+        toast.success("Category created successfully");
+    } catch (error) {
+        dispatch({ type: CREATE_CATEGORY_FAILURE, payload: error.message });
+        toast.error("Failed to create category");
+    }finally{
+        categoryData.setLoading(false)
+    }
+};
+
+
+export const updateCategory = (categoryData) => async (dispatch) => {
+    dispatch({ type: CREATE_CATEGORY_REQUEST });
+    try {
+        // const token = Cookies.get("token");
+        const respose= await axios.post(`${backend_url}/products/category/update`, categoryData
+            //  {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },}
+        );
+        dispatch({ type: CREATE_CATEGORY_SUCCESS, payload: respose.data.category });
+        toast.success("Category Updated successfully");
+    } catch (error) {
+        dispatch({ type: CREATE_CATEGORY_FAILURE, payload: error.message });
+        toast.error("Failed to update category");
+    }finally{
+        categoryData.setLoading(false)
+    }
+};
+
+
+
+export const deleteCategory = (categoryData) => async (dispatch) => {
+    dispatch({ type: CREATE_CATEGORY_REQUEST });
+    try {
+        // const token = Cookies.get("token");
+        const respose= await axios.post(`${backend_url}/products/category/delete`, categoryData
+            //  {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },}
+        );
+        dispatch({ type: CREATE_CATEGORY_SUCCESS, payload: respose.data.category });
+        toast.success("Category Deleted successfully");
+    } catch (error) {
+        dispatch({ type: CREATE_CATEGORY_FAILURE, payload: error.message });
+        toast.error("Failed to Delete category");
+    }finally{
+        categoryData.setLoading(false)
+    }
+};
+export const createCategorywithparent = (categoryData) => async (dispatch) => {
+    dispatch({ type: CREATE_CATEGORY_REQUEST });
+    try {
         const token = Cookies.get("token");
         const respose= await axios.post(`${backend_url}/api/v1/category/create-category`, categoryData, {
             headers: {
@@ -34,50 +96,54 @@ export const createCategory = (categoryData) => async (dispatch) => {
     } catch (error) {
         dispatch({ type: CREATE_CATEGORY_FAILURE, payload: error.message });
         toast.error("Failed to create category");
+    }finally{
+        categoryData.setLoading(false)
     }
+
 };
 
-export const getCategories = () => async (dispatch) => {
-    dispatch({ type: GET_CATEGORIES_REQUEST });
+
+
+export const getCategoriesWhereIdNotNull =(data) => async (dispatch) => {
+    const pageno=data.pageno||0;
+    const pagesize=data.pagesize||12;
+    dispatch({ type: GET_CATEGORIES_REQUEST});
     try {
-        const respose= await axios.get(`${backend_url}/api/v1/category/get-categories`);
-        dispatch({ type: GET_CATEGORIES_SUCCESS, payload: respose.data.categories });
+        const respose= await axios.get(`${backend_url}/products/category/sub-category`, {
+  params: {
+    pageno: pageno,
+    pagesize: pagesize
+  }
+});
+console.log(respose.data,"maincategories");
+        dispatch({ type: GET_CATEGORIES_SUCCESS, payload: respose.data });
     } catch (error) {
+
+        toast.error("Failed to fetch categories",error.message);
+
+        dispatch({ type: GET_CATEGORIES_FAILURE, payload: error.message });
+    }
+};
+export const getCategoryMain = (data) => async (dispatch) => {
+    const pageno=data.pageno||0;
+    const pagesize=data.pagesize||12;
+    dispatch({ type: GET_CATEGORIES_REQUEST});
+    try {
+        const respose= await axios.get(`${backend_url}/products/category/main`, {
+  params: {
+    pageno: pageno,
+    pagesize: pagesize
+  }
+});
+console.log(respose.data,"maincategories");
+        dispatch({ type: GET_CATEGORIES_SUCCESS, payload: respose.data });
+    } catch (error) {
+
+        toast.error("Failed to fetch categories",error.message);
+
         dispatch({ type: GET_CATEGORIES_FAILURE, payload: error.message });
     }
 };
 
-export const updateCategory = (categoryId, categoryData) => async (dispatch) => {
-    dispatch({ type: UPDATE_CATEGORY_REQUEST });
-    try {
-        const token = Cookies.get("token");
-        const respose= await axios.put(`${backend_url}/api/v1/category/update-category/${categoryId}`, categoryData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        dispatch({ type: UPDATE_CATEGORY_SUCCESS, payload: respose.data.category });
-        toast.success("Category updated successfully");
-    } catch (error) {
-        dispatch({ type: UPDATE_CATEGORY_FAILURE, payload: error.message });
-        toast.error("Failed to update category");
-    }
-};
 
-export const deleteCategory = (categoryId) => async (dispatch) => { 
-    dispatch({ type: DELETE_CATEGORY_REQUEST });
-    try {
-        const token = Cookies.get("token");
-        const respose= await axios.delete(`${backend_url}/api/v1/category/delete-category/${categoryId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        dispatch({ type: DELETE_CATEGORY_SUCCESS, payload: respose.data.category });
-        toast.success("Category deleted successfully");
-    } catch (error) {
-        dispatch({ type: DELETE_CATEGORY_FAILURE, payload: error.message });
-        toast.error("Failed to delete category");
-    }
-};  
 

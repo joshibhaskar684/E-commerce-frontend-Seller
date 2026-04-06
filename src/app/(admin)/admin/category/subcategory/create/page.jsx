@@ -48,7 +48,7 @@ export default function page(){
     const getCategory=async()=>{
     try{
         console.log("getcategory function")
-await dispatch(getCategoryMain({pageno:pageno-1,pagesize}))
+await dispatch(getCategoriesWhereIdNotNull({pageno:pageno-1,pagesize}))
     }catch(error){
 
     }finally{
@@ -68,7 +68,7 @@ await dispatch(getCategoryMain({pageno:pageno-1,pagesize}))
         <>
 <div className="grid grid-cols-1 gap-5 p-5 md:p-10">
 <div className="grid grid-cols-1 gap-5 md:p-5">
-    <h1 className="font-bold text-3xl">Main Categories</h1>
+    <h1 className="font-bold text-3xl">All Sub-Categories</h1>
 </div>
 
 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5  place-items-center">
