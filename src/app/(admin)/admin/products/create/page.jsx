@@ -1,202 +1,230 @@
 "use client";
 
-import { createProduct } from "@/redux-store/authstore/product/action";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { createProduct, getCategorytree } from "@/redux-store/authstore/product/action";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { CategorySelect } from './M';
+import { FaPlus, FaTimes } from "react-icons/fa";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
-
-  const [images, setImages] = useState([""]);
-  const [categoryPath, setCategoryPath] = useState([""]);
-  const [specs, setSpecs] = useState([{ key: "", value: "" }]);
+  const [imageUrl, setImageUrl] = useState("");
+  const [images, setImages] = useState([]);
+  const [categoryPath, setCategoryPath] = useState([]);
+  const [specs, setSpecs] = useState({});
+  const [name, setName] = useState("");   // for input: spec name
+  const [value, setValue] = useState(""); // for input: spec value
 
   const dispatch = useDispatch();
+  const [categoryId, SetCategoryId] = useState("");
+  const CategoriesList = useSelector((state) => state.productReducer.categories);
 
-  // -------- HANDLERS --------
-
-  const handleArrayChange = (index, value, setter, arr) => {
-    const updated = [...arr];
-    updated[index] = value;
-    setter(updated);
+  const addSpec = () => {
+    if (!name) return; // don't allow empty name
+    setSpecs(prev => ({
+      ...prev,
+      [name]: value
+    }));
+    setName("");
+    setValue("");
   };
 
-  const addField = (setter, arr, emptyValue) => {
-    setter([...arr, emptyValue]);
+  useEffect(() => {
+    console.log("useEffect called")
+    getCategories()
+  }, []);
+
+  const getCategories = async () => {
+    console.log("getCategories called")
+    try {
+      await dispatch(getCategorytree({}))
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const removeField = (index, setter, arr) => {
-    const updated = arr.filter((_, i) => i !== index);
-    setter(updated);
+  console.log(categoryId, "categoriesId")
+  console.log(categoryPath.toLocaleString(), "categoriesList")
+
+  const removeImage = (index) => {
+    setImages(images.filter((_, i) => i !== index));
   };
 
-  const handleSpecChange = (index, field, value) => {
-    const updated = [...specs];
-    updated[index][field] = value;
-    setSpecs(updated);
+  const removeSpec = (index) => {
+    const newSpecs = { ...specs }; // make a shallow copy
+    const keyToRemove = Object.keys(newSpecs)[index]; // find key by index
+    delete newSpecs[keyToRemove]; // remove the key
+    setSpecs(newSpecs); // update state
   };
-
-  // -------- SUBMIT --------
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+    e.preventDefault()
+    setLoading(true)
     const formData = new FormData(e.target);
-    let data = Object.fromEntries(formData.entries());
-
-    // Clean arrays
-    data.images = images.filter((i) => i.trim() !== "");
-    data.categoryPath = categoryPath.filter((c) => c.trim() !== "");
-
-    // Convert specs to object
-    const specObj = {};
-    specs.forEach(({ key, value }) => {
-      if (key) specObj[key] = value;
-    });
-    data.specifications = specObj;
-
-    // Numbers
-    data.price = data.price ? parseFloat(data.price) : null;
-    data.originalPrice = data.originalPrice
-      ? parseFloat(data.originalPrice)
-      : null;
-    data.quantity = data.quantity ? parseInt(data.quantity) : null;
-    data.returnDay = data.returnDay ? parseInt(data.returnDay) : null;
-
-    try {
+    const data = {
+      name: formData.get("name"),
+      brand: formData.get("brand"),
+      categoryId,
+      categoryPath,
+      color: formData.get("color"),
+      price: parseFloat(formData.get("price")),
+      originalPrice: parseFloat(formData.get("originalPrice")),
+      store: formData.get("store"),
+      quantity: parseInt(formData.get("quantity")),
+      returnDay: parseInt(formData.get("returnDay")),
+      description: formData.get("description"),
+      images,
+      specifications: specs,
+    };
+    try{
       await dispatch(createProduct(data));
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
 
-    console.log(data);
-  };
+    }catch(error){
+
+    }
+    finally{
+      setLoading(false)
+    }
+    console.log(data, "formData")
+  }
 
   return (
-    <>
+    <div className="p-5 grid grid-cols-1 w-full place-items-center gap-5 mb-10">
 
-  <div className="w-full p-5 grid gap-5 max-h-screen overflow-y-auto  pb-20">
-      <h1 className="text-2xl font-bold">Create Product</h1>
+      <div className="p-5 grid grid-cols-1 w-full">
+        <h1 className="font-bold text-2xl">Create Product</h1>
+      </div>
 
-      <form onSubmit={handleSubmit} className="grid gap-4 ">
+      <div className="p-5 grid grid-cols-1 w-full">
+        <form onSubmit={handleSubmit} className="grid gap-4">
 
-        {/* BASIC FIELDS */}
-        <input name="name" placeholder="Product Name" className="border p-3 rounded" required />
-        <input name="brand" placeholder="Brand" className="border p-3 rounded" />
-        <input name="categoryId" placeholder="Category ID" className="border p-3 rounded" required />
-        <input name="color" placeholder="Color" className="border p-3 rounded" />
-        <input type="number" name="price" placeholder="Price" className="border p-3 rounded" />
-        <input type="number" name="originalPrice" placeholder="Original Price" className="border p-3 rounded" />
-        <input name="store" placeholder="Store" className="border p-3 rounded" />
-        <input type="number" name="quantity" placeholder="Quantity" className="border p-3 rounded" />
-        <input type="number" name="returnDay" placeholder="Return Days" className="border p-3 rounded" />
-
-        {/* IMAGES */}
-        <div>
-          <h2 className="font-bold">Images</h2>
-          {images.map((img, i) => (
-            <div key={i} className="flex gap-2 mb-2">
-              <input
-                value={img}
-                onChange={(e) =>
-                  handleArrayChange(i, e.target.value, setImages, images)
-                }
-                className="border p-2 w-full rounded"
-                placeholder="Image URL"
+          <div className="gap-5">
+            {CategoriesList && CategoriesList.length > 0 && (
+              <CategorySelect
+                data={CategoriesList}
+                path={categoryPath}
+                setPath={setCategoryPath}
+                SetCategoryId={SetCategoryId}
               />
-              <button type="button" onClick={() => removeField(i, setImages, images)}>❌</button>
-            </div>
-          ))}
-          <button type="button" onClick={() => addField(setImages, images, "")}>
-            ➕ Add Image
-          </button>
-
-          <div className="text-sm mt-2">
-            Preview: {JSON.stringify(images)}
-          </div>
-        </div>
-
-        {/* CATEGORY PATH */}
-        <div>
-          <h2 className="font-bold">Category Path</h2>
-          {categoryPath.map((cat, i) => (
-            <div key={i} className="flex gap-2 mb-2">
-              <input
-                value={cat}
-                onChange={(e) =>
-                  handleArrayChange(i, e.target.value, setCategoryPath, categoryPath)
-                }
-                className="border p-2 w-full rounded"
-                placeholder="Category"
-              />
-              <button type="button" onClick={() => removeField(i, setCategoryPath, categoryPath)}>❌</button>
-            </div>
-          ))}
-          <button type="button" onClick={() => addField(setCategoryPath, categoryPath, "")}>
-            ➕ Add Category
-          </button>
-
-          <div className="text-sm mt-2">
-            Preview: {JSON.stringify(categoryPath)}
-          </div>
-        </div>
-
-        {/* SPECIFICATIONS */}
-        <div>
-          <h2 className="font-bold">Specifications</h2>
-          {specs.map((spec, i) => (
-            <div key={i} className="flex gap-2 mb-2">
-              <input
-                value={spec.key}
-                onChange={(e) => handleSpecChange(i, "key", e.target.value)}
-                placeholder="Key"
-                className="border p-2 rounded w-1/2"
-              />
-              <input
-                value={spec.value}
-                onChange={(e) => handleSpecChange(i, "value", e.target.value)}
-                placeholder="Value"
-                className="border p-2 rounded w-1/2"
-              />
-              <button type="button" onClick={() => removeField(i, setSpecs, specs)}>❌</button>
-            </div>
-          ))}
-          <button type="button" onClick={() => addField(setSpecs, specs, { key: "", value: "" })}>
-            ➕ Add Spec
-          </button>
-
-          <div className="text-sm mt-2">
-            Preview:{" "}
-            {JSON.stringify(
-              specs.reduce((acc, cur) => {
-                if (cur.key) acc[cur.key] = cur.value;
-                return acc;
-              }, {})
             )}
           </div>
-        </div>
 
-        {/* DESCRIPTION */}
-        <textarea name="description" placeholder="Description" className="border p-3 rounded" />
+          <div className="flex gap-5">
+            <input
+              type="text"
+              name="image"
+              placeholder="Image URL"
+              className="border p-3 rounded w-full"
+              value={imageUrl}
+              onChange={(e) => setImageUrl(e.target.value)}
+            />
+            <button
+              onClick={() => { setImages([...images, imageUrl]); setImageUrl("") }}
+              type="button"
+              className="p-3 rounded bg-blue-500 text-foreground cursor-pointer border"
+            >
+              <FaPlus className="text-2xl font-bold text-foreground" />
+            </button>
+          </div>
 
-        {/* SUBMIT */}
-        <button
-          className={`p-4 rounded bg-yellow-500 font-bold ${
-            loading ? "opacity-50" : ""
-          }`}
-          disabled={loading}
-        >
-          {loading ? "Creating..." : "Create Product"}
-        </button>
-      </form>
-      <div className=" m-5  w-full"></div>
+          {images.length > 0 &&
+            <div className="grid gap-5">
+              <p className="font-bold">Images Link:</p>
+              {images.map((item, index) => (
+                <div key={index} className="flex gap-5">
+                  <input type="text" value={item} readOnly className="border p-3 rounded w-full" />
+                  <button
+                    onClick={() => { removeImage(index) }}
+                    className="font-bold text-2xl border p-4 rounded cursor-pointer"
+                  >
+                    <FaTimes className="font-bold text-2xl" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          }
+
+          <input name="name" placeholder="Product Name" className="border p-3 rounded" required />
+          <input name="brand" placeholder="Brand" className="border p-3 rounded" required />
+          <input name="categoryId" placeholder="Category ID" className="border p-3 rounded" required readOnly value={categoryId} />
+          <input
+            name="category"
+            placeholder="Category Path"
+            className="border p-3 rounded"
+            required
+            readOnly
+            value={categoryPath.join(" / ")}
+          />
+          <input name="color" placeholder="Color" className="border p-3 rounded" required />
+          <input type="number" name="price" placeholder="Price" className="border p-3 rounded" required />
+          <input type="number" name="originalPrice" placeholder="Original Price" className="border p-3 rounded" required />
+          <input name="store" placeholder="Store" className="border p-3 rounded" required />
+          <input type="number" name="quantity" placeholder="Quantity" className="border p-3 rounded" required />
+          <input type="number" name="returnDay" placeholder="Return Days" className="border p-3 rounded" required />
+
+          <div className="w-full flex-col gap-5 py-5">
+            <h2>Product Specifications</h2>
+            <div className="flex flex-col md:flex-row lg:flex-row gap-5 w-full">
+              <input
+                placeholder="Specification Name"
+                value={name}
+                className="border p-3 rounded w-full md:w-1/2"
+                onChange={e => setName(e.target.value)}
+              />
+              <input
+                placeholder="Specification Value"
+                value={value}
+                className="border p-3 rounded w-full md:w-1/2"
+                onChange={e => setValue(e.target.value)}
+              />
+              <button
+                onClick={addSpec}
+                className="border p-3 rounded w-full md:w-1/2 bg-yellow-500 cursor-pointer"
+              >
+                Add Spec
+              </button>
+            </div>
+
+            <h3>Specs:</h3>
+            <ul>
+              {Object.entries(specs).map(([key, val], index) => (
+                <li key={index} className="mb-4 flex flex-col md:flex-row gap-3 items-center">
+                  <div className="flex flex-col md:flex-row gap-3 flex-1">
+                    <input
+                      type="text"
+                      value={key}
+                      readOnly
+                      className="border p-3 rounded w-full"
+                    />
+                    <input
+                      type="text"
+                      value={val}
+                      readOnly
+                      className="border p-3 rounded w-full"
+                    />
+                  </div>
+                  <button
+                    onClick={() => removeSpec(index)}
+                    className="font-bold text-2xl border p-4 rounded cursor-pointer"
+                  >
+                    <FaTimes className="font-bold text-2xl" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <textarea name="description" placeholder="Description" className="border p-3 rounded" required />
+
+          <button
+            type="submit"
+            className={`p-4 rounded bg-yellow-500 font-bold cursor-pointer ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={loading}
+          >
+           {loading?"Creating......":" Create Product"}
+          </button>
+        </form>
+      </div>
     </div>
-
-
-    
-    </>
   );
 }
