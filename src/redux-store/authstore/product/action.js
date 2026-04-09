@@ -9,6 +9,9 @@ import {
         GET_PRODUCTS_REQUEST,
         GET_PRODUCTS_SUCCESS,
         GET_PRODUCTS_FAILURE,
+        GET_PRODUCTS_BY_ID_REQUEST,
+        GET_PRODUCTS_BY_ID_SUCCESS,
+        GET_PRODUCTS_BY_ID_FAILURE,
         UPDATE_PRODUCTS_REQUEST,
         UPDATE_PRODUCTS_SUCCESS,
         UPDATE_PRODUCTS_FAILURE,
@@ -41,10 +44,18 @@ export const createProduct = (data) => async (dispatch) => {
 };
 export const getProducts = (data) => async (dispatch) => {
     dispatch({ type: GET_PRODUCTS_REQUEST});
+    const pageno=data.pageno-1;
+    const pagesize=data.pagesize||12;
     console.log("getproducts")
     try {
         // const token = Cookies.get("token");
-        const respose= await axios.get(`${backend_url}/products`, data
+        const respose= await axios.get(`${backend_url}/products/page`,
+            {
+                params:{
+                    pageno,
+                    pagesize
+                }
+            }
             //  {
             // headers: {
             //     Authorization: `Bearer ${token}`,
@@ -58,7 +69,64 @@ export const getProducts = (data) => async (dispatch) => {
           }
 };
 
+export const getProductsById = (data) => async (dispatch) => {
+    dispatch({ type: GET_PRODUCTS_BY_ID_REQUEST});
+    const id=data.id;
+    console.log("getproducts id")
+    try {
+        // const token = Cookies.get("token");
+        const respose= await axios.get(`${backend_url}/products/${id}`, data
+            //  {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },}
+        );
+        dispatch({ type: GET_PRODUCTS_BY_ID_SUCCESS, payload: respose.data });
+       
+    } catch (error) {
+        toast.error("Failed to fetch Product By ID",error.message);
+        dispatch({ type:GET_PRODUCTS_BY_ID_FAILURE, payload: error.message });
+          }
+};
+export const updateProductsById = (data) => async (dispatch) => {
+    dispatch({ type:UPDATE_PRODUCTS_REQUEST});
+    const id=data.id;
+    console.log("update products id")
+    try {
+        // const token = Cookies.get("token");
+        const respose= await axios.put(`${backend_url}/products/update/${id}`, data
+            //  {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },}
+        );
+        dispatch({ type: UPDATE_PRODUCTS_SUCCESS, payload: respose.data });
+       
+    } catch (error) {
+        toast.error("Failed to UPDATE Product By ID",error.message);
+        dispatch({ type:UPDATE_PRODUCTS_FAILURE, payload: error.message });
+          }
+};
 
+export const deleteProductsById = (data) => async (dispatch) => {
+    dispatch({ type:DELETE_PRODUCTS_REQUEST});
+    const id=data.id;
+    console.log("DELETE products id")
+    try {
+        // const token = Cookies.get("token");
+        const respose= await axios.put(`${backend_url}/products/delete/${id}`, data
+            //  {
+            // headers: {
+            //     Authorization: `Bearer ${token}`,
+            // },}
+        );
+        dispatch({ type: DELETE_PRODUCTS_SUCCESS, payload: respose.data });
+       
+    } catch (error) {
+        toast.error("Failed to delete Product By ID",error.message);
+        dispatch({ type:DELETE_PRODUCTS_FAILURE, payload: error.message });
+          }
+};
 export const getCategorytree = (data) => async (dispatch) => {
    
     dispatch({ type: GET_CATEGORIES_REQUEST});

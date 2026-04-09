@@ -12,13 +12,15 @@ export default function page(){
      const [totalPage,setTotalPages]=useState(1);
         const [pageno,setPageno]=useState(Number(searchParams.get("pageno")) || 1);
         const [loading ,setLoading]=useState(false);
-        const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 1);
+        const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
         const router=useRouter();
        
     const products=useSelector((state)=>state.productReducer.products);
 
     useEffect(()=>{
-        dispatch(getProducts())},[]);
+        dispatch(getProducts(pageno,pagesize))
+    },[]
+    );
         
 
      useEffect(()=>{
