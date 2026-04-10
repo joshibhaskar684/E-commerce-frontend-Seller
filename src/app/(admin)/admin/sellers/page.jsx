@@ -7,61 +7,58 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState ,useEffect} from "react";
 import { useDispatch ,useSelector} from "react-redux";
 
-
 export default function page(){
        const dispatch=useDispatch();   
-           const searchParams = useSearchParams();
-         const [totalPage,setTotalPages]=useState(1);
-            const [pageno,setPageno]=useState(Number(searchParams.get("pageno")) || 1);
-            const [loadingId ,setLoadingId]=useState('');
-            const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
-            const router=useRouter();
-           
-        const products=useSelector((state)=>state.productReducer.products);
-        console.log(products,"products");
-        useEffect(()=>{
-            dispatch(getProducts({pageno,pagesize}));
-        },[pageno,pagesize]
-        );
-        // useEffect(()=>{
-        //     dispatch(getProducts(pageno,pagesize))
-        // },[]
-        // );
-            
-    const deleteProduct=async(id)=>{
-        setLoadingId(id);
-        try{
+       const searchParams = useSearchParams();
+     const [totalPage,setTotalPages]=useState(1);
+        const [pageno,setPageno]=useState(Number(searchParams.get("pageno")) || 1);
+        const [loadingId ,setLoadingId]=useState('');
+        const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
+        const router=useRouter();
+       
+    const products=useSelector((state)=>state.productReducer.products);
+    console.log(products,"products");
+    useEffect(()=>{
+        dispatch(getProducts({pageno,pagesize}));
+    },[pageno,pagesize]
+    );
     
-        }catch(error){
-    
-        }finally{
-            setLoadingId('');
-        }
+        
+const deleteProduct=async(id)=>{
+    setLoadingId(id);
+    try{
+
+    }catch(error){
+
+    }finally{
+        setLoadingId('');
     }
-         useEffect(()=>{
-            setTotalPages(products?.totalPages)
-           },[products]);
-    
-         const handlePaginationChange = (_, page) => {
-            setPageno(page);
-    
-            const params = new URLSearchParams(searchParams.toString());
-            params.set("pageno", page);
-    
-            router.push(`?${params.toString()}`);
-        };
-    
+}
+     useEffect(()=>{
+        setTotalPages(products?.totalPages)
+       },[products]);
+
+     const handlePaginationChange = (_, page) => {
+        setPageno(page);
+
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("pageno", page);
+
+        router.push(`?${params.toString()}`);
+    };
 
     return (
         <>
-
-    <div className="grid grid-cols-1 gap-5 p-5 place-items-center w-full">
+        <div className="grid grid-cols-1 gap-5">
             <div className="w-full">
-<h1 className="font-bold text-2xl">Users</h1>
+<h1 className="font-bold text-2xl">Sellers</h1>
             </div>
-             <div className="w-full">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
 
 
+<p className="p-5 border">m</p>
+<p className="p-5 border">,</p>
+<p className="p-5 border">o</p>
 
             </div>
 
@@ -84,8 +81,6 @@ export default function page(){
                        />
              </div>
         </div>
-
-
 
         
         </>

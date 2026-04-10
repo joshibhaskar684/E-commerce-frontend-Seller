@@ -43,6 +43,7 @@ export const createProduct = (data) => async (dispatch) => {
           }
 };
 export const getProducts = (data) => async (dispatch) => {
+    console.log("getproducts action called with data:", data);      
     dispatch({ type: GET_PRODUCTS_REQUEST});
     const pageno=data.pageno-1;
     const pagesize=data.pagesize||12;
@@ -61,6 +62,8 @@ export const getProducts = (data) => async (dispatch) => {
             //     Authorization: `Bearer ${token}`,
             // },}
         );
+
+        console.log(respose,"getproducts  vs")
         dispatch({ type: GET_PRODUCTS_SUCCESS, payload: respose.data });
        
     } catch (error) {
@@ -71,8 +74,8 @@ export const getProducts = (data) => async (dispatch) => {
 
 export const getProductsById = (data) => async (dispatch) => {
     dispatch({ type: GET_PRODUCTS_BY_ID_REQUEST});
-    const id=data.id;
-    console.log("getproducts id")
+    const id=data.productId;
+    console.log("getproducts id" ,id)
     try {
         // const token = Cookies.get("token");
         const respose= await axios.get(`${backend_url}/products/${id}`, data
@@ -81,6 +84,7 @@ export const getProductsById = (data) => async (dispatch) => {
             //     Authorization: `Bearer ${token}`,
             // },}
         );
+        console.log(respose, "product by id ")
         dispatch({ type: GET_PRODUCTS_BY_ID_SUCCESS, payload: respose.data });
        
     } catch (error) {

@@ -31,8 +31,9 @@ export const menuItems = [
 
 { name: "Products", href: "/admin/products?pageno=1&pagesize=12"},
 
+{ name: "Sellers", href: "/admin/sellers?pageno=1&pagesize=12"},
 
-{ name: "lo Products", href: "/admin/products/create/lo"},
+{ name: "Users", href: "/admin/users?pageno=1&pagesize=12"},
 
 
 ];
