@@ -136,11 +136,11 @@ export default function Navbar() {
           </div>
         </Dialog>
 
-        <header className="relative bg-background text-foreground ">
+        <header className="relative bg-background text-foreground border-b border-gray-200">
 
 
           <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="border-b border-gray-200">
+            <div className="">
               <div className="flex h-16 items-center">
                 <button
                   type="button"

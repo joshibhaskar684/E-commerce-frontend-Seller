@@ -7,7 +7,8 @@ export async function proxy(request){
  const {pathname} = url;
  
    const sellerToken = request.cookies.get("sellerToken")?.value;
- 
+   const adminToken= request.cookies.get("adminToken")?.value;
+   const verifyToken= request.cookies.get("verifyToken")?.value;
 
   if (pathname === "/seller-login") {
     if(sellerToken)
@@ -18,6 +19,49 @@ export async function proxy(request){
  return NextResponse.next();
   }
   }
+
+   if (pathname === "/verify") {
+    if(verifyToken)
+    {
+    return NextResponse.redirect(new URL("/register", request.url));
+  }
+  else{
+ return NextResponse.next();
+  }
+  }
+
+   if (pathname === "/register") {
+    if(!verifyToken)
+    {
+    return NextResponse.redirect(new URL("/verify", request.url));
+  }
+  if(sellerToken){
+     return NextResponse.redirect(new URL("/seller", request.url));
+  }
+   if(adminToken){
+     return NextResponse.redirect(new URL("/admin", request.url));
+  }
+  else{
+ return NextResponse.next();
+  }
+  }
+
+if(pathname.startsWith("/admin")){
+    if(!adminToken){
+        return NextResponse.redirect(new URL("/admin-login",request.url))
+    }
+    else {
+      return NextResponse.next();
+    }
+ }
+ if(pathname.startsWith("/admin-login")){
+    if(adminToken){
+        return NextResponse.redirect(new URL("/admin",request.url))
+    }
+    else {
+      return NextResponse.next();
+    }
+ }
 
  if(pathname.startsWith("/seller")){
     if(!sellerToken){
@@ -36,7 +80,7 @@ export async function proxy(request){
 
 
 export const config={
-  matcher:["/admin/:path*","/seller/:path*","/seller-login"],
+  matcher:["/admin/:path*","/seller/:path*","/seller-login","/verify","/register/:path*"],
   
 }
 
