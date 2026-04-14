@@ -1,5 +1,5 @@
 "use client";
-import { LoginSeller } from "@/redux-store/authstore/user/action";
+import { VerifyForSeller } from "@/redux-store/authstore/verify/action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
@@ -14,16 +14,16 @@ export default function Login({ handleClose, setPage }) {
         const formData = new FormData(e.target);
         const data = {
             email: formData.get('email'),
-            password: formData.get('password'),
-            router
+            password: formData.get('password')
         }
         setLoading(true);
         try {
-            await dispatch(LoginSeller(data));
+            await dispatch(VerifyForSeller(data));
         } catch (e) {
 
         } finally {
             setLoading(false);
+          window.location.reload();
         }
     }
 

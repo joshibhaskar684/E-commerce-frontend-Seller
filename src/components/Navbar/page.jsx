@@ -30,10 +30,9 @@ import { FaUserCircle } from 'react-icons/fa'
 import Link from 'next/link'
 
 
-export default function Navbar() {
+export default function Navbar({tokenPresent}) {
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [tokenPresent, setTokenPresent] = useState(false);
   const router = useRouter();
 
 
@@ -45,18 +44,12 @@ export default function Navbar() {
   const [openModal, setOpenModal] = useState(false);
   const [page, setPage] = useState('');
 
-  const NavData = [{ label: "Home", link: "/" },
+  const NavData = [
+    { label: "Home", link: "/" },
   { label: "About", link: "/about" },
   ];
 
-  useEffect(() => {
-    const usertoken = Cookies.get('sellerToken');
-    if (usertoken) {
-      setTokenPresent(true);
-    } else {
-      setTokenPresent(false);
-    }
-  }, []);
+ 
 
   const handleClose = () => {
     setOpenModal(false);
@@ -111,7 +104,7 @@ export default function Navbar() {
                         Seller
                       </a>
                       <button
-                        onClick={() => { setTokenPresent(false) }}
+                        
                         className="font-bold text-xl text-red-600 hover:text-red-800 transition text-left"
                       >
                         Logout
@@ -185,12 +178,10 @@ export default function Navbar() {
                             <span className="absolute -inset-1.5" />
                             <span className="sr-only">Open user menu</span>
 
-                            <Avatar
-                              sx={{ bgcolor: 'yellow' }} // MUI theme color
-                              className="w-8 h-8 rounded-full outline outline-1 outline-white/10 text-white font-bold text-2xl"
-                            >
-                              B
-                            </Avatar>
+                           <FaUserCircle
+                            className="w-8 h-8 rounded-full outline outline-1 outline-white/10 text-foreground border font-bold text-2xl"
+                                           
+                           />
 
                           </MenuButton>
                           <MenuItems
@@ -200,20 +191,20 @@ export default function Navbar() {
                             
                             <MenuItem>
                               <a
-                                href="#"
+                                href="/seller"
                                 className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                               >
                                 Seller
                               </a>
                             </MenuItem>
                             <MenuItem>
-                              <button
+                              <a
                                 // onClick={handleLogOut}
                                 href="#"
-                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                                className="block px-4 py-2 text-sm text-red-500  text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
                               >
                                 Log out
-                              </button>
+                              </a>
                             </MenuItem>
                           </MenuItems>
                         </Menu></div>

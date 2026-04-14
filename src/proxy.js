@@ -23,7 +23,7 @@ export async function proxy(request){
    if (pathname === "/verify") {
     if(verifyToken)
     {
-    return NextResponse.redirect(new URL("/register", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
   else{
  return NextResponse.next();
