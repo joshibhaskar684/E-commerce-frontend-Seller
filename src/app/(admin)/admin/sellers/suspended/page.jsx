@@ -1,7 +1,7 @@
 "use client";
 
 import Cookies from "js-cookie";
-import { getApprovedSeller } from "@/redux-store/authstore/seller/action";
+import { getSuspendedSeller } from "@/redux-store/authstore/seller/action";
 import SellerCard from "@/components/Admin/Cards/SellerCard/SellerCard";
 import {  Pagination } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,7 +17,7 @@ export default function page(){
         const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
         const router=useRouter();
        
-    const seller=useSelector((state)=>state.sellerReducer.approveseller);
+    const seller=useSelector((state)=>state.sellerReducer.suspendedseller);
 
     console.log(seller,"products");
     useEffect(()=>{
@@ -26,7 +26,7 @@ handleSellerLoading();
     );
     const handleSellerLoading=()=>{
         const token=Cookies.get("adminToken");
-        dispatch(getApprovedSeller({pageno,pagesize},token));
+        dispatch(getSuspendedSeller({pageno,pagesize},token));
         
     }
     
@@ -59,7 +59,7 @@ handleSellerLoading();
         <>
         <div className="grid grid-cols-1 gap-5">
             <div className="w-full">
-<h1 className="font-bold text-2xl">Approved Sellers </h1>
+<h1 className="font-bold text-2xl">Suspended Sellers </h1>
 
             </div>
 

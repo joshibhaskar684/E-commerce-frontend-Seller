@@ -23,6 +23,7 @@ export default function Login({ handleClose, setPage }) {
 
         } finally {
             setLoading(false);
+            window.location.reload();
         }
 
     }
@@ -63,8 +64,8 @@ export default function Login({ handleClose, setPage }) {
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
                             <button
                                 type="submit"
-                                className="py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold hover:opacity-90 transition"
-                            >
+                                disabled={loading}
+                               className={`py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold hover:opacity-90 transition ${loading ? "cursor-not-allowed bg-background" : ""}`}                            >
                                 {loading ? "Submitting..." : "Submit"}
                             </button>
 

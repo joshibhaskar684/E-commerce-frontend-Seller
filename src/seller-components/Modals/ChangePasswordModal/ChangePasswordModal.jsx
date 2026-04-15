@@ -1,0 +1,70 @@
+"use client";
+import { Modal } from "@mui/material";
+
+export default function ChangePasswordModal({ oldPassword,newPassword,setOldPassword,setnewPassword,setOpenmodal, openModal ,changePassword,loading}) {
+    const handleClose = () => {
+        setOpenmodal(openModal ? false : true);
+    }
+    return (
+        <>
+            <Modal open={openModal} onClose={handleClose}>
+                <div className="z-50  bg-transparent/70  h-full w-full grid grid-cols-1 p-10 ">
+                    <div className="border flex flex-col gap-5 bg-foreground text-background p-5  md:pt-20">
+                        <div className="w-full">
+                            <h1 className="text-center text-2xl md:text-4xl font-bold w-full h-full">
+                               Update Password
+                            </h1>
+                        </div>
+                        <div className="">
+                            <h1 className="text-center ">
+                            
+                            If you want to update password then both the fields are required to be filled.
+                                  
+                                                        </h1>
+                        </div>
+                        <div className="border p-5 md:border-0 md:p-10">
+                            <form className=" grid grid-cols-1 gap-5  md:p-15 md:border rounded" onSubmit={(e)=>changePassword(e)}>
+                                
+                                <input 
+                                type="text"
+                                 placeholder="Enter The Old Password" 
+                                 className="border p-2 w-full" 
+                                 required
+                                  name="reason"
+                                   value={oldPassword}
+    onChange={(e) => setOldPassword(e.target.value)}
+                                    />
+                                     <input 
+                                type="text"
+                                 placeholder="Enter The New Password" 
+                                 className="border p-2 w-full" 
+                                 required
+                                  name="reason"
+                                   value={newPassword}
+    onChange={(e) => setnewPassword(e.target.value)}
+                                    />
+                                <div className=" grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                                    <button type="submit" 
+                                    disabled={loading}
+                                     className={`border cursor-pointer turncate p-5 w-full rounded font-bold text-md bg-foreground overflow-hidden text-background ${ loading? "cursor-not-allowed bg-background text-foreground":"bg-yellow-500 "}`}>
+                                        {loading?"Submitting....":"Submit"}
+                                        </button>
+
+                                    <button 
+                                    onClick={() => handleClose()}  
+                                    className="border cursor-pointer font-bold text-md turncate overflow-hidden p-5 rounded w-full bg-foreground text-background">Close</button>
+
+                                </div>
+                            </form>
+                        </div>
+                        
+
+
+                    </div>
+                </div>
+            </Modal>
+
+        </>
+    )
+}

@@ -1,6 +1,6 @@
 import { FaUser, FaUserMd } from "react-icons/fa";
 
-export default function UserDetails({ name, email, phone }) {
+export default function UserDetails({ name, email, phone ,openModal,openModal1,setOpenmodal,setOpenmodal1,loading}) {
     return (
         <>
             <div className="grid grid-cols-1 md:grid-cols-2  md:border-b p-5 gap-3 md:mt-15">
@@ -18,10 +18,17 @@ export default function UserDetails({ name, email, phone }) {
                 
             </div>
              <div className="grid grid-cols-1 md:grid-cols-2 place-items-center md:mt-5 gap-5">
-  <button className="border border-green-300 bg-foreground text-background cursor-pointer truncate rounded w-full md:w-1/2 p-5 text-center">
+  <button 
+  disabled={loading&&openModal1}
+  onClick={() => setOpenmodal1(openModal1 ? false : true)}
+  className=" border border-green-300 bg-foreground text-background cursor-pointer truncate rounded w-full md:w-1/2 p-5 text-center">
     Edit Profile
   </button>
-  <button className="border w-full md:w-1/2 cursor-pointer hover:bg-foreground hover:text-background truncate p-5 text-center">
+  <button 
+  
+  onClick={() => setOpenmodal(openModal ? false : true)}
+  disabled={loading&&openModal}
+  className="border w-full md:w-1/2 cursor-pointer hover:bg-foreground hover:text-background truncate p-5 text-center">
     Change Password
   </button>
 </div>

@@ -1,11 +1,43 @@
 import { 
+
+    GET_REJECTED_SELLER_PAGE_REQUEST,
+    GET_REJECTED_SELLER_PAGE_SUCCESS,
+    GET_REJECTED_SELLER_PAGE_FAILURE,
+    
+GET_SUSPENDED_SELLER_PAGE_REQUEST,
+GET_SUSPENDED_SELLER_PAGE_SUCCESS,
+GET_SUSPENDED_SELLER_PAGE_FAILURE,
+
+    
+    GET_APPROVED_SELLER_PAGE_REQUEST,
+        GET_APPROVED_SELLER_PAGE_SUCCESS,        
+        GET_APPROVED_SELLER_PAGE_FAILURE,
+
+    GET_UNAPPROVED_SELLER_PAGE_REQUEST,
+        GET_UNAPPROVED_SELLER_PAGE_SUCCESS,        
+        GET_UNAPPROVED_SELLER_PAGE_FAILURE,
+
+        GET_SELLER_BY_ID_REQUEST,
+        GET_SELLER_BY_ID_SUCCESS,
+        GET_SELLER_BY_ID_FAILURE,
+                
+        APPROVE_SELLER_BY_ID_REQUEST,
+        APPROVE_SELLER_BY_ID_SUCCESS,
+        APPROVE_SELLER_BY_ID_FAILURE,
+
+        
+        REJECT_SELLER_BY_ID_REQUEST,
+        REJECT_SELLER_BY_ID_SUCCESS,
+        REJECT_SELLER_BY_ID_FAILURE,
+
     REGISTER_SELLER_REQUEST,
         REGISTER_SELLER_SUCCESS,        
         REGISTER_SELLER_FAILURE,
 
       LOGIN_SELLER_FAILURE, 
       LOGIN_SELLER_REQUEST,
-       LOGIN_SELLER_SUCCESS, 
+       LOGIN_SELLER_SUCCESS,
+
        LOGOUT_SELLER_FAILURE,
         LOGOUT_SELLER_REQUEST,
          LOGOUT_SELLER_SUCCESS, 
@@ -18,6 +50,351 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
+
+
+
+
+export const getRejectedSeller=(data,token)=>async(dispatch)=>{
+  
+ 
+ const pageno=data.pageno-1;  
+ const pagesize=data.pagesize;
+    try{
+        dispatch({
+            type:GET_REJECTED_SELLER_PAGE_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/rejected/seller/page`,
+            {
+                params: {
+                    pageno,
+                    pagesize,
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        console.log(response,"kjnjknkjnkjn");
+        dispatch({
+            type:GET_REJECTED_SELLER_PAGE_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_REJECTED_SELLER_PAGE_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+export const getSuspendedSeller=(data,token)=>async(dispatch)=>{
+  
+ 
+ const pageno=data.pageno-1;  
+ const pagesize=data.pagesize;
+    try{
+        dispatch({
+            type:GET_SUSPENDED_SELLER_PAGE_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/suspended/seller/page`,
+            {
+                params: {
+                    pageno,
+                    pagesize,
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        console.log(response,"kjnjknkjnkjn");
+        dispatch({
+            type:GET_SUSPENDED_SELLER_PAGE_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_SUSPENDED_SELLER_PAGE_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+
+
+export const rejectSellerById=(data,token)=>async(dispatch)=>{
+  
+    const id=data.id;
+ 
+    try{
+        dispatch({
+            type:REJECT_SELLER_BY_ID_REQUEST,
+            payload:data
+        })
+        const res=await axios.post(`${backend_url}/auth/reject/seller/${id}`,
+            data,
+            {
+                headers: {
+      Authorization: `Bearer ${token}`
+    }
+});
+
+        console.log(res,"kjnjknkjnkjn");
+        dispatch({
+            type:REJECT_SELLER_BY_ID_SUCCESS,
+            payload:res.data
+        })
+        toast.success("Seller rejected successfully");
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:REJECT_SELLER_BY_ID_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+export const ApproveSellerById=(data,token)=>async(dispatch)=>{
+  
+ const id=data.id;
+    try{
+        dispatch({
+            type:APPROVE_SELLER_BY_ID_REQUEST,
+            payload:data
+        })
+        const res=await axios.post(`${backend_url}/auth/approve/seller/${id}`,
+            data,
+            {
+                headers: {
+      Authorization: `Bearer ${token}`
+    }
+});
+
+        console.log(res,"kjnjknkjnkjn");
+        dispatch({
+            type:APPROVE_SELLER_BY_ID_SUCCESS,
+            payload:res.data
+        })
+toast.success("Seller Approved successfully");
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type: APPROVE_SELLER_BY_ID_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+
+export const getSellerById=(data,token)=>async(dispatch)=>{
+  
+    console.log(data)
+ const id=data.id;
+    try{
+        dispatch({
+            type:GET_SELLER_BY_ID_REQUEST,
+            payload:data
+        })
+        const res=await axios.get(`${backend_url}/auth/check/seller/${id}`,
+          
+            {
+                headers: {
+      Authorization: `Bearer ${token}`
+    }
+});
+
+        console.log(res,"kjnjknkjnkjn");
+        dispatch({
+            type:GET_SELLER_BY_ID_SUCCESS,
+            payload:res.data
+        })
+
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_SELLER_BY_ID_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+export const getApprovedSeller=(data,token)=>async(dispatch)=>{
+  
+ 
+ const pageno=data.pageno-1;  
+ const pagesize=data.pagesize;
+    try{
+        dispatch({
+            type:GET_APPROVED_SELLER_PAGE_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/approve/seller/page`,
+            {
+                params: {
+                    pageno,
+                    pagesize,
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        console.log(response,"kjnjknkjnkjn");
+        dispatch({
+            type:GET_APPROVED_SELLER_PAGE_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_APPROVED_SELLER_PAGE_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+export const getUnApprovedSeller=(data,token)=>async(dispatch)=>{
+    
+ const pageno=data.pageno-1;  
+ const pagesize=data.pagesize;
+    try{
+        dispatch({
+            type:GET_UNAPPROVED_SELLER_PAGE_REQUEST,
+            payload:data
+        })
+       
+
+ const response = await axios.get(
+            `${backend_url}/auth/unapprove/seller/page`,
+            {
+                params: {
+                    pageno,
+                    pagesize,
+                },
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        console.log(response,"kjnjknkjnkjn");
+        dispatch({
+            type:GET_UNAPPROVED_SELLER_PAGE_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_UNAPPROVED_SELLER_PAGE_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+
+
+
+
+
 
 
 export const LoginSeller=(data)=>async(dispatch)=>{
@@ -43,15 +420,12 @@ export const LoginSeller=(data)=>async(dispatch)=>{
             payload:e.message
         })
     }
-    finally{
-        //  window.location.reload();
-    }
+   
 }
 
+
 export const RegisterSeller=(data,token)=>async(dispatch)=>{
-    console.log(data,"dataATREGISTER SELLER");
-    console.log(token,"dataATREGISTER SELLER  token");
-   
+  
  
     try{
         dispatch({
@@ -71,6 +445,7 @@ export const RegisterSeller=(data,token)=>async(dispatch)=>{
             type:REGISTER_SELLER_SUCCESS,
             payload:res.data
         })
+        toast.success("Seller Registered successfully");
 
 
     }catch(e){
@@ -88,74 +463,6 @@ export const RegisterSeller=(data,token)=>async(dispatch)=>{
             payload:e.message
         })
     }
-    finally{
-        //  window.location.reload();
-    }
+  
 }
-
-
-
-// export const getSELLERDetails=(data)=>async(dispatch)=>{
-//     try{
-//         dispatch({
-//             type:GET_SELLER_DETAILS_REQUEST,
-//             payload:data
-//         })
-//         const res=await axios.post(`${backend_url}/api/SELLER/getSELLERdetails`,data);
-//         console.log(res);
-//         dispatch({
-//             type:GET_SELLER_DETAILS_SUCCESS,
-//             payload:res.data
-//         })
-//     }catch(e){
-//         dispatch({
-//             type:GET_SELLER_DETAILS_FAILURE,
-//             payload:e.message
-//         })
-//     }
-// }
-
-
-
-// export const LoginSeller=(data)=>async(dispatch)=>{
- 
-//     try{
-//         dispatch({
-//             type:LOGIN_SELLER_REQUEST,
-//             payload:data
-//         })
-//         const res=await axios.post(`${backend_url}/auth/login`,data);
-//         console.log(res);
-    
-//         dispatch({
-//             type:LOGIN_SELLER_SUCCESS,
-//             payload:res.data
-//         })
-//     }catch(e){
-//         toast.error(e.message);
-//         dispatch({
-//             type:LOGIN_SELLER_FAILURE,
-//             payload:e.message
-//         })
-//     }
-// }
-// export const LogOutSeller=(data)=>async(dispatch)=>{
-//     try{
-//         dispatch({
-//             type:LOGOUT_SELLER_REQUEST,
-//             payload:data
-//         })
-//         Cookies.remove("sellerToken");
-//         console.log(res);
-//         dispatch({
-//             type:LOGOUT_SELLER_SUCCESS,
-//             payload:res.data
-//         })
-//     }catch(e){
-//         dispatch({
-//             type:LOGOUT_SELLER_FAILURE,
-//             payload:e.message
-//         })
-//     }
-// }
 

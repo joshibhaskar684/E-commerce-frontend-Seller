@@ -59,7 +59,7 @@ handleSellerLoading();
         <>
         <div className="grid grid-cols-1 gap-5">
             <div className="w-full">
-<h1 className="font-bold text-2xl">Approved Sellers </h1>
+<h1 className="font-bold text-2xl">Approved Shops </h1>
 
             </div>
 

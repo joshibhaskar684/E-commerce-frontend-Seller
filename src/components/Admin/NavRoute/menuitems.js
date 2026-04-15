@@ -31,7 +31,22 @@ export const menuItems = [
 
 { name: "Products", href: "/admin/products?pageno=1&pagesize=12"},
 
-{ name: "Sellers", href: "/admin/sellers?pageno=1&pagesize=12"},
+{ name: "Approved Sellers", href: "/admin/sellers?pageno=1&pagesize=12"},
+
+{ name: "Unapproved Sellers", href: "/admin/sellers/request?pageno=1&pagesize=12"},
+
+{ name: "Rejected Sellers", href: "/admin/sellers/rejected?pageno=1&pagesize=12"},
+
+{ name: "Suspended Sellers", href: "/admin/sellers/suspended?pageno=1&pagesize=12"},
+
+
+{ name: "Approved Shop", href: "/admin/shop?pageno=1&pagesize=12"},
+
+{ name: "Unapproved Shop", href: "/admin/shop/request?pageno=1&pagesize=12"},
+
+{ name: "Rejected Shop", href: "/admin/shop/rejected?pageno=1&pagesize=12"},
+
+{ name: "Suspended Shop", href: "/admin/shop/suspended?pageno=1&pagesize=12"},
 
 { name: "Users", href: "/admin/users?pageno=1&pagesize=12"},
 
