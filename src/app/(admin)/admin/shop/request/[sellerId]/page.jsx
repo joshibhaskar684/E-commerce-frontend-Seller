@@ -6,8 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Cookies from "js-cookie";
 
-import { getSellerById,ApproveSellerById,rejectSellerById } from "@/redux-store/authstore/seller/action";
-import SellerDataCard from "@/components/Admin/Cards/SellerDataCard/SellerDataCard";
+import { getShopById,ApproveSellerById,rejectShopById } from "@/redux-store/authstore/shops/action";
+import ShopDataCard from "@/components/Admin/Cards/ShopDataCard/ShopDataCard";
 import RejectSellerModal from "@/components/Admin/Modals/RejectSellerModal";
 
 export default function page() {
@@ -18,7 +18,7 @@ export default function page() {
     const params = useParams();
     const sellerId = params.sellerId;
     const dispatch = useDispatch();
-    const seller = useSelector((state) => state.sellerReducer.sellerdetails);
+    const seller = useSelector((state) => state.ShopsReducer.Shopsdetails);
 
 
 
@@ -30,14 +30,14 @@ export default function page() {
 
     const handleFetchingSellerData = () => {
         const token=Cookies.get("adminToken");
-        dispatch(getSellerById({ id:sellerId},token )) 
+        dispatch(getShopById({ id:sellerId},token )) 
     }
 
     const ApproveRequest=async()=>{ 
         setLoading(true)
         try{
              const token=Cookies.get("adminToken");
-            await dispatch(ApproveSellerById({id:sellerId},token))
+            await dispatch(ApproveShopById({id:sellerId},token))
             window.location.reload();
         }
         catch(e){
@@ -52,7 +52,7 @@ export default function page() {
         try{
 
         const token=Cookies.get("adminToken");
-            await dispatch(rejectSellerById({id:sellerId,reason},token));
+            await dispatch(rejectShopById({id:sellerId,reason},token));
  window.location.reload();
  
         }catch(e){
@@ -74,7 +74,7 @@ export default function page() {
             </div>
 <div className="p-5 w-full">
 
-<SellerDataCard seller={seller}/>
+<ShopDataCard seller={seller}/>
 
             </div>
             <div className="p-5 w-full grid grid-cols-1 md:grid-cols-2 gap-5 p-5">

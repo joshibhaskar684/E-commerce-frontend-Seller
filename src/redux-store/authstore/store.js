@@ -6,7 +6,7 @@ import categoryReducer from './category/reducer';
 
 import  sellerReducer  from './seller/reducer';
 import  verifyReducer  from './verify/reducer';
-
+import  ShopsReducer from './shops/reducer';
 import  AdminReducer  from './admin/reducer';
 import { productReducer } from './product/reducer';
 // import adminauthreducer from "./adminauth/reducer";
@@ -20,6 +20,7 @@ const rootReducer = combineReducers({
   verifyReducer:verifyReducer,
   sellerReducer:sellerReducer,
   AdminReducer:AdminReducer,
+  ShopsReducer:ShopsReducer,
 //   auth: authreducer,
 //   adminauth:adminauthreducer,
 // AdminCR:AdminComponentsReducer,

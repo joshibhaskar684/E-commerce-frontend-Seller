@@ -39,7 +39,7 @@ export default function SellerForm() {
   };
 
   const handleFileUpload = (e, field) => {  
-    e.preventDefault;
+    e.preventDefault();
   }
  
   const handleSubmit = async (e) => {

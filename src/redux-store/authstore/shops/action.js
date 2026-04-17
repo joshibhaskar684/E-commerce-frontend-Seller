@@ -1,46 +1,46 @@
 import { 
 
-    GET_REJECTED_SELLER_PAGE_REQUEST,
-    GET_REJECTED_SELLER_PAGE_SUCCESS,
-    GET_REJECTED_SELLER_PAGE_FAILURE,
+    GET_REJECTED_SHOPS_PAGE_REQUEST,
+    GET_REJECTED_SHOPS_PAGE_SUCCESS,
+    GET_REJECTED_SHOPS_PAGE_FAILURE,
     
-GET_SUSPENDED_SELLER_PAGE_REQUEST,
-GET_SUSPENDED_SELLER_PAGE_SUCCESS,
-GET_SUSPENDED_SELLER_PAGE_FAILURE,
+GET_SUSPENDED_SHOPS_PAGE_REQUEST,
+GET_SUSPENDED_SHOPS_PAGE_SUCCESS,
+GET_SUSPENDED_SHOPS_PAGE_FAILURE,
 
     
-    GET_APPROVED_SELLER_PAGE_REQUEST,
-        GET_APPROVED_SELLER_PAGE_SUCCESS,        
-        GET_APPROVED_SELLER_PAGE_FAILURE,
+    GET_APPROVED_SHOPS_PAGE_REQUEST,
+        GET_APPROVED_SHOPS_PAGE_SUCCESS,        
+        GET_APPROVED_SHOPS_PAGE_FAILURE,
 
-    GET_UNAPPROVED_SELLER_PAGE_REQUEST,
-        GET_UNAPPROVED_SELLER_PAGE_SUCCESS,        
-        GET_UNAPPROVED_SELLER_PAGE_FAILURE,
+    GET_UNAPPROVED_SHOPS_PAGE_REQUEST,
+        GET_UNAPPROVED_SHOPS_PAGE_SUCCESS,        
+        GET_UNAPPROVED_SHOPS_PAGE_FAILURE,
 
-        GET_SELLER_BY_ID_REQUEST,
-        GET_SELLER_BY_ID_SUCCESS,
-        GET_SELLER_BY_ID_FAILURE,
+        GET_SHOPS_BY_ID_REQUEST,
+        GET_SHOPS_BY_ID_SUCCESS,
+        GET_SHOPS_BY_ID_FAILURE,
                 
-        APPROVE_SELLER_BY_ID_REQUEST,
-        APPROVE_SELLER_BY_ID_SUCCESS,
-        APPROVE_SELLER_BY_ID_FAILURE,
+        APPROVE_SHOPS_BY_ID_REQUEST,
+        APPROVE_SHOPS_BY_ID_SUCCESS,
+        APPROVE_SHOPS_BY_ID_FAILURE,
 
         
-        REJECT_SELLER_BY_ID_REQUEST,
-        REJECT_SELLER_BY_ID_SUCCESS,
-        REJECT_SELLER_BY_ID_FAILURE,
+        REJECT_SHOPS_BY_ID_REQUEST,
+        REJECT_SHOPS_BY_ID_SUCCESS,
+        REJECT_SHOPS_BY_ID_FAILURE,
 
-    REGISTER_SELLER_REQUEST,
-        REGISTER_SELLER_SUCCESS,        
-        REGISTER_SELLER_FAILURE,
+    REGISTER_SHOPS_REQUEST,
+        REGISTER_SHOPS_SUCCESS,        
+        REGISTER_SHOPS_FAILURE,
 
-      LOGIN_SELLER_FAILURE, 
-      LOGIN_SELLER_REQUEST,
-       LOGIN_SELLER_SUCCESS,
+      LOGIN_SHOPS_FAILURE, 
+      LOGIN_SHOPS_REQUEST,
+       LOGIN_SHOPS_SUCCESS,
 
-       LOGOUT_SELLER_FAILURE,
-        LOGOUT_SELLER_REQUEST,
-         LOGOUT_SELLER_SUCCESS, 
+       LOGOUT_SHOPS_FAILURE,
+        LOGOUT_SHOPS_REQUEST,
+         LOGOUT_SHOPS_SUCCESS, 
          
             } from "./actiontype";
 
@@ -54,21 +54,21 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
 
-export const getRejectedSeller=(data,token)=>async(dispatch)=>{
+export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
   
  
  const pageno=data.pageno-1;  
  const pagesize=data.pagesize;
     try{
         dispatch({
-            type:GET_REJECTED_SELLER_PAGE_REQUEST,
+            type:GET_REJECTED_SHOPS_PAGE_REQUEST,
             payload:data
         })
        
         
         
  const response = await axios.get(
-            `${backend_url}/auth/seller/rejected/seller/page`,
+            `${backend_url}/auth/rejected/SHOPS/page`,
             {
                 params: {
                     pageno,
@@ -82,13 +82,13 @@ export const getRejectedSeller=(data,token)=>async(dispatch)=>{
 
         console.log(response,"kjnjknkjnkjn");
         dispatch({
-            type:GET_REJECTED_SELLER_PAGE_SUCCESS,
+            type:GET_REJECTED_SHOPS_PAGE_SUCCESS,
             payload:response.data
         })
 
 
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -98,7 +98,7 @@ export const getRejectedSeller=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:GET_REJECTED_SELLER_PAGE_FAILURE,
+            type:GET_REJECTED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
     }
@@ -106,21 +106,21 @@ export const getRejectedSeller=(data,token)=>async(dispatch)=>{
 }
 
 
-export const getSuspendedSeller=(data,token)=>async(dispatch)=>{
+export const getSuspendedSHOPS=(data,token)=>async(dispatch)=>{
   
  
  const pageno=data.pageno-1;  
  const pagesize=data.pagesize;
     try{
         dispatch({
-            type:GET_SUSPENDED_SELLER_PAGE_REQUEST,
+            type:GET_SUSPENDED_SHOPS_PAGE_REQUEST,
             payload:data
         })
        
         
         
  const response = await axios.get(
-            `${backend_url}/auth/seller/suspended/seller/page`,
+            `${backend_url}/auth/suspended/SHOPS/page`,
             {
                 params: {
                     pageno,
@@ -134,13 +134,13 @@ export const getSuspendedSeller=(data,token)=>async(dispatch)=>{
 
         console.log(response,"kjnjknkjnkjn");
         dispatch({
-            type:GET_SUSPENDED_SELLER_PAGE_SUCCESS,
+            type:GET_SUSPENDED_SHOPS_PAGE_SUCCESS,
             payload:response.data
         })
 
 
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -150,7 +150,7 @@ export const getSuspendedSeller=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:GET_SUSPENDED_SELLER_PAGE_FAILURE,
+            type:GET_SUSPENDED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
     }
@@ -160,16 +160,16 @@ export const getSuspendedSeller=(data,token)=>async(dispatch)=>{
 
 
 
-export const rejectSellerById=(data,token)=>async(dispatch)=>{
+export const rejectShopById=(data,token)=>async(dispatch)=>{
   
     const id=data.id;
  
     try{
         dispatch({
-            type:REJECT_SELLER_BY_ID_REQUEST,
+            type:REJECT_SHOPS_BY_ID_REQUEST,
             payload:data
         })
-        const res=await axios.post(`${backend_url}/auth/seller/reject/seller/${id}`,
+        const res=await axios.post(`${backend_url}/auth/shops/reject/shop/${id}`,
             data,
             {
                 headers: {
@@ -179,12 +179,12 @@ export const rejectSellerById=(data,token)=>async(dispatch)=>{
 
         console.log(res,"kjnjknkjnkjn");
         dispatch({
-            type:REJECT_SELLER_BY_ID_SUCCESS,
+            type:REJECT_SHOPS_BY_ID_SUCCESS,
             payload:res.data
         })
-        toast.success("Seller rejected successfully");
+        toast.success("SHOPS rejected successfully");
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -194,7 +194,7 @@ export const rejectSellerById=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:REJECT_SELLER_BY_ID_FAILURE,
+            type:REJECT_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
     }
@@ -202,15 +202,15 @@ export const rejectSellerById=(data,token)=>async(dispatch)=>{
 }
 
 
-export const ApproveSellerById=(data,token)=>async(dispatch)=>{
+export const ApproveShopById=(data,token)=>async(dispatch)=>{
   
  const id=data.id;
     try{
         dispatch({
-            type:APPROVE_SELLER_BY_ID_REQUEST,
+            type:APPROVE_SHOPS_BY_ID_REQUEST,
             payload:data
         })
-        const res=await axios.post(`${backend_url}/auth/seller/approve/seller/${id}`,
+        const res=await axios.post(`${backend_url}/auth/shops/approve/shop/${id}`,
             data,
             {
                 headers: {
@@ -220,13 +220,13 @@ export const ApproveSellerById=(data,token)=>async(dispatch)=>{
 
         console.log(res,"kjnjknkjnkjn");
         dispatch({
-            type:APPROVE_SELLER_BY_ID_SUCCESS,
+            type:APPROVE_SHOPS_BY_ID_SUCCESS,
             payload:res.data
         })
-toast.success("Seller Approved successfully");
+toast.success("SHOPS Approved successfully");
 
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -236,7 +236,7 @@ toast.success("Seller Approved successfully");
 
   toast.error(message);
         dispatch({
-            type: APPROVE_SELLER_BY_ID_FAILURE,
+            type: APPROVE_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
     }
@@ -245,16 +245,16 @@ toast.success("Seller Approved successfully");
 
 
 
-export const getSellerById=(data,token)=>async(dispatch)=>{
+export const getShopById=(data,token)=>async(dispatch)=>{
   
     console.log(data)
  const id=data.id;
     try{
         dispatch({
-            type:GET_SELLER_BY_ID_REQUEST,
+            type:GET_SHOPS_BY_ID_REQUEST,
             payload:data
         })
-        const res=await axios.get(`${backend_url}/auth/seller/check/seller/${id}`,
+        const res=await axios.get(`${backend_url}/auth/shops/check/shop/${id}`,
           
             {
                 headers: {
@@ -264,13 +264,13 @@ export const getSellerById=(data,token)=>async(dispatch)=>{
 
         console.log(res,"kjnjknkjnkjn");
         dispatch({
-            type:GET_SELLER_BY_ID_SUCCESS,
+            type:GET_SHOPS_BY_ID_SUCCESS,
             payload:res.data
         })
 
 
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -280,7 +280,7 @@ export const getSellerById=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:GET_SELLER_BY_ID_FAILURE,
+            type:GET_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
     }
@@ -288,21 +288,21 @@ export const getSellerById=(data,token)=>async(dispatch)=>{
 }
 
 
-export const getApprovedSeller=(data,token)=>async(dispatch)=>{
+export const getApprovedSHOPS=(data,token)=>async(dispatch)=>{
   
  
  const pageno=data.pageno-1;  
  const pagesize=data.pagesize;
     try{
         dispatch({
-            type:GET_APPROVED_SELLER_PAGE_REQUEST,
+            type:GET_APPROVED_SHOPS_PAGE_REQUEST,
             payload:data
         })
        
         
         
  const response = await axios.get(
-            `${backend_url}/auth/seller/approve/seller/page`,
+            `${backend_url}/auth/shops/approve/shop/page`,
             {
                 params: {
                     pageno,
@@ -316,13 +316,13 @@ export const getApprovedSeller=(data,token)=>async(dispatch)=>{
 
         console.log(response,"kjnjknkjnkjn");
         dispatch({
-            type:GET_APPROVED_SELLER_PAGE_SUCCESS,
+            type:GET_APPROVED_SHOPS_PAGE_SUCCESS,
             payload:response.data
         })
 
 
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -332,7 +332,7 @@ export const getApprovedSeller=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:GET_APPROVED_SELLER_PAGE_FAILURE,
+            type:GET_APPROVED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
     }
@@ -340,19 +340,19 @@ export const getApprovedSeller=(data,token)=>async(dispatch)=>{
 }
 
 
-export const getUnApprovedSeller=(data,token)=>async(dispatch)=>{
+export const getUnApprovedSHOPS=(data,token)=>async(dispatch)=>{
     
  const pageno=data.pageno-1;  
  const pagesize=data.pagesize;
     try{
         dispatch({
-            type:GET_UNAPPROVED_SELLER_PAGE_REQUEST,
+            type:GET_UNAPPROVED_SHOPS_PAGE_REQUEST,
             payload:data
         })
        
 
  const response = await axios.get(
-            `${backend_url}/auth/seller/unapprove/seller/page`,
+            `${backend_url}/auth/shops/unapprove/shop/page`,
             {
                 params: {
                     pageno,
@@ -366,13 +366,13 @@ export const getUnApprovedSeller=(data,token)=>async(dispatch)=>{
 
         console.log(response,"kjnjknkjnkjn");
         dispatch({
-            type:GET_UNAPPROVED_SELLER_PAGE_SUCCESS,
+            type:GET_UNAPPROVED_SHOPS_PAGE_SUCCESS,
             payload:response.data
         })
 
 
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -382,7 +382,7 @@ export const getUnApprovedSeller=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:GET_UNAPPROVED_SELLER_PAGE_FAILURE,
+            type:GET_UNAPPROVED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
     }
@@ -397,26 +397,26 @@ export const getUnApprovedSeller=(data,token)=>async(dispatch)=>{
 
 
 
-export const LoginSeller=(data)=>async(dispatch)=>{
+export const LoginSHOPS=(data)=>async(dispatch)=>{
  
     try{
         dispatch({
-            type:LOGIN_SELLER_REQUEST
+            type:LOGIN_SHOPS_REQUEST
         })
-        const res=await axios.post(`${backend_url}/auth/login/seller`,
+        const res=await axios.post(`${backend_url}/auth/login/SHOPS`,
             data,
             {
   withCredentials: true
 });
         console.log(res);
         dispatch({
-            type:LOGIN_SELLER_SUCCESS,
+            type:LOGIN_SHOPS_SUCCESS,
             payload:res.data
         })
     }catch(e){
         toast.error(e.message,"error");
         dispatch({
-            type:LOGIN_SELLER_FAILURE,
+            type:LOGIN_SHOPS_FAILURE,
             payload:e.message
         })
     }
@@ -424,15 +424,17 @@ export const LoginSeller=(data)=>async(dispatch)=>{
 }
 
 
-export const RegisterSeller=(data,token)=>async(dispatch)=>{
+
+
+export const Request2Shop=(data,token)=>async(dispatch)=>{
   
  
     try{
         dispatch({
-            type:REGISTER_SELLER_REQUEST,
+            type:REGISTER_SHOPS_REQUEST,
             payload:data
         })
-        const res=await axios.post(`${backend_url}/auth/seller/create/seller`,
+        const res=await axios.post(`${backend_url}/auth/shops/applyforshop`,
             data,
             {
                 headers: {
@@ -442,14 +444,13 @@ export const RegisterSeller=(data,token)=>async(dispatch)=>{
 
         console.log(res,"kjnjknkjnkjn");
         dispatch({
-            type:REGISTER_SELLER_SUCCESS,
+            type:REGISTER_SHOPS_SUCCESS,
             payload:res.data
         })
-        toast.success("Seller Registered successfully");
-
-
+        toast.success("Application Submitted successfully");
+        
     }catch(e){
-        console.log("error in register seller action");
+        console.log("error in register SHOPS action");
         console.log(e)
          const message =
     e.response?.data?.error ||
@@ -459,7 +460,50 @@ export const RegisterSeller=(data,token)=>async(dispatch)=>{
 
   toast.error(message);
         dispatch({
-            type:REGISTER_SELLER_FAILURE,
+            type:REGISTER_SHOPS_FAILURE,
+            payload:e.message
+        })
+    }
+  
+}
+
+
+
+export const CreateShop=(data,token)=>async(dispatch)=>{
+  
+ 
+    try{
+        dispatch({
+            type:REGISTER_SHOPS_REQUEST,
+            payload:data
+        })
+        const res=await axios.post(`${backend_url}/auth/shops/create/shop`,
+            data,
+            {
+                headers: {
+      Authorization: `Bearer ${token}`
+    }
+});
+
+        console.log(res,"kjnjknkjnkjn");
+        dispatch({
+            type:REGISTER_SHOPS_SUCCESS,
+            payload:res.data
+        })
+        toast.success("SHOP Registered successfully");
+
+    }catch(e){
+        console.log("error in register SHOPS action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:REGISTER_SHOPS_FAILURE,
             payload:e.message
         })
     }

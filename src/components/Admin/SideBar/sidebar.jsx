@@ -18,7 +18,7 @@ export default function Sidebar() {
     const isActive = pathname === item.href.split('?')[0];
 
   return(
-  <div className="flow-root p-5" key={index}>
+  <div className="flow-root p-5 mb-50 " key={index}>
   
   
                         <Link
@@ -26,6 +26,7 @@ export default function Sidebar() {
                           className={`-m-2 cursor-pointer block p-2 font-medium  ${isActive ? "text-yellow-500 font-extrabold text-xl" : "text-background"}` } >
                           {item.name}
                         </Link>
+
                       </div>)})}
 </div>
     </>

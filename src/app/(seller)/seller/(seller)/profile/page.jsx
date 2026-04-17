@@ -30,8 +30,8 @@ export default function page () {
     }
          return (
         <>
-            <div className="grid grid-cols-1 p-5">
-<div className="w-full">
+            <div className="grid grid-cols-1 p-5 ">
+<div className="w-full mb-20">
                <UserDetails 
                 name={"Bhaskar"} 
                 phone={"6395653472"}
@@ -44,18 +44,19 @@ export default function page () {
                    />
 
                    </div>
-                   <div className="w-full">
+                   <div className="w-full grid grid-cols-1 gap-5">
                     <div className="w-full">
-                        <h1 className="text-2xl md:text-3xl font-bold">
+                        <h1 className="text-2xl text-4xl font-bold">
                             Shops
                         </h1>
+<p className="text-2xl ">Approval of shops may required 24-48 hr and after Approval you can only add product etc .</p>
                     </div>
                     <div className="w-full">
                         
                     </div>
                     
 <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-5">
-                        <button className="border p-2 ">Apply for  New Shop </button>
+                        <a className="border p-2 text-center " href="/seller/shops/apply">Apply for  New Shop </a>
                          <button className="border p-2">Close Shop </button>
                     </div>
 
