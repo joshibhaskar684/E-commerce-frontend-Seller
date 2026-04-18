@@ -44,6 +44,9 @@ GET_SUSPENDED_SELLER_PAGE_FAILURE,
     LOGOUT_SELLER_REQUEST,
     LOGOUT_SELLER_SUCCESS,
 
+    GET_SELLER_PROFILE_REQUEST,
+    GET_SELLER_PROFILE_SUCCESS,   
+    GET_SELLER_PROFILE_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
@@ -52,7 +55,7 @@ const initalstate = {
     approveseller: null,
     unapproveseller:null,
     seller:null,
-    sellerdetails: null,
+    sellerdetails:null,
     payload: null,
     error: null,
     loading: false
@@ -61,6 +64,7 @@ const initalstate = {
 export default function sellerReducer(state = initalstate, action) {
     switch (action.type) {
 
+        case GET_SELLER_PROFILE_REQUEST:
         case  GET_REJECTED_SELLER_PAGE_REQUEST:
         case GET_SUSPENDED_SELLER_PAGE_REQUEST:
         case APPROVE_SELLER_BY_ID_REQUEST:
@@ -88,6 +92,9 @@ export default function sellerReducer(state = initalstate, action) {
 
         case GET_SUSPENDED_SELLER_PAGE_SUCCESS:
              return { ...state, suspendedseller: action.payload, loading: false }
+  
+             case GET_SELLER_PROFILE_SUCCESS:
+             return { ...state, sellerdetails: action.payload, loading: false }
 
 
         case APPROVE_SELLER_BY_ID_SUCCESS:
@@ -98,7 +105,7 @@ export default function sellerReducer(state = initalstate, action) {
             return { ...state, seller: action.payload, loading: false }
 
 
-        
+        case GET_SELLER_PROFILE_FAILURE:
         case  GET_REJECTED_SELLER_PAGE_FAILURE:
         case GET_SUSPENDED_SELLER_PAGE_FAILURE:
         case APPROVE_SELLER_BY_ID_FAILURE:

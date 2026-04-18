@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Cookies from "js-cookie";
 
-import { getShopById,ApproveSellerById,rejectShopById } from "@/redux-store/authstore/shops/action";
+import { getShopById,ApproveShopById,rejectShopById } from "@/redux-store/authstore/shops/action";
 import ShopDataCard from "@/components/Admin/Cards/ShopDataCard/ShopDataCard";
-import RejectSellerModal from "@/components/Admin/Modals/RejectSellerModal";
+import RejectShopModal from "@/components/Admin/Modals/RejectShopModal";
 
 export default function page() {
     const [loading,setLoading]=useState(false);
@@ -34,9 +34,11 @@ export default function page() {
     }
 
     const ApproveRequest=async()=>{ 
-        setLoading(true)
+        console.log("approve shop")
+        setLoading(true);
         try{
              const token=Cookies.get("adminToken");
+
             await dispatch(ApproveShopById({id:sellerId},token))
             window.location.reload();
         }
@@ -82,13 +84,13 @@ export default function page() {
 disabled={loading}
  className={`border p-5 text-xl font-bold rounded bg-yellow-500  cursor-pointer ${loading?" bg-background cursor-not-allowed":""}`}
  onClick={()=>ApproveRequest()}>
-   {loading?"Approving....": "Approve Seller"}
+   {loading?"Approving....": "Approve Shop"}
     </button>
 
-<button className="border p-5 text-xl font-bold rounded  cursor-pointer " onClick={()=>setOpenmodal(true)}>Reject Seller</button>
+<button className="border p-5 text-xl font-bold rounded  cursor-pointer " onClick={()=>setOpenmodal(true)}>Reject Shop</button>
             </div>
             </div>
-<RejectSellerModal setReason={setReason}  reason={reason} setOpenmodal={setOpenmodal} openModal={openModal} rejection={rejection} sellerId={sellerId} handleRejectSeller={handleRejectSeller}/>
+<RejectShopModal setReason={setReason}  reason={reason} setOpenmodal={setOpenmodal} openModal={openModal} rejection={rejection} sellerId={sellerId} handleRejectSeller={handleRejectSeller}/>
         </>
     )
 }

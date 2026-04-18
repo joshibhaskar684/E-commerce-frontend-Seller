@@ -1,4 +1,10 @@
 import { 
+GET_SHOPS_LIST_REQUEST,
+GET_SHOPS_LIST_SUCCESS,
+GET_SHOPS_LIST_FAILURE,
+    SUSPEND_SHOP_BY_ID_REQUEST,
+    SUSPEND_SHOP_BY_ID_SUCCESS,
+    SUSPEND_SHOP_BY_ID_FAILURE,
 
     GET_REJECTED_SHOPS_PAGE_REQUEST,
     GET_REJECTED_SHOPS_PAGE_SUCCESS,
@@ -54,6 +60,98 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
 
+
+export const getShopListIntro=(data)=>async(dispatch)=>{
+  
+ 
+ const token=data.token;
+    try{
+        dispatch({
+            type:GET_SHOPS_LIST_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/shops/apply/total/shop`,
+            {
+                
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        console.log(response,"kjnjknkjnkjn");
+        dispatch({
+            type:GET_SHOPS_LIST_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log("error in register SHOPS action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_SHOPS_LIST_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+export const SuspendShopByid=(data,token)=>async(dispatch)=>{
+
+    const id=data.id;
+ 
+    try{
+        dispatch({
+            type:SUSPEND_SHOP_BY_ID_REQUEST,
+            payload:data
+        })
+        const res=await axios.post(`${backend_url}/auth/shops/suspend/shop/${id}`,
+            data,
+            {
+                headers: {
+      Authorization: `Bearer ${token}`
+    }
+});
+
+        console.log(res,"kjnjknkjnkjn");
+        dispatch({
+            type:SUSPEND_SHOP_BY_ID_SUCCESS,
+            payload:res.data
+        })
+        toast.success("SHOPS rejected successfully");
+    }catch(e){
+        console.log("error in register SHOPS action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:SUSPEND_SHOP_BY_ID_FAILURE,
+            payload:e.message
+        })
+    }
+
+
+
+}
+
 export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
   
  
@@ -68,7 +166,7 @@ export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
         
         
  const response = await axios.get(
-            `${backend_url}/auth/rejected/SHOPS/page`,
+            `${backend_url}/auth/shops/rejected/shop/page`,
             {
                 params: {
                     pageno,
@@ -120,7 +218,7 @@ export const getSuspendedSHOPS=(data,token)=>async(dispatch)=>{
         
         
  const response = await axios.get(
-            `${backend_url}/auth/suspended/SHOPS/page`,
+            `${backend_url}/auth/shops/suspended/shop/page`,
             {
                 params: {
                     pageno,
@@ -203,7 +301,7 @@ export const rejectShopById=(data,token)=>async(dispatch)=>{
 
 
 export const ApproveShopById=(data,token)=>async(dispatch)=>{
-  
+  console.log("Approve shop by id ")
  const id=data.id;
     try{
         dispatch({

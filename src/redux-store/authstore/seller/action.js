@@ -1,4 +1,7 @@
 import { 
+    GET_SELLER_PROFILE_REQUEST,
+    GET_SELLER_PROFILE_SUCCESS,   
+    GET_SELLER_PROFILE_FAILURE,
 
     GET_REJECTED_SELLER_PAGE_REQUEST,
     GET_REJECTED_SELLER_PAGE_SUCCESS,
@@ -52,7 +55,52 @@ import { toast } from "react-toastify";
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
+export const getSellerProfile=(data)=>async(dispatch)=>{
+    const token=data.token;
+    console.log(token,data,"token in action");
+    try{
+        dispatch({
+            type: GET_SELLER_PROFILE_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/seller/profile`,
+            {
+                
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
 
+        console.log(response,"kjnjknkjnkjn");
+        dispatch({
+            type: GET_SELLER_PROFILE_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log("error in register seller action");
+        console.log(e)
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_SELLER_PROFILE_FAILURE,
+            payload:e.message
+        })
+    }
+
+}
+  
 
 export const getRejectedSeller=(data,token)=>async(dispatch)=>{
   

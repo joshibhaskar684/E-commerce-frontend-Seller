@@ -1,7 +1,7 @@
 "use client";
 
 import Cookies from "js-cookie";
-import { getRejectedSeller } from "@/redux-store/authstore/seller/action";
+import { getRejectedSHOPS } from "@/redux-store/authstore/shops/action";
 import SellerCard from "@/components/Admin/Cards/SellerCard/SellerCard";
 import {  Pagination } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -17,7 +17,8 @@ export default function page(){
         const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
         const router=useRouter();
        
-    const seller=useSelector((state)=>state.sellerReducer.rejectedseller);
+        
+    const seller=useSelector((state)=>state.ShopsReducer.rejectedShops);
 
     console.log(seller,"products");
     useEffect(()=>{
@@ -26,14 +27,14 @@ handleSellerLoading();
     );
     const handleSellerLoading=()=>{
         const token=Cookies.get("adminToken");
-        dispatch(getRejectedSeller({pageno,pagesize},token));
+        dispatch(getRejectedSHOPS({pageno,pagesize},token));
         
     }
     
     const handleViewMore=(id)=>{
         try{
         setSelectedId(id);
-        router.push(`/admin/sellers/${id}`);
+        router.push(`/admin/shop/${id}`);
     }
     catch(e){
 

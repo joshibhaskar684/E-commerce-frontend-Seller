@@ -1,6 +1,14 @@
 import { FaProductHunt } from "react-icons/fa";
 import {
 
+    GET_SHOPS_LIST_REQUEST,
+    GET_SHOPS_LIST_SUCCESS,
+    GET_SHOPS_LIST_FAILURE,
+
+    SUSPEND_SHOP_BY_ID_REQUEST,
+    SUSPEND_SHOP_BY_ID_SUCCESS,
+    SUSPEND_SHOP_BY_ID_FAILURE,
+
 
      GET_REJECTED_SHOPS_PAGE_REQUEST,
     GET_REJECTED_SHOPS_PAGE_SUCCESS,
@@ -47,9 +55,10 @@ GET_SUSPENDED_SHOPS_PAGE_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
-    rejectedSHOPS:null,
-    suspendedSHOPS:null,
-    approveSHOPS: null,
+    shopsList:null
+    rejectedShops:null,
+    suspendedShops:null,
+    approveShops: null,
     unapproveShops:null,
     SHOPS:null,
     Shopsdetails: null,
@@ -61,6 +70,8 @@ const initalstate = {
 export default function ShopsReducer(state = initalstate, action) {
     switch (action.type) {
 
+        case GET_SHOPS_LIST_REQUEST:
+        case SUSPEND_SHOP_BY_ID_REQUEST:
         case  GET_REJECTED_SHOPS_PAGE_REQUEST:
         case GET_SUSPENDED_SHOPS_PAGE_REQUEST:
         case APPROVE_SHOPS_BY_ID_REQUEST:
@@ -74,7 +85,7 @@ export default function ShopsReducer(state = initalstate, action) {
             return { ...state, loading: true }
 
              case  GET_APPROVED_SHOPS_PAGE_SUCCESS:
-            return { ...state, approveSHOPS: action.payload, loading: false }
+            return { ...state, approveShops: action.payload, loading: false }
 
             case  GET_UNAPPROVED_SHOPS_PAGE_SUCCESS:
             return { ...state, unapproveShops: action.payload, loading: false }
@@ -84,12 +95,18 @@ export default function ShopsReducer(state = initalstate, action) {
 
 
         case  GET_REJECTED_SHOPS_PAGE_SUCCESS:
-             return { ...state, rejectedSHOPS: action.payload, loading: false }
+             return { ...state, rejectedShops: action.payload, loading: false }
 
         case GET_SUSPENDED_SHOPS_PAGE_SUCCESS:
-             return { ...state, suspendedSHOPS: action.payload, loading: false }
+             return { ...state, suspendedShops: action.payload, loading: false }
 
 
+        case GET_SHOPS_LIST_SUCCESS:
+ return { ...state, shopsList: action.payload, loading: false }
+
+
+
+        case SUSPEND_SHOP_BY_ID_SUCCESS:
         case APPROVE_SHOPS_BY_ID_SUCCESS:
         case REJECT_SHOPS_BY_ID_SUCCESS:
         case LOGOUT_SHOPS_SUCCESS:
@@ -97,8 +114,8 @@ export default function ShopsReducer(state = initalstate, action) {
         case LOGIN_SHOPS_SUCCESS:
             return { ...state, SHOPS: action.payload, loading: false }
 
-
-        
+        case GET_SHOPS_LIST_FAILURE:
+        case SUSPEND_SHOP_BY_ID_FAILURE:
         case  GET_REJECTED_SHOPS_PAGE_FAILURE:
         case GET_SUSPENDED_SHOPS_PAGE_FAILURE:
         case APPROVE_SHOPS_BY_ID_FAILURE:
