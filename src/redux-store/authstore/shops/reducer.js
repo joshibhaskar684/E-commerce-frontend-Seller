@@ -55,7 +55,7 @@ GET_SUSPENDED_SHOPS_PAGE_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
-    shopsList:null
+    shopsList:null,
     rejectedShops:null,
     suspendedShops:null,
     approveShops: null,

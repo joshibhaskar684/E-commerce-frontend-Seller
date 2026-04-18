@@ -26,9 +26,12 @@ export default function page () {
     const [openModal1, setOpenmodal1] = useState(false);
         const [loading, setLoading] = useState(false);
         
+         const [closingId, setClosingId] = useState('');
+
+        
     const seller=useSelector((state)=>state.sellerReducer.sellerdetails);
     
-    const shops=useSelector((state)=>state.ShopsReducer.Shopsdetails);
+    const shops=useSelector((state)=>state.ShopsReducer.shopsList);
 
 
     const changePassword=async(e)=>{
@@ -39,6 +42,12 @@ export default function page () {
         e.preventDefault();
 
     }
+
+     useEffect(()=>{
+ console.log(shops);
+    },[shops]
+    );
+   
      
 const getSellerdata=async()=>{
           const token = Cookies.get("sellerToken");
@@ -52,7 +61,9 @@ const getSellerdata=async()=>{
 getSellerdata();
     },[]
     );
+const closeShopwithId=()=>{
 
+}
 
          return (
         <>
@@ -79,10 +90,11 @@ getSellerdata();
                     </div>
                     <div className="w-full">
 
-
-                        <ShopListCards shopdata={shops} closeShopwithId={closeShopwithId}/>
-                        
-                    </div>
+{
+    shops?.map((item,index)=>( <ShopListCards key={index} shopdata={shops} closeShopwithId={closeShopwithId} setClosingId={setClosingId} closingId={closingId}/>
+))
+                                               
+}                    </div>
                     
 <div className="w-full grid grid-cols-1  place-items-center gap-5">
                         <a className="border p-2 text-center w-full " href="/seller/shops/apply">Apply for  New Shop </a>
