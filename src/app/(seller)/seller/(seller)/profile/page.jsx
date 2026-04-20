@@ -67,7 +67,7 @@ const closeShopwithId=()=>{
 
          return (
         <>
-            <div className="grid grid-cols-1 p-5 h-full ">
+            <div className="grid grid-cols-1 p-5 h-full w-full ">
 <div className="w-full mb-20">
                <UserDetails 
                sellerdetails={seller}
@@ -80,7 +80,9 @@ const closeShopwithId=()=>{
 
                    </div>
 
-                   <div className="h-[40px] p-10 h-full w-full mt-30"></div>
+                   <div className="h-[40px] p-10 h-full w-full mt-30">
+j
+                   </div>
                    <div className="w-full grid grid-cols-1 gap-5">
                     <div className="w-full">
                         <h1 className="text-2xl text-4xl font-bold">
