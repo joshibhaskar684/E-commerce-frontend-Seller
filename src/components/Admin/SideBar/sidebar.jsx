@@ -18,7 +18,7 @@ export default function Sidebar() {
     const isActive = pathname === item.href.split('?')[0];
 
   return(
-  <div className="flow-root p-5 mb-50 " key={index}>
+  <div className="flow-root p-5  " key={index}>
   
   
                         <Link

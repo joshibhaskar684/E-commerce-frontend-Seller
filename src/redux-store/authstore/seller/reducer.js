@@ -1,6 +1,11 @@
 import { FaProductHunt } from "react-icons/fa";
 import {
 
+    
+TOTAL_SELLER_COUNT_DATA_REQUEST,
+TOTAL_SELLER_COUNT_DATA_SUCCESS,
+TOTAL_SELLER_COUNT_DATA_FAILURE,
+
 
      GET_REJECTED_SELLER_PAGE_REQUEST,
     GET_REJECTED_SELLER_PAGE_SUCCESS,
@@ -50,6 +55,7 @@ GET_SUSPENDED_SELLER_PAGE_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
+    sellerCount:null,
     rejectedseller:null,
     suspendedseller:null,
     approveseller: null,
@@ -64,6 +70,7 @@ const initalstate = {
 export default function sellerReducer(state = initalstate, action) {
     switch (action.type) {
 
+         case TOTAL_SELLER_COUNT_DATA_REQUEST:
         case GET_SELLER_PROFILE_REQUEST:
         case  GET_REJECTED_SELLER_PAGE_REQUEST:
         case GET_SUSPENDED_SELLER_PAGE_REQUEST:
@@ -96,6 +103,9 @@ export default function sellerReducer(state = initalstate, action) {
              case GET_SELLER_PROFILE_SUCCESS:
              return { ...state, sellerdetails: action.payload, loading: false }
 
+              case TOTAL_SELLER_COUNT_DATA_SUCCESS:
+ return { ...state, sellerCount: action.payload, loading: false }
+
 
         case APPROVE_SELLER_BY_ID_SUCCESS:
         case REJECT_SELLER_BY_ID_SUCCESS:
@@ -104,7 +114,7 @@ export default function sellerReducer(state = initalstate, action) {
         case LOGIN_SELLER_SUCCESS:
             return { ...state, seller: action.payload, loading: false }
 
-
+  case TOTAL_SELLER_COUNT_DATA_FAILURE:
         case GET_SELLER_PROFILE_FAILURE:
         case  GET_REJECTED_SELLER_PAGE_FAILURE:
         case GET_SUSPENDED_SELLER_PAGE_FAILURE:

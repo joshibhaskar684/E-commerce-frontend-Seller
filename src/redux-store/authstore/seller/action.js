@@ -1,4 +1,10 @@
 import { 
+
+    
+TOTAL_SELLER_COUNT_DATA_REQUEST,
+TOTAL_SELLER_COUNT_DATA_SUCCESS,
+TOTAL_SELLER_COUNT_DATA_FAILURE,
+
     GET_SELLER_PROFILE_REQUEST,
     GET_SELLER_PROFILE_SUCCESS,   
     GET_SELLER_PROFILE_FAILURE,
@@ -54,6 +60,54 @@ import { toast } from "react-toastify";
 
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+
+
+
+
+export const totalSellerCountForAdmin=(data)=>async(dispatch)=>{
+ 
+ 
+ const token=data.token;
+    try{
+        dispatch({
+            type:TOTAL_SELLER_COUNT_DATA_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/seller/count`,
+            {
+                
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+console.log(response,"respomse")
+        dispatch({
+            type:TOTAL_SELLER_COUNT_DATA_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log(e.message,"error")
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:TOTAL_SELLER_COUNT_DATA_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
 
 export const getSellerProfile=(data)=>async(dispatch)=>{
     const token=data.token;

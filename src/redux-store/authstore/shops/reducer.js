@@ -1,6 +1,11 @@
 import { FaProductHunt } from "react-icons/fa";
 import {
 
+    
+TOTAL_SHOPS_COUNT_DATA_REQUEST,
+TOTAL_SHOPS_COUNT_DATA_SUCCESS,
+TOTAL_SHOPS_COUNT_DATA_FAILURE,
+
     GET_SHOPS_LIST_REQUEST,
     GET_SHOPS_LIST_SUCCESS,
     GET_SHOPS_LIST_FAILURE,
@@ -55,6 +60,7 @@ GET_SUSPENDED_SHOPS_PAGE_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
+    shopCount:null,
     shopsList:null,
     rejectedShops:null,
     suspendedShops:null,
@@ -70,6 +76,7 @@ const initalstate = {
 export default function ShopsReducer(state = initalstate, action) {
     switch (action.type) {
 
+        case TOTAL_SHOPS_COUNT_DATA_REQUEST:
         case GET_SHOPS_LIST_REQUEST:
         case SUSPEND_SHOP_BY_ID_REQUEST:
         case  GET_REJECTED_SHOPS_PAGE_REQUEST:
@@ -104,6 +111,8 @@ export default function ShopsReducer(state = initalstate, action) {
         case GET_SHOPS_LIST_SUCCESS:
  return { ...state, shopsList: action.payload, loading: false }
 
+ case TOTAL_SHOPS_COUNT_DATA_SUCCESS:
+ return { ...state, shopCount: action.payload, loading: false }
 
 
         case SUSPEND_SHOP_BY_ID_SUCCESS:
@@ -114,6 +123,7 @@ export default function ShopsReducer(state = initalstate, action) {
         case LOGIN_SHOPS_SUCCESS:
             return { ...state, SHOPS: action.payload, loading: false }
 
+        case TOTAL_SHOPS_COUNT_DATA_FAILURE:
         case GET_SHOPS_LIST_FAILURE:
         case SUSPEND_SHOP_BY_ID_FAILURE:
         case  GET_REJECTED_SHOPS_PAGE_FAILURE:

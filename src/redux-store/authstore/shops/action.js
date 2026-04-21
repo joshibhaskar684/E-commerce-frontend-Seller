@@ -1,7 +1,13 @@
 import { 
+TOTAL_SHOPS_COUNT_DATA_REQUEST,
+TOTAL_SHOPS_COUNT_DATA_SUCCESS,
+TOTAL_SHOPS_COUNT_DATA_FAILURE,
+
+
 GET_SHOPS_LIST_REQUEST,
 GET_SHOPS_LIST_SUCCESS,
 GET_SHOPS_LIST_FAILURE,
+
     SUSPEND_SHOP_BY_ID_REQUEST,
     SUSPEND_SHOP_BY_ID_SUCCESS,
     SUSPEND_SHOP_BY_ID_FAILURE,
@@ -58,7 +64,98 @@ import { toast } from "react-toastify";
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
+export const totalShopCountForAdmin=(data)=>async(dispatch)=>{
+ 
+ 
+ const token=data.token;
+    try{
+        dispatch({
+            type:TOTAL_SHOPS_COUNT_DATA_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.get(
+            `${backend_url}/auth/shops/shop/count`,
+            {
+                
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+console.log(response,"respomse")
+        dispatch({
+            type:TOTAL_SHOPS_COUNT_DATA_SUCCESS,
+            payload:response.data
+        })
 
+
+    }catch(e){
+        console.log(e.message,"error")
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:TOTAL_SHOPS_COUNT_DATA_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
+
+
+
+export const closeShopWithId=(data)=>async(dispatch)=>{
+ 
+ 
+ const token=data.token;
+ const id=data.id;  
+    try{
+        dispatch({
+            type:GET_SHOPS_LIST_REQUEST,
+            payload:data
+        })
+       
+        
+        
+ const response = await axios.post(
+            `${backend_url}/auth/shops/close/${id}`,{},
+            {
+                
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+console.log(response,"respomse")
+        dispatch({
+            type:GET_SHOPS_LIST_SUCCESS,
+            payload:response.data
+        })
+
+
+    }catch(e){
+        console.log(e.message,"error")
+         const message =
+    e.response?.data?.error ||
+    e.response?.data ||
+    e.message ||
+    "Unknown error";
+
+  toast.error(message);
+        dispatch({
+            type:GET_SHOPS_LIST_FAILURE,
+            payload:e.message
+        })
+    }
+   
+}
 
 
 export const getShopListIntro=(data)=>async(dispatch)=>{
@@ -72,6 +169,7 @@ export const getShopListIntro=(data)=>async(dispatch)=>{
         })
        
         
+
         
  const response = await axios.get(
             `${backend_url}/auth/shops/apply/total/shop`,
@@ -83,7 +181,6 @@ export const getShopListIntro=(data)=>async(dispatch)=>{
             }
         );
 
-        console.log(response,"kjnjknkjnkjn");
         dispatch({
             type:GET_SHOPS_LIST_SUCCESS,
             payload:response.data
@@ -91,8 +188,6 @@ export const getShopListIntro=(data)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -126,15 +221,12 @@ export const SuspendShopByid=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:SUSPEND_SHOP_BY_ID_SUCCESS,
             payload:res.data
         })
         toast.success("SHOPS rejected successfully");
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -178,7 +270,6 @@ export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
             }
         );
 
-        console.log(response,"kjnjknkjnkjn");
         dispatch({
             type:GET_REJECTED_SHOPS_PAGE_SUCCESS,
             payload:response.data
@@ -186,8 +277,6 @@ export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -230,7 +319,6 @@ export const getSuspendedSHOPS=(data,token)=>async(dispatch)=>{
             }
         );
 
-        console.log(response,"kjnjknkjnkjn");
         dispatch({
             type:GET_SUSPENDED_SHOPS_PAGE_SUCCESS,
             payload:response.data
@@ -238,8 +326,6 @@ export const getSuspendedSHOPS=(data,token)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -275,15 +361,12 @@ export const rejectShopById=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:REJECT_SHOPS_BY_ID_SUCCESS,
             payload:res.data
         })
         toast.success("SHOPS rejected successfully");
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -301,7 +384,6 @@ export const rejectShopById=(data,token)=>async(dispatch)=>{
 
 
 export const ApproveShopById=(data,token)=>async(dispatch)=>{
-  console.log("Approve shop by id ")
  const id=data.id;
     try{
         dispatch({
@@ -316,7 +398,6 @@ export const ApproveShopById=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:APPROVE_SHOPS_BY_ID_SUCCESS,
             payload:res.data
@@ -324,8 +405,6 @@ export const ApproveShopById=(data,token)=>async(dispatch)=>{
 toast.success("SHOPS Approved successfully");
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -345,7 +424,7 @@ toast.success("SHOPS Approved successfully");
 
 export const getShopById=(data,token)=>async(dispatch)=>{
   
-    console.log(data)
+ 
  const id=data.id;
     try{
         dispatch({
@@ -360,7 +439,6 @@ export const getShopById=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:GET_SHOPS_BY_ID_SUCCESS,
             payload:res.data
@@ -368,8 +446,6 @@ export const getShopById=(data,token)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -412,7 +488,6 @@ export const getApprovedSHOPS=(data,token)=>async(dispatch)=>{
             }
         );
 
-        console.log(response,"kjnjknkjnkjn");
         dispatch({
             type:GET_APPROVED_SHOPS_PAGE_SUCCESS,
             payload:response.data
@@ -420,8 +495,6 @@ export const getApprovedSHOPS=(data,token)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -462,7 +535,6 @@ export const getUnApprovedSHOPS=(data,token)=>async(dispatch)=>{
             }
         );
 
-        console.log(response,"kjnjknkjnkjn");
         dispatch({
             type:GET_UNAPPROVED_SHOPS_PAGE_SUCCESS,
             payload:response.data
@@ -470,8 +542,7 @@ export const getUnApprovedSHOPS=(data,token)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
+
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -506,7 +577,6 @@ export const LoginSHOPS=(data)=>async(dispatch)=>{
             {
   withCredentials: true
 });
-        console.log(res);
         dispatch({
             type:LOGIN_SHOPS_SUCCESS,
             payload:res.data
@@ -540,7 +610,6 @@ export const Request2Shop=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:REGISTER_SHOPS_SUCCESS,
             payload:res.data
@@ -548,8 +617,6 @@ export const Request2Shop=(data,token)=>async(dispatch)=>{
         toast.success("Application Submitted successfully");
         
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -583,7 +650,6 @@ export const CreateShop=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:REGISTER_SHOPS_SUCCESS,
             payload:res.data
@@ -591,8 +657,6 @@ export const CreateShop=(data,token)=>async(dispatch)=>{
         toast.success("SHOP Registered successfully");
 
     }catch(e){
-        console.log("error in register SHOPS action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||
