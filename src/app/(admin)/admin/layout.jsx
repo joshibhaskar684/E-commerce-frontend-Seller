@@ -12,7 +12,7 @@ export default async function Layout({ children }) {
                   <div className="">
                       <Sidebar/>
                   </div>
-                  <div className="overflow-y-auto flex-1 p-5  hide-scrollbar py-15 mb-10 ">
+                  <div className="overflow-y-auto flex-1 p-5  hide-scrollbar pt-2 mb-10 ">
                        {children}
                   </div>
   

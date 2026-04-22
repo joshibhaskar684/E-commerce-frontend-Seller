@@ -9,6 +9,7 @@ import  verifyReducer  from './verify/reducer';
 import  ShopsReducer from './shops/reducer';
 import  AdminReducer  from './admin/reducer';
 import { productReducer } from './product/reducer';
+import AdminDashBoardReducer from './adminDashboard/reducer';
 // import adminauthreducer from "./adminauth/reducer";
 // import AdminComponentsReducer from"./admincomponents/reducer";
 // import { PurchaseReducer } from './purchase/reducer';
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   sellerReducer:sellerReducer,
   AdminReducer:AdminReducer,
   ShopsReducer:ShopsReducer,
+  AdminDashBoardReducer:AdminDashBoardReducer,
 //   auth: authreducer,
 //   adminauth:adminauthreducer,
 // AdminCR:AdminComponentsReducer,
