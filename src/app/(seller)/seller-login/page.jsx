@@ -1,5 +1,5 @@
 "use client";
-import { LoginSeller } from "@/redux-store/authstore/user/action";
+import { LoginSeller } from "@/redux-store/authstore/seller/action";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

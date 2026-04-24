@@ -1,41 +1,44 @@
 import { FaProductHunt } from "react-icons/fa";
 import {
-
-    
-TOTAL_SELLER_COUNT_DATA_REQUEST,
-TOTAL_SELLER_COUNT_DATA_SUCCESS,
-TOTAL_SELLER_COUNT_DATA_FAILURE,
+    GET_TOTAL_DATA_OF_AUTH_SERVICE_REQUEST,
+    GET_TOTAL_DATA_OF_AUTH_SERVICE_SUCCESS,
+    GET_TOTAL_DATA_OF_AUTH_SERVICE_FAILURE,
 
 
-     GET_REJECTED_SELLER_PAGE_REQUEST,
+    TOTAL_SELLER_COUNT_DATA_REQUEST,
+    TOTAL_SELLER_COUNT_DATA_SUCCESS,
+    TOTAL_SELLER_COUNT_DATA_FAILURE,
+
+
+    GET_REJECTED_SELLER_PAGE_REQUEST,
     GET_REJECTED_SELLER_PAGE_SUCCESS,
     GET_REJECTED_SELLER_PAGE_FAILURE,
-    
-GET_SUSPENDED_SELLER_PAGE_REQUEST,
-GET_SUSPENDED_SELLER_PAGE_SUCCESS,
-GET_SUSPENDED_SELLER_PAGE_FAILURE,
 
-        APPROVE_SELLER_BY_ID_REQUEST,
-        APPROVE_SELLER_BY_ID_SUCCESS,
-        APPROVE_SELLER_BY_ID_FAILURE,
+    GET_SUSPENDED_SELLER_PAGE_REQUEST,
+    GET_SUSPENDED_SELLER_PAGE_SUCCESS,
+    GET_SUSPENDED_SELLER_PAGE_FAILURE,
 
-        
-        REJECT_SELLER_BY_ID_REQUEST,
-        REJECT_SELLER_BY_ID_SUCCESS,
-        REJECT_SELLER_BY_ID_FAILURE,
-    
+    APPROVE_SELLER_BY_ID_REQUEST,
+    APPROVE_SELLER_BY_ID_SUCCESS,
+    APPROVE_SELLER_BY_ID_FAILURE,
+
+
+    REJECT_SELLER_BY_ID_REQUEST,
+    REJECT_SELLER_BY_ID_SUCCESS,
+    REJECT_SELLER_BY_ID_FAILURE,
+
     GET_UNAPPROVED_SELLER_PAGE_REQUEST,
-    GET_UNAPPROVED_SELLER_PAGE_SUCCESS,        
+    GET_UNAPPROVED_SELLER_PAGE_SUCCESS,
     GET_UNAPPROVED_SELLER_PAGE_FAILURE,
 
     GET_APPROVED_SELLER_PAGE_REQUEST,
-        GET_APPROVED_SELLER_PAGE_SUCCESS,        
-        GET_APPROVED_SELLER_PAGE_FAILURE,
+    GET_APPROVED_SELLER_PAGE_SUCCESS,
+    GET_APPROVED_SELLER_PAGE_FAILURE,
 
-        
-        GET_SELLER_BY_ID_REQUEST,
-        GET_SELLER_BY_ID_SUCCESS,
-        GET_SELLER_BY_ID_FAILURE,
+
+    GET_SELLER_BY_ID_REQUEST,
+    GET_SELLER_BY_ID_SUCCESS,
+    GET_SELLER_BY_ID_FAILURE,
 
     REGISTER_SELLER_REQUEST,
     REGISTER_SELLER_SUCCESS,
@@ -50,18 +53,19 @@ GET_SUSPENDED_SELLER_PAGE_FAILURE,
     LOGOUT_SELLER_SUCCESS,
 
     GET_SELLER_PROFILE_REQUEST,
-    GET_SELLER_PROFILE_SUCCESS,   
+    GET_SELLER_PROFILE_SUCCESS,
     GET_SELLER_PROFILE_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
-    sellerCount:null,
-    rejectedseller:null,
-    suspendedseller:null,
+    totalShopCount: null,
+    sellerCount: null,
+    rejectedseller: null,
+    suspendedseller: null,
     approveseller: null,
-    unapproveseller:null,
-    seller:null,
-    sellerdetails:null,
+    unapproveseller: null,
+    seller: null,
+    sellerdetails: null,
     payload: null,
     error: null,
     loading: false
@@ -70,41 +74,46 @@ const initalstate = {
 export default function sellerReducer(state = initalstate, action) {
     switch (action.type) {
 
-         case TOTAL_SELLER_COUNT_DATA_REQUEST:
+        case GET_TOTAL_DATA_OF_AUTH_SERVICE_REQUEST:
+        case TOTAL_SELLER_COUNT_DATA_REQUEST:
         case GET_SELLER_PROFILE_REQUEST:
-        case  GET_REJECTED_SELLER_PAGE_REQUEST:
+        case GET_REJECTED_SELLER_PAGE_REQUEST:
         case GET_SUSPENDED_SELLER_PAGE_REQUEST:
         case APPROVE_SELLER_BY_ID_REQUEST:
         case REJECT_SELLER_BY_ID_REQUEST:
-        case  GET_SELLER_BY_ID_REQUEST:
+        case GET_SELLER_BY_ID_REQUEST:
         case GET_APPROVED_SELLER_PAGE_REQUEST:
         case GET_UNAPPROVED_SELLER_PAGE_REQUEST:
         case REGISTER_SELLER_REQUEST:
         case LOGIN_SELLER_REQUEST:
-            case LOGOUT_SELLER_REQUEST:
+        case LOGOUT_SELLER_REQUEST:
             return { ...state, loading: true }
 
-             case  GET_APPROVED_SELLER_PAGE_SUCCESS:
+        case GET_TOTAL_DATA_OF_AUTH_SERVICE_SUCCESS:
+            return { ...state, totalShopCount: action.payload, loading: false }
+
+
+        case GET_APPROVED_SELLER_PAGE_SUCCESS:
             return { ...state, approveseller: action.payload, loading: false }
 
-            case  GET_UNAPPROVED_SELLER_PAGE_SUCCESS:
+        case GET_UNAPPROVED_SELLER_PAGE_SUCCESS:
             return { ...state, unapproveseller: action.payload, loading: false }
 
-            case GET_SELLER_BY_ID_SUCCESS:
+        case GET_SELLER_BY_ID_SUCCESS:
             return { ...state, sellerdetails: action.payload, loading: false }
 
 
-        case  GET_REJECTED_SELLER_PAGE_SUCCESS:
-             return { ...state, rejectedseller: action.payload, loading: false }
+        case GET_REJECTED_SELLER_PAGE_SUCCESS:
+            return { ...state, rejectedseller: action.payload, loading: false }
 
         case GET_SUSPENDED_SELLER_PAGE_SUCCESS:
-             return { ...state, suspendedseller: action.payload, loading: false }
-  
-             case GET_SELLER_PROFILE_SUCCESS:
-             return { ...state, sellerdetails: action.payload, loading: false }
+            return { ...state, suspendedseller: action.payload, loading: false }
 
-              case TOTAL_SELLER_COUNT_DATA_SUCCESS:
- return { ...state, sellerCount: action.payload, loading: false }
+        case GET_SELLER_PROFILE_SUCCESS:
+            return { ...state, sellerdetails: action.payload, loading: false }
+
+        case TOTAL_SELLER_COUNT_DATA_SUCCESS:
+            return { ...state, sellerCount: action.payload, loading: false }
 
 
         case APPROVE_SELLER_BY_ID_SUCCESS:
@@ -114,22 +123,23 @@ export default function sellerReducer(state = initalstate, action) {
         case LOGIN_SELLER_SUCCESS:
             return { ...state, seller: action.payload, loading: false }
 
-  case TOTAL_SELLER_COUNT_DATA_FAILURE:
+        case GET_TOTAL_DATA_OF_AUTH_SERVICE_FAILURE:
+        case TOTAL_SELLER_COUNT_DATA_FAILURE:
         case GET_SELLER_PROFILE_FAILURE:
-        case  GET_REJECTED_SELLER_PAGE_FAILURE:
+        case GET_REJECTED_SELLER_PAGE_FAILURE:
         case GET_SUSPENDED_SELLER_PAGE_FAILURE:
         case APPROVE_SELLER_BY_ID_FAILURE:
         case REJECT_SELLER_BY_ID_FAILURE:
         case GET_SELLER_BY_ID_FAILURE:
-        case  GET_APPROVED_SELLER_PAGE_FAILURE:
-        case  GET_UNAPPROVED_SELLER_PAGE_FAILURE:
+        case GET_APPROVED_SELLER_PAGE_FAILURE:
+        case GET_UNAPPROVED_SELLER_PAGE_FAILURE:
         case REGISTER_SELLER_FAILURE:
         case LOGIN_SELLER_FAILURE:
         case LOGOUT_SELLER_FAILURE:
             return { ...state, error: action.payload, loading: false }
 
 
-            default:
+        default:
             return state;
     }
 }
