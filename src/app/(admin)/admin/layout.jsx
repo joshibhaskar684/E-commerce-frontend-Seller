@@ -8,7 +8,7 @@ export default async function Layout({ children }) {
    const token = cookieStore.get('adminToken')?.value ?? null
   return (<>
    <Navbar tokenPresent={token}/>
-   <div className="flex w-full h-full fixed flex-row ">
+   <div className="flex w-full h-full fixed flex-row top-15">
                   <div className="">
                       <Sidebar/>
                   </div>

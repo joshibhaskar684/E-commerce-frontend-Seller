@@ -69,7 +69,7 @@ router.refresh();
 
   return (
     <>
-      <div className="bg-background border-b text-foreground  sticky top-0 z-1">
+      <div className="bg-background border-b text-foreground  fixed w-full top-0 z-1">
         {/* Mobile menu */}
         <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden ">
           <DialogBackdrop
