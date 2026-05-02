@@ -33,7 +33,7 @@ handleSellerLoading();
     const handleViewMore=(id)=>{
         try{
         setSelectedId(id);
-        router.push(`/admin/sellers/${id}`);
+        router.push(`/admin/sellers/suspended/${id}`);
     }
     catch(e){
 

@@ -6,9 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Cookies from "js-cookie";
 
-import { getSellerById,ApproveSellerById,rejectSellerById } from "@/redux-store/authstore/seller/action";
-import SellerDataCard from "@/components/Admin/Cards/SellerDataCard/SellerDataCard";
-import RejectSellerModal from "@/components/Admin/Modals/RejectSellerModal";
+import { SuspendShopByid,getShopById,rejectShopById} from "@/redux-store/authstore/shops/action";
+import ShopDataCard from "@/components/Admin/Cards/ShopDataCard/ShopDataCard";
+import RejectShopModal from "@/components/Admin/Modals/RejectSellerModal";
 
 export default function page() {
     const [loading,setLoading]=useState(false);
@@ -18,26 +18,26 @@ export default function page() {
     const params = useParams();
     const sellerId = params.sellerId;
     const dispatch = useDispatch();
-    const seller = useSelector((state) => state.sellerReducer.sellerdetails);
-
+   
+    const seller=useSelector((state)=>state.ShopsReducer.Shopsdetails);
 
 
     useEffect(() => {
-        handleFetchingSellerData();
+        handleFetchingShopData();
     }
         , []
     )
 
-    const handleFetchingSellerData = () => {
+    const handleFetchingShopData = () => {
         const token=Cookies.get("adminToken");
-        dispatch(getSellerById({ id:sellerId},token )) 
+        dispatch(getShopById({ id:sellerId},token )) 
     }
 
     const ApproveRequest=async()=>{ 
         setLoading(true)
         try{
              const token=Cookies.get("adminToken");
-            await dispatch(ApproveSellerById({id:sellerId},token))
+            await dispatch(SuspendShopByid({id:sellerId},token))
             window.location.reload();
         }
         catch(e){
@@ -52,7 +52,7 @@ export default function page() {
         try{
 
         const token=Cookies.get("adminToken");
-            await dispatch(rejectSellerById({id,reason},token))
+            await dispatch(rejectShopById({id,reason},token))
 
         }catch(e){
 
@@ -67,23 +67,14 @@ export default function page() {
         <>
         <div className="grid grid-cols-1 w-full p-5 gap-5">
             <div className=" w-full">
-                <h1 className="text-2xl md:text-3xl font-bold">Seller Data</h1>
-
+                <h1 className="text-2xl md:text-3xl font-bold">Shop Data</h1>
             </div>
 <div className="p-5 w-full">
 
-<SellerDataCard seller={seller}/>
-
+<ShopDataCard seller={seller}/>
             </div>
-            <div className="p-5 w-full grid grid-cols-1  gap-5 p-5">
-<button
-disabled={loading}
- className={`border p-5 text-xl font-bold rounded bg-yellow-500  cursor-pointer ${loading?" bg-background cursor-not-allowed":""}`}
- onClick={()=>ApproveRequest()}>
-   {loading?"Suspending....": "Suspend Seller"}
-    </button>
-           </div>
+            
             </div>
-     </>
+      </>
     )
 }

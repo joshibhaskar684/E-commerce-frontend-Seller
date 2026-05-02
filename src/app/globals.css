@@ -27,7 +27,12 @@
 .hide-scrollbar {
   -ms-overflow-style: none;
 }
-
+input{
+  padding: 5px;
+}
+textarea{
+  padding: 5px;
+}
 /* Hide scrollbar for Firefox */
 .hide-scrollbar {
   scrollbar-width: none;

@@ -34,7 +34,7 @@ handleSellerLoading();
     const handleViewMore=(id)=>{
         try{
         setSelectedId(id);
-        router.push(`/admin/shop/${id}`);
+        router.push(`/admin/shop/rejected/${id}`);
     }
     catch(e){
 

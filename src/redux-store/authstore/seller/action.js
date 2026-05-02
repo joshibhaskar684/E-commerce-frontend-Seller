@@ -351,6 +351,48 @@ export const rejectSellerById = (data, token) => async (dispatch) => {
 }
 
 
+export const ReApproveSellerById = (data, token) => async (dispatch) => {
+
+    const id = data.id;
+    try {
+        dispatch({
+            type: APPROVE_SELLER_BY_ID_REQUEST,
+            payload: data
+        })
+        const res = await axios.post(`${backend_url}/auth/seller/reapprove/seller/${id}`,
+            data,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+        console.log(res, "kjnjknkjnkjn");
+        dispatch({
+            type: APPROVE_SELLER_BY_ID_SUCCESS,
+            payload: res.data
+        })
+        toast.success("Seller Approved successfully");
+
+    } catch (e) {
+        console.log("error in register seller action");
+        console.log(e)
+        const message =
+            e.response?.data?.error ||
+            e.response?.data ||
+            e.message ||
+            "Unknown error";
+
+        toast.error(message);
+        dispatch({
+            type: APPROVE_SELLER_BY_ID_FAILURE,
+            payload: e.message
+        })
+    }
+
+}
+
+
 export const ApproveSellerById = (data, token) => async (dispatch) => {
 
     const id = data.id;

@@ -6,9 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Cookies from "js-cookie";
 
-import { getSellerById,ApproveSellerById,rejectSellerById } from "@/redux-store/authstore/seller/action";
+import { getSellerById,ReApproveSellerById,rejectSellerById } from "@/redux-store/authstore/seller/action";
 import SellerDataCard from "@/components/Admin/Cards/SellerDataCard/SellerDataCard";
-import RejectSellerModal from "@/components/Admin/Modals/RejectSellerModal";
 
 export default function page() {
     const [loading,setLoading]=useState(false);
@@ -37,7 +36,7 @@ export default function page() {
         setLoading(true)
         try{
              const token=Cookies.get("adminToken");
-            await dispatch(ApproveSellerById({id:sellerId},token))
+            await dispatch(ReApproveSellerById({id:sellerId},token))
             window.location.reload();
         }
         catch(e){
@@ -80,7 +79,7 @@ export default function page() {
 disabled={loading}
  className={`border p-5 text-xl font-bold rounded bg-yellow-500  cursor-pointer ${loading?" bg-background cursor-not-allowed":""}`}
  onClick={()=>ApproveRequest()}>
-   {loading?"Suspending....": "Suspend Seller"}
+   {loading?"Approving....": "Approve Seller"}
     </button>
            </div>
             </div>
