@@ -39,8 +39,6 @@ export default function page() {
     e.preventDefault();
   };
 
-  useEffect(() => {
-  }, [shops]);
 
   const getSellerdata = async () => {
     const token = Cookies.get("sellerToken");
@@ -58,9 +56,11 @@ export default function page() {
 
   try {
     await dispatch(closeShopWithId({ id, token }));
+    
   } catch (error) {
   } finally {
     setClosingId("");
+    // Refresh the page after closing the shop
   }
 };
 
@@ -94,7 +94,7 @@ export default function page() {
 
           {/* Shop Cards */}
           <div className="w-full grid grid-cols-1 gap-5">
-            {shops?.length>0 && shops?.map((item, index) => (
+            {shops && shops?.length>0 && shops?.map((item, index) => (
               <ShopListCards
                 key={index}
                 shopdata={item}

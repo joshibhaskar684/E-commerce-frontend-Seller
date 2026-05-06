@@ -8,15 +8,14 @@ export default function ShopListCards({
   closingId,
   setClosingId,
   setRedirectingId,
-  redirectingId
+  redirectingId,
 }) {
 
   const router=useRouter();
   const handleClose = async() => {
     const id = shopdata?.id;
-
   setClosingId(id);
-  await closeShopwithId(id); 
+  closeShopwithId(id); 
 
  };
 const handleRedirect=()=>{
@@ -43,10 +42,10 @@ const status = shopdata?.status?.trim()?.toUpperCase();
 
     <>
 
-<div className="flex items-center justify-between p-4 rounded-xl border border-border bg-background text-foreground shadow-sm">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-5  overflow-hidden w-full p-4 rounded-xl border border-border bg-background text-foreground shadow-sm">
   
   {/* Left Side */}
-  <div className="flex-1 min-w-0">
+  <div className="flex-1 min-w-0 w-full">
     <h1 className="text-lg sm:text-xl font-semibold truncate">
       {shopdata?.businessName}
     </h1>
@@ -61,11 +60,11 @@ const status = shopdata?.status?.trim()?.toUpperCase();
   </div>
 
   {/* Right Side */}
-  <div className="gap-5 flex items-center justify-center">
+  <div className="gap-5 grid grid-cols-1 md:grid-cols-2 p-5 w-full ">
     <button
       onClick={handleClose}
       disabled={isClosing}
-      className={`ml-4 shrink-0 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 bg-red-500
+      className={`ml-4 shrink-0 px-4 py-2 w-full text-sm font-medium rounded-lg border transition-all duration-200 bg-red-500
       ${
         isClosing
           ? "bg-muted text-muted-foreground border-muted cursor-not-allowed"
@@ -78,7 +77,7 @@ const status = shopdata?.status?.trim()?.toUpperCase();
     <button
       onClick={handleRedirect}
       disabled={isRedirect}
-      className={`ml-4 shrink-0 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200
+      className={`ml-4 shrink-0 px-4 py-2 w-full text-sm font-medium rounded-lg border transition-all duration-200
       ${
         isRedirect
           ? "bg-muted text-muted-foreground border-muted cursor-not-allowed"

@@ -118,7 +118,7 @@ export const closeShopWithId=(data)=>async(dispatch)=>{
  const id=data.id;  
     try{
         dispatch({
-            type:GET_SHOPS_LIST_REQUEST,
+            type:REJECT_SHOPS_BY_ID_REQUEST,
             payload:data
         })
        
@@ -133,9 +133,12 @@ export const closeShopWithId=(data)=>async(dispatch)=>{
                 }
             }
         );
+        toast.success("Shop closed successfully");
+        
+        getShopListIntro({token})(dispatch);
 console.log(response,"respomse")
         dispatch({
-            type:GET_SHOPS_LIST_SUCCESS,
+            type:REJECT_SHOPS_BY_ID_SUCCESS,
             payload:response.data
         })
 
@@ -150,7 +153,7 @@ console.log(response,"respomse")
 
   toast.error(message);
         dispatch({
-            type:GET_SHOPS_LIST_FAILURE,
+            type:REJECT_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
     }
