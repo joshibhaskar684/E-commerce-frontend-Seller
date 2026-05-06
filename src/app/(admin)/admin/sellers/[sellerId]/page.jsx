@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import Cookies from "js-cookie";
 
-import { getSellerById,ApproveSellerById,rejectSellerById } from "@/redux-store/authstore/seller/action";
+import { getSellerById,SuspendSellerById,rejectSellerById } from "@/redux-store/authstore/seller/action";
 import SellerDataCard from "@/components/Admin/Cards/SellerDataCard/SellerDataCard";
 import RejectSellerModal from "@/components/Admin/Modals/RejectSellerModal";
 
@@ -37,7 +37,7 @@ export default function page() {
         setLoading(true)
         try{
              const token=Cookies.get("adminToken");
-            await dispatch(ApproveSellerById({id:sellerId},token))
+            await dispatch(SuspendSellerById({id:sellerId},token))
             window.location.reload();
         }
         catch(e){

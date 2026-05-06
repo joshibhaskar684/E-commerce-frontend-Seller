@@ -18,7 +18,10 @@ export default function ShopDataCard({ seller }) {
                             {seller?.shopName}
                         </h1>
                         <p className="text-sm text-foreground/60 break-all">
-                            Seller ID: {seller?.id}
+                            Shop ID: {seller?.id}
+                        </p>
+                        <p className="text-sm text-foreground/60 break-all">
+                            Seller ID: {seller?.sellerId}
                         </p>
                     </div>
 

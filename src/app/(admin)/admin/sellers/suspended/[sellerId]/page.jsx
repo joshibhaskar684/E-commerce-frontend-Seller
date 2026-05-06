@@ -75,12 +75,6 @@ export default function page() {
 
             </div>
             <div className="p-5 w-full grid grid-cols-1  gap-5 p-5">
-<button
-disabled={loading}
- className={`border p-5 text-xl font-bold rounded bg-yellow-500  cursor-pointer ${loading?" bg-background cursor-not-allowed":""}`}
- onClick={()=>ApproveRequest()}>
-   {loading?"Approving....": "Approve Seller"}
-    </button>
            </div>
             </div>
      </>

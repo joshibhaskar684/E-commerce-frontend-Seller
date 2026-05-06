@@ -7,6 +7,7 @@ import {  Pagination } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState ,useEffect} from "react";
 import { useDispatch ,useSelector} from "react-redux";
+import ShopCard from "@/components/Admin/Cards/ShopCard/ShopCard";
 
 export default function page(){
        const dispatch=useDispatch();   
@@ -67,7 +68,7 @@ handleSellerLoading();
 
 {
     seller?.content?.map((item,index)=>(
-        <SellerCard seller={item} key={index} handleViewMore={handleViewMore} selectedId={selectedId}/>
+        <ShopCard seller={item} key={index} handleViewMore={handleViewMore} selectedId={selectedId}/>
     ))
 }
 
