@@ -50,6 +50,11 @@ import {
     LOGIN_SELLER_REQUEST,
     LOGIN_SELLER_SUCCESS,
 
+    
+   GET_SELLER_ID_AND_SHOP_ID_LIST_FAILURE,
+   GET_SELLER_ID_AND_SHOP_ID_LIST_REQUEST,
+   GET_SELLER_ID_AND_SHOP_ID_LIST_SUCCESS,
+
     LOGOUT_SELLER_FAILURE,
     LOGOUT_SELLER_REQUEST,
     LOGOUT_SELLER_SUCCESS,
@@ -65,6 +70,49 @@ const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
 
+export const getSellerIdAndShopIdList = (data) => async (dispatch) => {
+
+    const token = data.token;
+    try {
+        dispatch({
+            type: GET_SELLER_ID_AND_SHOP_ID_LIST_REQUEST,
+            payload: data
+        })
+
+
+
+        const response = await axios.get(
+            `${backend_url}/auth/shops/seller/data`,
+            {
+
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+        console.log(response, "respomse sellerid and shopid list")
+        dispatch({
+            type: GET_SELLER_ID_AND_SHOP_ID_LIST_SUCCESS,
+            payload: response.data
+        })
+
+
+    } catch (e) {
+        console.log(e.message, "error")
+        const message =
+            e.response?.data?.error ||
+            e.response?.data ||
+            e.message ||
+            "Unknown error";
+
+        toast.error(message);
+        dispatch({
+            type: GET_SELLER_ID_AND_SHOP_ID_LIST_FAILURE,
+            payload: e.message
+        })
+    }
+
+}
 
 export const totalShopsCountForSellerDashBoard = (data) => async (dispatch) => {
 

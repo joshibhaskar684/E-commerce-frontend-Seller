@@ -1,5 +1,12 @@
 import { FaProductHunt } from "react-icons/fa";
 import {
+
+    
+   GET_SELLER_ID_AND_SHOP_ID_LIST_FAILURE,
+   GET_SELLER_ID_AND_SHOP_ID_LIST_REQUEST,
+   GET_SELLER_ID_AND_SHOP_ID_LIST_SUCCESS,
+
+
     GET_TOTAL_DATA_OF_AUTH_SERVICE_REQUEST,
     GET_TOTAL_DATA_OF_AUTH_SERVICE_SUCCESS,
     GET_TOTAL_DATA_OF_AUTH_SERVICE_FAILURE,
@@ -58,6 +65,7 @@ import {
 } from "./actiontype";
 
 const initalstate = {
+    sellerIdAndShopIdList: null,
     totalShopCount: null,
     sellerCount: null,
     rejectedseller: null,
@@ -74,6 +82,7 @@ const initalstate = {
 export default function sellerReducer(state = initalstate, action) {
     switch (action.type) {
 
+        case GET_SELLER_ID_AND_SHOP_ID_LIST_REQUEST:
         case GET_TOTAL_DATA_OF_AUTH_SERVICE_REQUEST:
         case TOTAL_SELLER_COUNT_DATA_REQUEST:
         case GET_SELLER_PROFILE_REQUEST:
@@ -89,6 +98,8 @@ export default function sellerReducer(state = initalstate, action) {
         case LOGOUT_SELLER_REQUEST:
             return { ...state, loading: true }
 
+        case GET_SELLER_ID_AND_SHOP_ID_LIST_SUCCESS:
+            return { ...state, sellerIdAndShopIdList: action.payload, loading: false }
         case GET_TOTAL_DATA_OF_AUTH_SERVICE_SUCCESS:
             return { ...state, totalShopCount: action.payload, loading: false }
 
@@ -115,14 +126,15 @@ export default function sellerReducer(state = initalstate, action) {
         case TOTAL_SELLER_COUNT_DATA_SUCCESS:
             return { ...state, sellerCount: action.payload, loading: false }
 
-
+            
         case APPROVE_SELLER_BY_ID_SUCCESS:
         case REJECT_SELLER_BY_ID_SUCCESS:
         case LOGOUT_SELLER_SUCCESS:
         case REGISTER_SELLER_SUCCESS:
         case LOGIN_SELLER_SUCCESS:
             return { ...state, seller: action.payload, loading: false }
-
+        
+        case GET_SELLER_ID_AND_SHOP_ID_LIST_FAILURE:
         case GET_TOTAL_DATA_OF_AUTH_SERVICE_FAILURE:
         case TOTAL_SELLER_COUNT_DATA_FAILURE:
         case GET_SELLER_PROFILE_FAILURE:

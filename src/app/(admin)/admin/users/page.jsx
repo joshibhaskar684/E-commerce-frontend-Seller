@@ -1,8 +1,11 @@
 "use client";
 
+import Cookies from "js-cookie";
 import ProductsCard from "@/components/Admin/Cards/ProductsCard/ProductsCard";
-import { getProducts } from "@/redux-store/authstore/product/action";
+import UserCard from "@/components/Admin/Cards/UserCard/UserCard";
+import { getUserListPage } from "@/redux-store/authstore/user/action";
 import {  Pagination } from "@mui/material";
+import { TowelRack } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState ,useEffect} from "react";
 import { useDispatch ,useSelector} from "react-redux";
@@ -17,10 +20,13 @@ export default function page(){
             const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
             const router=useRouter();
            
-        const products=useSelector((state)=>state.productReducer.products);
-        console.log(products,"products");
+        const UsersList=useSelector((state)=>state.userReducer.usersList);
+        console.log(UsersList,"products");
+
+
         useEffect(()=>{
-            dispatch(getProducts({pageno,pagesize}));
+            const token=Cookies.get("adminToken");
+            dispatch(getUserListPage({pageno,pagesize,token}));
         },[pageno,pagesize]
         );
         // useEffect(()=>{
@@ -39,8 +45,10 @@ export default function page(){
         }
     }
          useEffect(()=>{
-            setTotalPages(products?.totalPages)
-           },[products]);
+            setTotalPages(UsersList?.totalPages)
+           },[UsersList
+
+           ]);
     
          const handlePaginationChange = (_, page) => {
             setPageno(page);
@@ -59,9 +67,11 @@ export default function page(){
             <div className="w-full">
 <h1 className="font-bold text-2xl">Users</h1>
             </div>
-             <div className="w-full">
+             <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 place-items-center ">
 
-
+                 {UsersList?.content?.map((user, index) => (
+                     <UserCard key={index} user={user} />
+                 ))}
 
             </div>
 

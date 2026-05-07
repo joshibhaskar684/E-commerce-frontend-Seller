@@ -1,6 +1,6 @@
 import { FaArrowRight } from "react-icons/fa";
 
-export default function ProductsCard({ product ,deleteProduct,loadingid}) {
+export default function ProductsCard({viewMore,viewMoreId, product ,deleteProduct,loadingid}) {
   return (
     <div className="w-full bg-foreground text-background border rounded p-5 grid grid-cols-1 gap-3 place-items-center">
       
@@ -61,9 +61,14 @@ export default function ProductsCard({ product ,deleteProduct,loadingid}) {
         </p>
       </div>
       <div className="w-full grid grid-cols-1 place-items-center gap-2">
-        <a href={`/admin/products/${product?.id}`} className="w-full bg-yellow-500 text-background  py-2 rounded hover:bg-yellow-600 cursor-pointer transition flex gap-5 items-center justify-center border">
-            View More <FaArrowRight className="inline-block ml-1" />
-        </a>
+        <button onClick={()=>(viewMore(product?.id))} disabled={viewMoreId == product?.id} className={`w-full bg-yellow-500 text-background  py-2 rounded hover:bg-yellow-600 cursor-pointer transition flex gap-5 items-center justify-center border ${viewMoreId == product?.id ? "ring-2 ring-blue-500  bg-background/50" : ""}`}>
+         {viewMoreId === product?.id ? (
+  "Redirecting...."
+) : (
+  <>
+    View More <FaArrowRight className="inline-block ml-1" />
+  </>
+)}  </button>
          <button  onClick={()=>deleteProduct(product?.id)} className={`w-full bg-background text-foreground  py-2 rounded hover:bg-yellow-600 cursor-pointer transition flex gap-5 items-center justify-center border ${loadingid==product?.id ? " opacity-50 cursor-not-allowed" : ""}`} disabled={loadingid==product?.id}>
         { loadingid==product?.id ? "Deleting..." : "  Delete Product"} <FaArrowRight className="inline-block ml-1" />
         </button>

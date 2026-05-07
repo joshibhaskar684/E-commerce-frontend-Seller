@@ -3,11 +3,13 @@
 "use client"
 
 import ProductsCard from "@/components/Admin/Cards/ProductsCard/ProductsCard";
-import { getProducts } from "@/redux-store/authstore/product/action";
+import { getProductsForSeller } from "@/redux-store/authstore/product/action";
 import {  Pagination } from "@mui/material";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState ,useEffect} from "react";
 import { useDispatch ,useSelector} from "react-redux";
+
+import Cookies from "js-cookie";
 
 export default function ProductPageListComponents(){
     const dispatch=useDispatch();   
@@ -16,19 +18,28 @@ export default function ProductPageListComponents(){
      const [totalPage,setTotalPages]=useState(1);
         const [pageno,setPageno]=useState(Number(searchParams.get("pageno")) || 1);
         const [loadingId ,setLoadingId]=useState('');
+        const [viewMoreId ,setViewMoreId]=useState('');
+
         const [pagesize,setPagesize]=useState(Number(searchParams.get("pagesize")) || 12);
         const router=useRouter();
        
     const products=useSelector((state)=>state.productReducer.products);
     console.log(products,"products");
     useEffect(()=>{
-        dispatch(getProducts({pageno,pagesize}));
+        const token=Cookies.get("sellerToken");
+        dispatch(getProductsForSeller({pageno,pagesize, token}));
     },[pageno,pagesize]
     );
-    // useEffect(()=>{
-    //     dispatch(getProducts(pageno,pagesize))
-    // },[]
-    // );
+    useEffect(()=>{
+          setViewMoreId('');
+    },[]
+    );
+        const viewMore=async(id)=>{
+            setViewMoreId(id);
+            router.push(`/seller/products/${id}`);
+            
+
+        }
         
 const deleteProduct=async(id)=>{
     setLoadingId(id);
@@ -58,12 +69,12 @@ const deleteProduct=async(id)=>{
         <>
         <div className="grid grid-cols-1 gap-5 p-5 place-items-center w-full">
             <div className="w-full">
-<h1 className="font-bold text-2xl">Products</h1>
+<h1 className="font-bold text-2xl">Products </h1>
             </div>
 
              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 p-5">
                 {
-                    products?.content?.map((item,index)=>(<ProductsCard key={index} product={item} deleteProduct={deleteProduct} loadingid={loadingId} />))
+                    products?.content?.map((item,index)=>(<ProductsCard key={index} viewMoreId={viewMoreId} product={item} viewMore={viewMore} deleteProduct={deleteProduct} loadingid={loadingId} />))
                 }
 
              </div>

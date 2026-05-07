@@ -17,10 +17,18 @@ import { GET_USER_DETAILS_FAILURE,
            DELETE_USER_FAILURE,
             DELETE_USER_REQUEST, 
             DELETE_USER_SUCCESS, 
+
+            
+         GET_ALL_USERS_PAGE_FAILURE, 
+         GET_ALL_USERS_PAGE_REQUEST, 
+          GET_ALL_USERS_PAGE_SUCCESS, 
+
+
             } from "./actiontype";
 
 const initalstate={
     user:null,
+    usersList:null,
     token:null,
     products:[],
     productsdetails:null,
@@ -31,6 +39,7 @@ const initalstate={
 
  export default function userReducer(state=initalstate,action){
     switch(action.type){
+        case GET_ALL_USERS_PAGE_REQUEST:
         case REGISTER_USER_REQUEST:
             return {...state,loading:true}
         case REGISTER_USER_SUCCESS:
@@ -41,6 +50,11 @@ const initalstate={
             return {...state,loading:true}
         case LOGIN_USER_SUCCESS:
             return {...state,user:action.payload,loading:false}
+
+            case GET_ALL_USERS_PAGE_SUCCESS:
+                return {...state,usersList:action.payload,loading:false}
+
+        case GET_ALL_USERS_PAGE_FAILURE:        
         case LOGIN_USER_FAILURE:
             return {...state,error:action.payload,loading:false}
         case LOGOUT_USER_REQUEST:
