@@ -1,11 +1,11 @@
-"use client";
+"use client"
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
-import { getOrderByIdSeller } from "@/redux-store/authstore/order/action";
+// import { getOrderByIdSeller } from "@/redux-store/authstore/order/action";
 
 export default function Page() {
   const [loading, setLoading] = useState(false);
