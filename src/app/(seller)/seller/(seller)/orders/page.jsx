@@ -78,6 +78,7 @@ export default function Page() {
                   ? "bg-black text-white"
                   : "bg-white border border-gray-300 hover:bg-gray-100"
               }`}
+              
             >
               {filter}
             </button>

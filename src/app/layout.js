@@ -1,6 +1,7 @@
 import ReduxProvider from "@/redux-store/ReduxProvider";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
+import AiModal from "@/components/Modal/AiModal";
 
 
 export const metadata = {
@@ -36,6 +37,7 @@ export default function RootLayout({ children }) {
   
         <ReduxProvider>
         {children}
+       
         </ReduxProvider>
        
       </body>
