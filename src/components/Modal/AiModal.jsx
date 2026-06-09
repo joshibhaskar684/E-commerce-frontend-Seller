@@ -135,7 +135,7 @@ export default function AiModal({ openModal, setOpenModal }) {
             <button
               onClick={sendMessage}
               disabled={isLoading || !input.trim()}
-              className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-colors font-medium h-[48px] flex items-center justify-center shadow-sm"
+              className="bg-yellow-600 hover:bg-yellow-700 disabled:bg-yellow-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-colors font-medium h-[48px] flex items-center justify-center shadow-sm"
             >
               {isLoading ? "Sending..." : "Send"}
             </button>
