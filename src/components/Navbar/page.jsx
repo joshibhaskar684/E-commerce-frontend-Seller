@@ -57,7 +57,7 @@ export default function Navbar({tokenPresent}) {
 
   return (
     <>
-      <div className="bg-background text-foreground  sticky top-0 z-1">
+      <div className="bg-background text-foreground  sticky top-0 z-111">
         {/* Mobile menu */}
         <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden">
           <DialogBackdrop
