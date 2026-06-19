@@ -17,8 +17,8 @@ export default function page(){
         const router=useRouter();
         const [viewMoreId ,setViewMoreId]=useState('');
        
-    const products=useSelector((state)=>state.productReducer.products);
-    console.log(products,"products");
+    const products=useSelector((state)=>state?.productReducer?.products);
+
     useEffect(()=>{
         dispatch(getProducts({pageno,pagesize}));
     },[pageno,pagesize]
