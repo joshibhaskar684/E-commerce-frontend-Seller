@@ -23,6 +23,7 @@ export default function page(){
         dispatch(getProducts({pageno,pagesize}));
     },[pageno,pagesize]
     );
+    
     // useEffect(()=>{
     //     dispatch(getProducts(pageno,pagesize))
     // },[]
