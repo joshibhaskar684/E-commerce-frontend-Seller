@@ -8,6 +8,11 @@ import AiBot from "../components/ai/AiBoat";
 export const metadata = {
   title: "Quick for Business",
   description: "This is an business site of Quick where  business can register and sell their products in our site quicksin.in",
+  manifest: "/manifest.json",
+};
+
+export const viewport = {
+  themeColor: "#ffffff",
 };
 
 export default function RootLayout({ children }) {
