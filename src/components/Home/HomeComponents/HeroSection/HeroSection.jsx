@@ -124,11 +124,11 @@ export default function HeroSection() {
                     </motion.div>
                 </div>
                 
-                <motion.div 
+                {/* <motion.div 
                     variants={itemVariants}
                     className="grid grid-cols-1 place-items-center md:p-5"
                 >
-                    {/* Added a floating animation to the hero image */}
+                    {/* Added a floating animation to the hero image *
                     <motion.img 
                         animate={{ y: [0, -15, 0] }}
                         transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
@@ -136,7 +136,7 @@ export default function HeroSection() {
                         alt="Hero Image" 
                         className="w-full h-auto lg:h-screen border rounded-xl border-2 shadow-2xl z-10 relative bg-background/50 backdrop-blur-sm" 
                     />
-                </motion.div>
+                </motion.div> */}
             </motion.div>
         </section>
     );
