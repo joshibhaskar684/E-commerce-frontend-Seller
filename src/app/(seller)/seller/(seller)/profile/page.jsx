@@ -7,7 +7,7 @@ import ShopListCards from "@/seller-components/Cards/ShopListCards";
 
 import Cookies from "js-cookie";
 
-import { getShopListIntro ,closeShopWithId} from "@/redux-store/authstore/shops/action";
+import { getShopListIntro, closeShopWithId } from "@/redux-store/authstore/shops/action";
 import { getSellerProfile } from "@/redux-store/authstore/seller/action";
 
 import { useState, useEffect } from "react";
@@ -28,7 +28,6 @@ export default function page() {
   const [redirectingId, setRedirectingId] = useState("");
 
   const seller = useSelector((state) => state.sellerReducer.sellerdetails);
-
   const shops = useSelector((state) => state.ShopsReducer.shopsList);
 
   const changePassword = async (e) => {
@@ -38,7 +37,6 @@ export default function page() {
   const updateDetails = async (e) => {
     e.preventDefault();
   };
-
 
   const getSellerdata = async () => {
     const token = Cookies.get("sellerToken");
@@ -51,71 +49,83 @@ export default function page() {
     getSellerdata();
   }, []);
 
- const closeShopwithId = async (id) => {
-  const token = Cookies.get("sellerToken");
+  const closeShopwithId = async (id) => {
+    const token = Cookies.get("sellerToken");
 
-  try {
-    await dispatch(closeShopWithId({ id, token }));
-    
-  } catch (error) {
-  } finally {
-    setClosingId("");
-    // Refresh the page after closing the shop
-  }
-};
+    try {
+      await dispatch(closeShopWithId({ id, token }));
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setClosingId("");
+      // Refresh the page after closing the shop
+    }
+  };
 
   return (
     <>
-      <div className="grid grid-cols-1 p-5 w-full h-full overflow-y-auto hide-scrollbar">
-        
-        {/* User Details */}
-        <div className="w-full mb-20">
-          <UserDetails
-            sellerdetails={seller}
-            loading={loading}
-            setOpenmodal={setOpenmodal}
-            setOpenmodal1={setOpenmodal1}
-            openModal={openModal}
-            openModal1={openModal1}
-          />
-        </div>
+      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-950 dark:text-zinc-50 overflow-y-auto hide-scrollbar">
+        <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-10">
+          
+          {/* User Details Section */}
+          <section>
+            <UserDetails
+              sellerdetails={seller}
+              loading={loading}
+              setOpenmodal={setOpenmodal}
+              setOpenmodal1={setOpenmodal1}
+              openModal={openModal}
+              openModal1={openModal1}
+            />
+          </section>
 
-        {/* Spacer */}
-        <div className="w-full h-[40px] p-10 mt-10" />
+          {/* Divider */}
+          <div className="border-t border-zinc-200 dark:border-zinc-800" />
 
-        {/* Shops Section */}
-        <div className="w-full grid grid-cols-1 gap-5">
-          <div className="w-full">
-            <h1 className="text-4xl font-bold">Shops</h1>
-            <p className="text-xl">
-              Approval of shops may require 24–48 hrs. After approval, you can add products.
-            </p>
-          </div>
+          {/* Shops Section */}
+          <section className="space-y-6">
+            
+            {/* Header & Actions */}
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="space-y-1">
+                <h2 className="text-2xl font-semibold tracking-tight">Your Shops</h2>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  Approval of shops may require 24–48 hrs. After approval, you can add products.
+                </p>
+              </div>
+              
+              <a
+                href="/seller/shops/apply"
+                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 h-9 px-4 py-2 shrink-0 w-full sm:w-auto dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300"
+              >
+                Apply for New Shop
+              </a>
+            </div>
 
-          {/* Shop Cards */}
-          <div className="w-full grid grid-cols-1 gap-5">
-            {shops && shops?.length>0 && shops?.map((item, index) => (
-              <ShopListCards
-                key={index}
-                shopdata={item}
-                closeShopwithId={closeShopwithId}
-                setClosingId={setClosingId}
-                closingId={closingId}
-                redirectingId={redirectingId}
-                setRedirectingId={setRedirectingId}
-              />
-            ))}
-          </div>
+            {/* Shop Cards Grid */}
+            <div className="grid grid-cols-1 gap-4">
+              {shops && shops?.length > 0 ? (
+                shops.map((item, index) => (
+                  <ShopListCards
+                    key={index}
+                    shopdata={item}
+                    closeShopwithId={closeShopwithId}
+                    setClosingId={setClosingId}
+                    closingId={closingId}
+                    redirectingId={redirectingId}
+                    setRedirectingId={setRedirectingId}
+                  />
+                ))
+              ) : (
+                <div className="flex flex-col items-center justify-center p-8 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950/50">
+                  <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center">
+                    You haven't applied for any shops yet.<br/> Click "Apply for New Shop" to get started.
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
 
-          {/* Apply Shop Button */}
-          <div className="w-full grid place-items-center gap-5">
-            <a
-              className="border p-2 text-center w-full"
-              href="/seller/shops/apply"
-            >
-              Apply for New Shop
-            </a>
-          </div>
         </div>
       </div>
 
