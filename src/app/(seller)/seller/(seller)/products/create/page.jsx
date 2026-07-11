@@ -3,7 +3,7 @@
 import Cookies from "js-cookie";
 
 import { createProduct, getCategorytree } from "@/redux-store/authstore/product/action";
-import { useState, useEffect, use } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CategorySelect } from './M';
 import { FaPlus, FaTimes } from "react-icons/fa";
@@ -23,19 +23,18 @@ export default function page() {
   const [categoryId, SetCategoryId] = useState("");
   
   const [sellerId, setSellerId] = useState("");
-  
-  const [shopId, setShopId] = useState(null);
-  const CategoriesList = useSelector((state) => state.productReducer.categories);
+  const [shopId, setShopId] = useState("");
 
+  const CategoriesList = useSelector((state) => state.productReducer.categories);
   const sellerIdAndShopIdList = useSelector((state) => state.sellerReducer.sellerIdAndShopIdList);
 
   useEffect(() => {
     setSellerId(sellerIdAndShopIdList?.sellerId || "");
-    //shopIdData
     console.log("Seller ID set to:", sellerIdAndShopIdList?.sellerId);
-  },[sellerIdAndShopIdList]);
+  }, [sellerIdAndShopIdList]);
+
   const addSpec = () => {
-    if (!name) return; // don't allow empty name
+    if (!name) return;
     setSpecs(prev => ({
       ...prev,
       [name]: value
@@ -52,16 +51,16 @@ export default function page() {
 
   const getCategories = async () => {
     console.log("getCategories called")
-    const token=Cookies.get("sellerToken")
     try {
       await dispatch(getCategorytree({}))
     } catch (error) {
       console.error(error);
     }
   };
+
   const getSellerAndShopIdData = async () => {
     console.log("getSellerAndShopIdData called")
-    const token=Cookies.get("sellerToken")
+    const token = Cookies.get("sellerToken")
     try {
       await dispatch(getSellerIdAndShopIdList({ token }))
     } catch (error) {
@@ -69,9 +68,7 @@ export default function page() {
     }
   };
 
-
   console.log(categoryId, "categoriesId")
-  
   console.log("categoryshopId", shopId)
   console.log(categoryPath.toLocaleString(), "categoriesList")
 
@@ -80,20 +77,22 @@ export default function page() {
   };
 
   const removeSpec = (index) => {
-    const newSpecs = { ...specs }; // make a shallow copy
-    const keyToRemove = Object.keys(newSpecs)[index]; // find key by index
-    delete newSpecs[keyToRemove]; // remove the key
-    setSpecs(newSpecs); // update state
+    const newSpecs = { ...specs };
+    const keyToRemove = Object.keys(newSpecs)[index];
+    delete newSpecs[keyToRemove];
+    setSpecs(newSpecs);
   };
 
   const handleSubmit = async (e) => {
-      e.preventDefault()
+    e.preventDefault()
       
     setLoading(true)
-    if(shopId===null){
+    if (!shopId) {
       toast.error("Please select a shop / create shop before creating a product.");
+      setLoading(false);
       return;
     }
+
     const token = Cookies.get("sellerToken");
     const formData = new FormData(e.target);
     const data = {
@@ -116,185 +115,263 @@ export default function page() {
       specifications: specs,
       token,
     };
-    try{
+    try {
       await dispatch(createProduct(data));
-
-    }catch(error){
-
-    }
-    finally{
+    } catch (error) {
+      console.error(error);
+    } finally {
       setLoading(false)
     }
     console.log(data, "formData")
   }
 
+  // Common Tailwind classes for standard shadcn appearance
+  const inputClass = "flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300";
+  const labelClass = "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2 block";
+  
   return (
-    <div className="p-5 grid grid-cols-1 w-full place-items-center gap-5 mb-10">
+    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 md:p-12 font-sans text-zinc-950 dark:text-zinc-50">
+      <div className="max-w-4xl mx-auto space-y-6">
+        
+        {/* Header */}
+        <div>
+          <h1 className="text-2xl font-bold tracking-tight">Create Product</h1>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">
+            Add a new product to your catalog. Fill in the details below.
+          </p>
+        </div>
 
-      <div className="p-5 grid grid-cols-1 w-full">
-        <h1 className="font-bold text-2xl">Create Product</h1>
-      </div>
-
-      <div className="p-5 grid grid-cols-1 w-full">
-        <form onSubmit={handleSubmit} className="grid gap-4">
-
-          <div className="gap-5">
-            {CategoriesList && CategoriesList.length > 0 && (
-              <CategorySelect
-                data={CategoriesList}
-                path={categoryPath}
-                setPath={setCategoryPath}
-                SetCategoryId={SetCategoryId}
-              />
-            )}
-          </div>
-
-          <div className="flex gap-5">
-            <input
-              type="text"
-              name="image"
-              placeholder="Image URL"
-              className="border p-3 rounded w-full"
-              value={imageUrl}
-              onChange={(e) => setImageUrl(e.target.value)}
-            />
-            <button
-              onClick={() => { setImages([...images, imageUrl]); setImageUrl("") }}
-              type="button"
-              className="p-3 rounded bg-blue-500 text-foreground cursor-pointer border"
-            >
-              <FaPlus className="text-2xl font-bold text-foreground" />
-            </button>
-          </div>
-
-          {images.length > 0 &&
-            <div className="grid gap-5">
-              <p className="font-bold">Images Link:</p>
-              {images.map((item, index) => (
-                <div key={index} className="flex gap-5">
-                  <input type="text" value={item} readOnly className="border p-3 rounded w-full" />
-                  <button
-                    onClick={() => { removeImage(index) }}
-                    className="font-bold text-2xl border p-4 rounded cursor-pointer"
-                  >
-                    <FaTimes className="font-bold text-2xl" />
-                  </button>
+        {/* Main Form Card */}
+        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden">
+          <form onSubmit={handleSubmit} className="divide-y divide-zinc-200 dark:divide-zinc-800">
+            
+            {/* Section: Basic Info */}
+            <div className="p-6 space-y-6">
+              <h2 className="text-lg font-semibold leading-none tracking-tight">Basic Information</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                
+                {/* Shop Selection */}
+                <div className="md:col-span-2">
+                  <label className={labelClass}>Select Shop</label>
+                  {sellerIdAndShopIdList && (
+                    <select
+                      name="shopId"
+                      className={`${inputClass} bg-white dark:bg-zinc-950`}
+                      value={shopId}
+                      onChange={(e) => setShopId(e.target.value)}
+                      required
+                    >
+                      <option value="" disabled>Select a shop...</option>
+                      {sellerIdAndShopIdList?.shopIdData?.map((item, index) => (
+                        <option key={index} value={item?.id}>
+                          {item?.businessName}
+                        </option>
+                      ))}
+                    </select>
+                  )}
                 </div>
-              ))}
+
+                {/* Category component wrapper */}
+                <div className="md:col-span-2 border border-zinc-200 dark:border-zinc-800 rounded-md p-4 bg-zinc-50/50 dark:bg-zinc-900/20">
+                  <label className={labelClass}>Category Assignment</label>
+                  {CategoriesList && CategoriesList.length > 0 && (
+                    <CategorySelect
+                      data={CategoriesList}
+                      path={categoryPath}
+                      setPath={setCategoryPath}
+                      SetCategoryId={SetCategoryId}
+                    />
+                  )}
+                </div>
+
+                <div className="space-y-1">
+                  <label className={labelClass}>Category ID</label>
+                  <input name="categoryId" placeholder="Auto-filled" className={`${inputClass} bg-zinc-50 dark:bg-zinc-900 text-zinc-500`} required readOnly value={categoryId} />
+                </div>
+                <div className="space-y-1">
+                  <label className={labelClass}>Category Path</label>
+                  <input name="category" placeholder="Auto-filled" className={`${inputClass} bg-zinc-50 dark:bg-zinc-900 text-zinc-500`} required readOnly value={categoryPath.join(" / ")} />
+                </div>
+
+                <div className="space-y-1 md:col-span-2">
+                  <label className={labelClass}>Product Name</label>
+                  <input name="name" placeholder="E.g. Wireless Noise-Cancelling Headphones" className={inputClass} required />
+                </div>
+
+                <div className="space-y-1">
+                  <label className={labelClass}>Brand</label>
+                  <input name="brand" placeholder="Brand Name" className={inputClass} required />
+                </div>
+
+                <div className="space-y-1">
+                  <label className={labelClass}>Color</label>
+                  <input name="color" placeholder="Primary Color" className={inputClass} required />
+                </div>
+              </div>
             </div>
-          }
-          {sellerIdAndShopIdList && (
-  <select
-    name="shopId"
-    className="border p-3 rounded"
-    value={shopId}
-    onChange={(e) => setShopId(e.target.value)}
-    required
-  >
-  <option  value='' className="text-yellow-500 ">
-    Select Shop
-      </option>
-    {sellerIdAndShopIdList?.shopIdData?.map((item, index) => (
-      <option key={index} value={item?.id} className="text-yellow-500 ">
-        {item?.businessName}
-      </option>
-    ))}
-  </select>
-)}
 
-          <input name="name" placeholder="Product Name" className="border p-3 rounded" required />
-          <input name="brand" placeholder="Brand" className="border p-3 rounded" required />
-          <input name="categoryId" placeholder="Category ID" className="border p-3 rounded" required readOnly value={categoryId} />
-          <input
-            name="category"
-            placeholder="Category Path"
-            className="border p-3 rounded"
-            required
-            readOnly
-            value={categoryPath.join(" / ")}
-          />
-          <input name="color" placeholder="Color" className="border p-3 rounded" required />
-          <input type="number" name="price" placeholder="Price" className="border p-3 rounded" required />
-          <input type="number" name="originalPrice" placeholder="Original Price" className="border p-3 rounded" required />
-          <input type="number" name="quantity" placeholder="Quantity" className="border p-3 rounded" required />
-          <input type="number" name="returnDay" placeholder="Return Days" className="border p-3 rounded" required />
-<div className="flex gap-4">
-   <label>
-    <span className="font-bold">Free Shipping:</span>
-  </label>
+            {/* Section: Media */}
+            <div className="p-6 space-y-6">
+              <h2 className="text-lg font-semibold leading-none tracking-tight">Product Images</h2>
+              
+              <div className="flex gap-3">
+                <input
+                  type="text"
+                  placeholder="Paste Image URL here..."
+                  className={inputClass}
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                />
+                <button
+                  onClick={() => { if(imageUrl) { setImages([...images, imageUrl]); setImageUrl(""); } }}
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 border border-zinc-200 bg-white hover:bg-zinc-100 hover:text-zinc-900 h-9 px-4 shadow-sm shrink-0 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+                >
+                  <FaPlus className="mr-2 h-3 w-3" /> Add
+                </button>
+              </div>
 
-  <label>
-    <input type="radio" name="freeShipping" value="true" required />
-    Yes
-  </label>
+              {images.length > 0 && (
+                <div className="grid gap-3">
+                  {images.map((item, index) => (
+                    <div key={index} className="flex gap-3 items-center">
+                      <input type="text" value={item} readOnly className={`${inputClass} bg-zinc-50 dark:bg-zinc-900 text-zinc-500`} />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(index)}
+                        className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 border border-red-200 bg-white text-red-600 hover:bg-red-50 hover:text-red-900 h-9 px-3 shadow-sm shrink-0 dark:border-red-900/30 dark:bg-zinc-950 dark:hover:bg-red-900/50 dark:text-red-500"
+                      >
+                        <FaTimes className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
 
-  <label>
-    <input type="radio" name="freeShipping" value="false" />
-    No
-  </label>
-</div>
-          <div className="w-full flex-col gap-5 py-5">
-            <h2>Product Specifications</h2>
-            <div className="flex flex-col md:flex-row lg:flex-row gap-5 w-full">
-              <input
-                placeholder="Specification Name"
-                value={name}
-                className="border p-3 rounded w-full md:w-1/2"
-                onChange={e => setName(e.target.value)}
+            {/* Section: Pricing & Inventory */}
+            <div className="p-6 space-y-6">
+              <h2 className="text-lg font-semibold leading-none tracking-tight">Pricing & Inventory</h2>
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-1">
+                  <label className={labelClass}>Original Price</label>
+                  <input type="number" name="originalPrice" placeholder="0.00" min="0" step="0.01" className={inputClass} required />
+                </div>
+                
+                <div className="space-y-1">
+                  <label className={labelClass}>Selling Price</label>
+                  <input type="number" name="price" placeholder="0.00" min="0" step="0.01" className={inputClass} required />
+                </div>
+                
+                <div className="space-y-1">
+                  <label className={labelClass}>Available Quantity</label>
+                  <input type="number" name="quantity" placeholder="0" min="0" className={inputClass} required />
+                </div>
+
+                <div className="space-y-1">
+                  <label className={labelClass}>Return Days</label>
+                  <input type="number" name="returnDay" placeholder="e.g. 7 or 14" min="0" className={inputClass} required />
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <label className={labelClass}>Free Shipping</label>
+                  <div className="flex gap-6 items-center h-9">
+                    <label className="flex items-center gap-2 text-sm cursor-pointer">
+                      <input type="radio" name="freeShipping" value="true" required className="accent-zinc-900 dark:accent-zinc-50 h-4 w-4" />
+                      Yes
+                    </label>
+                    <label className="flex items-center gap-2 text-sm cursor-pointer">
+                      <input type="radio" name="freeShipping" value="false" className="accent-zinc-900 dark:accent-zinc-50 h-4 w-4" />
+                      No
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section: Specifications */}
+            <div className="p-6 space-y-6">
+              <h2 className="text-lg font-semibold leading-none tracking-tight">Specifications</h2>
+              
+              <div className="flex flex-col sm:flex-row gap-3">
+                <input
+                  placeholder="E.g. RAM, Screen Size, Material"
+                  value={name}
+                  className={inputClass}
+                  onChange={e => setName(e.target.value)}
+                />
+                <input
+                  placeholder="E.g. 16GB, 6.1 inches, Cotton"
+                  value={value}
+                  className={inputClass}
+                  onChange={e => setValue(e.target.value)}
+                />
+                <button
+                  type="button"
+                  onClick={addSpec}
+                  className="inline-flex w-full sm:w-auto items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 border border-zinc-200 bg-white hover:bg-zinc-100 hover:text-zinc-900 h-9 px-4 shadow-sm shrink-0 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+                >
+                  <FaPlus className="mr-2 h-3 w-3" /> Add Spec
+                </button>
+              </div>
+
+              {Object.keys(specs).length > 0 && (
+                <div className="mt-4 border border-zinc-200 dark:border-zinc-800 rounded-md overflow-hidden">
+                  <table className="w-full text-sm">
+                    <thead className="bg-zinc-50 dark:bg-zinc-900/50 border-b border-zinc-200 dark:border-zinc-800">
+                      <tr>
+                        <th className="text-left font-medium p-3 text-zinc-500">Name</th>
+                        <th className="text-left font-medium p-3 text-zinc-500">Value</th>
+                        <th className="w-[50px]"></th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800">
+                      {Object.entries(specs).map(([key, val], index) => (
+                        <tr key={index}>
+                          <td className="p-3 font-medium">{key}</td>
+                          <td className="p-3 text-zinc-600 dark:text-zinc-400">{val}</td>
+                          <td className="p-2 text-right">
+                            <button
+                              type="button"
+                              onClick={() => removeSpec(index)}
+                              className="p-2 rounded-md text-zinc-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                            >
+                              <FaTimes className="h-4 w-4" />
+                            </button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+
+            {/* Section: Description */}
+            <div className="p-6 space-y-4">
+              <label className={labelClass}>Product Description</label>
+              <textarea
+                name="description"
+                placeholder="Write a detailed description of the product..."
+                className="flex min-h-[120px] w-full rounded-md border border-zinc-200 bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 resize-y dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
+                required
               />
-              <input
-                placeholder="Specification Value"
-                value={value}
-                className="border p-3 rounded w-full md:w-1/2"
-                onChange={e => setValue(e.target.value)}
-              />
+            </div>
+
+            {/* Form Footer / Submit */}
+            <div className="p-6 bg-zinc-50 dark:bg-zinc-900/30 flex justify-end">
               <button
-                onClick={addSpec}
-                className="border p-3 rounded w-full md:w-1/2 bg-yellow-500 cursor-pointer"
+                type="submit"
+                disabled={loading}
+                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 h-10 px-8 disabled:pointer-events-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300 w-full sm:w-auto"
               >
-                Add Spec
+                {loading ? "Creating Product..." : "Create Product"}
               </button>
             </div>
-
-            <h3>Specs:</h3>
-            <ul>
-              {Object.entries(specs).map(([key, val], index) => (
-                <li key={index} className="mb-4 flex flex-col md:flex-row gap-3 items-center">
-                  <div className="flex flex-col md:flex-row gap-3 flex-1">
-                    <input
-                      type="text"
-                      value={key}
-                      readOnly
-                      className="border p-3 rounded w-full"
-                    />
-                    <input
-                      type="text"
-                      value={val}
-                      readOnly
-                      className="border p-3 rounded w-full"
-                    />
-                  </div>
-                  <button
-                    onClick={() => removeSpec(index)}
-                    className="font-bold text-2xl border p-4 rounded cursor-pointer"
-                  >
-                    <FaTimes className="font-bold text-2xl" />
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <textarea name="description" placeholder="Description" className="border p-3 rounded" required />
-
-          <button
-            type="submit"
-            className={`p-4 rounded bg-yellow-500 font-bold cursor-pointer ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-            disabled={loading}
-          >
-           {loading?"Creating......":" Create Product"}
-          </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );
