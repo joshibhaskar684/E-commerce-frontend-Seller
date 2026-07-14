@@ -4,6 +4,16 @@ import { FaGoogle } from "react-icons/fa";
 
 export default function Signup({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
+
+    const validate = (data) => {
+        let errs = {};
+        if (!data.name || data.name.trim().length < 3) errs.name = "Name must be at least 3 characters.";
+        if (!data.mobile || !/^[0-9]{10}$/.test(data.mobile)) errs.mobile = "Mobile must be a valid 10-digit number.";
+        if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) errs.email = "Please enter a valid email address.";
+        if (!data.password || data.password.length < 8) errs.password = "Password must be at least 8 characters.";
+        return errs;
+    };
 
     const handlesubmit = (e) => {
         e.preventDefault();
@@ -13,7 +23,14 @@ export default function Signup({ handleClose, setPage }) {
             mobile: formData.get('mobile'),
             email: formData.get('email'),
             password: formData.get('password')
+        };
+
+        const validationErrors = validate(data);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
         }
+        setErrors({});
     }
 
     return (
@@ -34,8 +51,9 @@ export default function Signup({ handleClose, setPage }) {
                             name="name"
                             required
                             placeholder="Enter your name"
-                            className="px-4 py-2 rounded-lg border border-background/40 bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                            className={`px-4 py-2 rounded-lg border ${errors.name ? 'border-red-500' : 'border-background/40'} bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition`}
                         />
+                        {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
@@ -45,8 +63,9 @@ export default function Signup({ handleClose, setPage }) {
                             name="mobile"
                             required
                             placeholder="Enter mobile number"
-                            className="px-4 py-2 rounded-lg border border-background/40 bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                            className={`px-4 py-2 rounded-lg border ${errors.mobile ? 'border-red-500' : 'border-background/40'} bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition`}
                         />
+                        {errors.mobile && <span className="text-red-500 text-xs">{errors.mobile}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
@@ -56,8 +75,9 @@ export default function Signup({ handleClose, setPage }) {
                             name="email"
                             required
                             placeholder="Enter your email"
-                            className="px-4 py-2 rounded-lg border border-background/40 bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                            className={`px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-background/40'} bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition`}
                         />
+                        {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                     </div>
 
                     <div className="flex flex-col gap-1">
@@ -67,8 +87,9 @@ export default function Signup({ handleClose, setPage }) {
                             name="password"
                             required
                             placeholder="Enter password"
-                            className="px-4 py-2 rounded-lg border border-background/40 bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                            className={`px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-background/40'} bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition`}
                         />
+                        {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
