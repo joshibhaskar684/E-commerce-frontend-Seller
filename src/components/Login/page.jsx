@@ -7,8 +7,17 @@ import { useDispatch } from "react-redux";
 
 export default function Login({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const router=useRouter();   
+
+    const validate = (data) => {
+        let errs = {};
+        if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) errs.email = "Please enter a valid email address.";
+        if (!data.password || data.password.length < 8) errs.password = "Password must be at least 8 characters.";
+        return errs;
+    };
+
     const handlesubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -16,6 +25,14 @@ export default function Login({ handleClose, setPage }) {
             email: formData.get('email'),
             password: formData.get('password')
         }
+
+        const validationErrors = validate(data);
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            return;
+        }
+        setErrors({});
+
         setLoading(true);
         try {
             await dispatch(LoginSeller(data));
@@ -46,8 +63,9 @@ export default function Login({ handleClose, setPage }) {
                                 name="email"
                                 required
                                 placeholder="Enter your email"
-                                className="px-4 py-2 rounded-lg border border-background/40 bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                                className={`px-4 py-2 rounded-lg border ${errors.email ? 'border-red-500' : 'border-background/40'} bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition`}
                             />
+                            {errors.email && <span className="text-red-500 text-xs">{errors.email}</span>}
                         </div>
 
                         <div className="flex flex-col gap-1">
@@ -57,8 +75,9 @@ export default function Login({ handleClose, setPage }) {
                                 name="password"
                                 required
                                 placeholder="Enter your password"
-                                className="px-4 py-2 rounded-lg border border-background/40 bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                                className={`px-4 py-2 rounded-lg border ${errors.password ? 'border-red-500' : 'border-background/40'} bg-transparent text-background focus:outline-none focus:ring-2 focus:ring-yellow transition`}
                             />
+                            {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
