@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 
 export default function page() {
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
   const [imageUrl, setImageUrl] = useState("");
   const [images, setImages] = useState([]);
   const [categoryPath, setCategoryPath] = useState([]);
@@ -115,6 +116,27 @@ export default function page() {
       specifications: specs,
       token,
     };
+
+    let errs = {};
+    if (!data.name || data.name.trim().length < 3) errs.name = "Product name must be at least 3 characters.";
+    if (!data.brand || data.brand.trim().length < 2) errs.brand = "Brand is required.";
+    if (!data.color || data.color.trim().length < 2) errs.color = "Color is required.";
+    if (isNaN(data.originalPrice) || data.originalPrice <= 0) errs.originalPrice = "Original price must be greater than 0.";
+    if (isNaN(data.price) || data.price <= 0) errs.price = "Selling price must be greater than 0.";
+    if (data.price > data.originalPrice) errs.price = "Selling price cannot exceed original price.";
+    if (isNaN(data.quantity) || data.quantity < 0) errs.quantity = "Quantity must be a valid number.";
+    if (isNaN(data.returnDay) || data.returnDay < 0) errs.returnDay = "Return days must be a valid number.";
+    if (!data.description || data.description.trim().length < 10) errs.description = "Description must be at least 10 characters.";
+    if (images.length === 0) errs.images = "At least one product image is required.";
+    if (!categoryId) errs.categoryId = "Please assign a category.";
+    
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      setLoading(false);
+      return;
+    }
+    setErrors({});
+
     try {
       await dispatch(createProduct(data));
     } catch (error) {
@@ -187,7 +209,8 @@ export default function page() {
 
                 <div className="space-y-1">
                   <label className={labelClass}>Category ID</label>
-                  <input name="categoryId" placeholder="Auto-filled" className={`${inputClass} bg-zinc-50 dark:bg-zinc-900 text-zinc-500`} required readOnly value={categoryId} />
+                  <input name="categoryId" placeholder="Auto-filled" className={`${inputClass} bg-zinc-50 dark:bg-zinc-900 text-zinc-500 ${errors.categoryId ? 'border-red-500' : ''}`} required readOnly value={categoryId} />
+                  {errors.categoryId && <span className="text-red-500 text-xs">{errors.categoryId}</span>}
                 </div>
                 <div className="space-y-1">
                   <label className={labelClass}>Category Path</label>
@@ -196,17 +219,20 @@ export default function page() {
 
                 <div className="space-y-1 md:col-span-2">
                   <label className={labelClass}>Product Name</label>
-                  <input name="name" placeholder="E.g. Wireless Noise-Cancelling Headphones" className={inputClass} required />
+                  <input name="name" placeholder="E.g. Wireless Noise-Cancelling Headphones" className={`${inputClass} ${errors.name ? 'border-red-500' : ''}`} required />
+                  {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                 </div>
 
                 <div className="space-y-1">
                   <label className={labelClass}>Brand</label>
-                  <input name="brand" placeholder="Brand Name" className={inputClass} required />
+                  <input name="brand" placeholder="Brand Name" className={`${inputClass} ${errors.brand ? 'border-red-500' : ''}`} required />
+                  {errors.brand && <span className="text-red-500 text-xs">{errors.brand}</span>}
                 </div>
 
                 <div className="space-y-1">
                   <label className={labelClass}>Color</label>
-                  <input name="color" placeholder="Primary Color" className={inputClass} required />
+                  <input name="color" placeholder="Primary Color" className={`${inputClass} ${errors.color ? 'border-red-500' : ''}`} required />
+                  {errors.color && <span className="text-red-500 text-xs">{errors.color}</span>}
                 </div>
               </div>
             </div>
@@ -219,7 +245,7 @@ export default function page() {
                 <input
                   type="text"
                   placeholder="Paste Image URL here..."
-                  className={inputClass}
+                  className={`${inputClass} ${errors.images ? 'border-red-500' : ''}`}
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
                 />
@@ -231,6 +257,7 @@ export default function page() {
                   <FaPlus className="mr-2 h-3 w-3" /> Add
                 </button>
               </div>
+              {errors.images && <span className="text-red-500 text-xs block mt-1">{errors.images}</span>}
 
               {images.length > 0 && (
                 <div className="grid gap-3">
@@ -257,22 +284,26 @@ export default function page() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-1">
                   <label className={labelClass}>Original Price</label>
-                  <input type="number" name="originalPrice" placeholder="0.00" min="0" step="0.01" className={inputClass} required />
+                  <input type="number" name="originalPrice" placeholder="0.00" min="0" step="0.01" className={`${inputClass} ${errors.originalPrice ? 'border-red-500' : ''}`} required />
+                  {errors.originalPrice && <span className="text-red-500 text-xs">{errors.originalPrice}</span>}
                 </div>
                 
                 <div className="space-y-1">
                   <label className={labelClass}>Selling Price</label>
-                  <input type="number" name="price" placeholder="0.00" min="0" step="0.01" className={inputClass} required />
+                  <input type="number" name="price" placeholder="0.00" min="0" step="0.01" className={`${inputClass} ${errors.price ? 'border-red-500' : ''}`} required />
+                  {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>
                 
                 <div className="space-y-1">
                   <label className={labelClass}>Available Quantity</label>
-                  <input type="number" name="quantity" placeholder="0" min="0" className={inputClass} required />
+                  <input type="number" name="quantity" placeholder="0" min="0" className={`${inputClass} ${errors.quantity ? 'border-red-500' : ''}`} required />
+                  {errors.quantity && <span className="text-red-500 text-xs">{errors.quantity}</span>}
                 </div>
 
                 <div className="space-y-1">
                   <label className={labelClass}>Return Days</label>
-                  <input type="number" name="returnDay" placeholder="e.g. 7 or 14" min="0" className={inputClass} required />
+                  <input type="number" name="returnDay" placeholder="e.g. 7 or 14" min="0" className={`${inputClass} ${errors.returnDay ? 'border-red-500' : ''}`} required />
+                  {errors.returnDay && <span className="text-red-500 text-xs">{errors.returnDay}</span>}
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
@@ -355,9 +386,10 @@ export default function page() {
               <textarea
                 name="description"
                 placeholder="Write a detailed description of the product..."
-                className="flex min-h-[120px] w-full rounded-md border border-zinc-200 bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 resize-y dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
+                className={`flex min-h-[120px] w-full rounded-md border ${errors.description ? 'border-red-500' : 'border-zinc-200 dark:border-zinc-800'} bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 resize-y dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300`}
                 required
               />
+              {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
             </div>
 
             {/* Form Footer / Submit */}
