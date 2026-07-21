@@ -1,170 +1,166 @@
+import { MapPin, Phone, Store, User, FileBadge2, AlertCircle, Star, Calendar } from "lucide-react";
+
 export default function ShopDataCard({ seller }) {
     const statusStyles = {
-        APPROVED: "bg-green-100 text-green-600 border-green-200",
-        PENDING: "bg-yellow-100 text-yellow-600 border-yellow-200",
-        REJECTED: "bg-red-100 text-red-600 border-red-200",
+        APPROVED: "border-transparent bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
+        PENDING: "border-transparent bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
+        REJECTED: "border-transparent bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",
     };
 
     return (
-        <div className="w-full min-h-screen bg-background px-3 sm:px-6 py-6 flex justify-center">
-            
-            <div className="w-full max-w-6xl space-y-6">
-
-                {/* HEADER */}
-                <div className="bg-foreground/5 border border-foreground/10 rounded-2xl p-4 sm:p-6 shadow-md flex flex-col sm:flex-row justify-between gap-4 sm:items-center">
-                    
-                    <div className="min-w-0">
-                        <h1 className="text-xl sm:text-2xl font-bold text-foreground break-words">
-                            {seller?.shopName}
-                        </h1>
-                        <p className="text-sm text-foreground/60 break-all">
-                            Shop ID: {seller?.id}
-                        </p>
-                        <p className="text-sm text-foreground/60 break-all">
-                            Seller ID: {seller?.sellerId}
-                        </p>
+        <div className="w-full space-y-6">
+            {/* HEADER CARD */}
+            <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background text-foreground shadow-sm p-6 flex flex-col sm:flex-row justify-between gap-4 sm:items-center">
+                <div className="min-w-0">
+                    <h1 className="text-2xl font-semibold tracking-tight text-foreground break-words flex items-center gap-2">
+                        <Store className="w-6 h-6 text-zinc-500 shrink-0" />
+                        {seller?.shopName}
+                    </h1>
+                    <div className="flex flex-col gap-1 mt-2 text-sm text-zinc-500 dark:text-zinc-400 break-all">
+                        <p>Shop ID: {seller?.id}</p>
+                        <p>Seller ID: {seller?.sellerId}</p>
                     </div>
-
-                    <div className="flex flex-wrap gap-2">
-                        <span
-                            className={`px-3 py-1.5 rounded-lg border text-sm font-semibold ${statusStyles[seller?.status]}`}
-                        >
-                            {seller?.status}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                    <span className={`inline-flex items-center rounded-md border px-3 py-1 text-xs font-semibold uppercase tracking-wider ${statusStyles[seller?.status] || "border-zinc-200 text-zinc-950"}`}>
+                        {seller?.status}
+                    </span>
+                    {seller?.ownerStatus && (
+                        <span className={`inline-flex items-center rounded-md border px-3 py-1 text-xs font-semibold uppercase tracking-wider ${statusStyles[seller?.ownerStatus] || "border-zinc-200 text-zinc-950"}`}>
+                            Owner: {seller?.ownerStatus}
                         </span>
+                    )}
+                </div>
+            </div>
 
-                        {seller?.ownerStatus && (
-                            <span
-                                className={`px-3 py-1.5 rounded-lg border text-sm font-semibold ${statusStyles[seller?.ownerStatus]}`}
+            {/* GRID */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                {/* SHOP INFO */}
+                <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background shadow-sm p-6 flex flex-col h-full">
+                    <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4 text-zinc-900 dark:text-zinc-100">
+                        <Store className="w-4 h-4 text-zinc-500" />
+                        Shop Information
+                    </h2>
+                    <div className="space-y-3 text-sm flex-1">
+                        <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                            <span className="text-zinc-500">Name</span>
+                            <span className="font-medium text-foreground text-right">{seller?.shopName}</span>
+                        </div>
+                        <div className="flex flex-col gap-1 pb-2">
+                            <span className="text-zinc-500">Description</span>
+                            <span className="font-medium text-foreground text-sm">{seller?.description || "No description provided."}</span>
+                        </div>
+                    </div>
+                    <div className="flex flex-wrap gap-3 mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-500 rounded-md text-xs font-medium border border-yellow-200 dark:border-yellow-900/50">
+                            <Star className="w-3.5 h-3.5 fill-current" />
+                            {seller?.rating ?? 0} Rating
+                        </span>
+                        <span className="inline-flex items-center px-3 py-1 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-500 rounded-md text-xs font-medium border border-green-200 dark:border-green-900/50">
+                            {seller?.totalReviews ?? 0} Reviews
+                        </span>
+                    </div>
+                </div>
+
+                {/* OWNER INFO */}
+                <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background shadow-sm p-6 flex flex-col h-full">
+                    <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4 text-zinc-900 dark:text-zinc-100">
+                        <User className="w-4 h-4 text-zinc-500" />
+                        Owner Info
+                    </h2>
+                    <div className="space-y-3 text-sm flex-1">
+                        <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                            <span className="text-zinc-500">Owner Name</span>
+                            <span className="font-medium text-foreground">{seller?.businessOwnerName || "N/A"}</span>
+                        </div>
+                        <div className="flex justify-between items-center border-b border-zinc-100 dark:border-zinc-800 pb-2">
+                            <span className="text-zinc-500">Mobile Number</span>
+                            <span className="font-medium text-foreground">{seller?.mobileNo || "N/A"}</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* ADDRESS */}
+                <div className="md:col-span-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background shadow-sm p-6">
+                    <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4 text-zinc-900 dark:text-zinc-100">
+                        <MapPin className="w-4 h-4 text-zinc-500" />
+                        Address
+                    </h2>
+                    <p className="text-sm text-foreground bg-zinc-50 dark:bg-zinc-900/50 p-4 rounded-lg border border-zinc-100 dark:border-zinc-800">
+                        {seller?.address}, {seller?.city}, {seller?.state} - {seller?.pincode}
+                    </p>
+                </div>
+
+                {/* MEDIA DOCUMENTS */}
+                <div className="md:col-span-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background shadow-sm p-6">
+                    <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4 text-zinc-900 dark:text-zinc-100">
+                        <FileBadge2 className="w-4 h-4 text-zinc-500" />
+                        Media Assets
+                    </h2>
+                    <div className="flex flex-col sm:flex-row flex-wrap gap-4 text-sm">
+                        {seller?.logoUrl && (
+                            <a
+                                href={seller.logoUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 border border-zinc-200 dark:border-zinc-800 bg-background hover:bg-zinc-100 dark:hover:bg-zinc-800 h-10 px-4 py-2"
                             >
-                                Owner: {seller?.ownerStatus}
-                            </span>
+                                View Logo
+                            </a>
+                        )}
+
+                        {seller?.bannerUrl && (
+                            <a
+                                href={seller.bannerUrl}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 border border-zinc-200 dark:border-zinc-800 bg-background hover:bg-zinc-100 dark:hover:bg-zinc-800 h-10 px-4 py-2"
+                            >
+                                View Banner
+                            </a>
+                        )}
+                        {!seller?.logoUrl && !seller?.bannerUrl && (
+                            <p className="text-zinc-500">No media assets uploaded.</p>
                         )}
                     </div>
                 </div>
 
-                {/* GRID */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
-
-                    {/* SHOP INFO */}
-                    <div className="card">
-                        <h2 className="card-title">Shop Information</h2>
-
-                        <div className="space-y-2 text-sm">
-                            <p><b>Name:</b> {seller?.shopName}</p>
-                            <p><b>Description:</b> {seller?.description || "N/A"}</p>
-
-                            <div className="flex flex-wrap gap-4 pt-2">
-                                <span className="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-xs font-medium">
-                                    ⭐ {seller?.rating ?? 0} Rating
-                                </span>
-                                <span className="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-xs font-medium">
-                                    {seller?.totalReviews ?? 0} Reviews
-                                </span>
-                            </div>
+                {/* TIMELINE */}
+                <div className="md:col-span-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background shadow-sm p-6">
+                    <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-4 text-zinc-900 dark:text-zinc-100">
+                        <Calendar className="w-4 h-4 text-zinc-500" />
+                        Timeline
+                    </h2>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+                        <div className="flex flex-col gap-1 border border-zinc-100 dark:border-zinc-800 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900/50">
+                            <span className="text-zinc-500 font-medium">Created</span>
+                            <span className="text-foreground">
+                                {seller?.createdAt ? new Date(seller.createdAt).toLocaleString() : "N/A"}
+                            </span>
+                        </div>
+                        <div className="flex flex-col gap-1 border border-zinc-100 dark:border-zinc-800 p-3 rounded-lg bg-zinc-50 dark:bg-zinc-900/50">
+                            <span className="text-zinc-500 font-medium">Updated</span>
+                            <span className="text-foreground">
+                                {seller?.updatedAt ? new Date(seller.updatedAt).toLocaleString() : "N/A"}
+                            </span>
                         </div>
                     </div>
+                </div>
 
-                    {/* OWNER INFO */}
-                    <div className="card">
-                        <h2 className="card-title">Owner Info</h2>
-
-                        <div className="space-y-2 text-sm">
-                            <p><b>Name:</b> {seller?.businessOwnerName || "N/A"}</p>
-                            <p><b>Mobile:</b> {seller?.mobileNo || "N/A"}</p>
-                        </div>
-                    </div>
-
-                    {/* MEDIA */}
-                    <div className="card md:col-span-2">
-                        <h2 className="card-title">Media</h2>
-
-                        <div className="flex flex-wrap gap-3">
-                            {seller?.logoUrl && (
-                                <a
-                                    href={seller.logoUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="btn-blue"
-                                >
-                                    View Logo
-                                </a>
-                            )}
-
-                            {seller?.bannerUrl && (
-                                <a
-                                    href={seller.bannerUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    className="btn-green"
-                                >
-                                    View Banner
-                                </a>
-                            )}
-                        </div>
-                    </div>
-
-                    {/* ADDRESS */}
-                    <div className="card md:col-span-2">
-                        <h2 className="card-title">Address</h2>
-
-                        <p className="text-sm break-words">
-                            {seller?.address}, {seller?.city}, {seller?.state} - {seller?.pincode}
+                {/* REJECTION */}
+                {seller?.status === "REJECTED" && seller?.rejectionReason && (
+                    <div className="md:col-span-2 rounded-xl border border-red-200 dark:border-red-900/50 bg-red-50 dark:bg-red-950/20 shadow-sm p-6">
+                        <h2 className="flex items-center gap-2 text-sm font-semibold tracking-tight mb-3 text-red-800 dark:text-red-400">
+                            <AlertCircle className="w-4 h-4" />
+                            Rejection Reason
+                        </h2>
+                        <p className="text-sm text-red-600 dark:text-red-300">
+                            {seller?.rejectionReason}
                         </p>
                     </div>
-
-                    {/* REJECTION */}
-                    {seller?.status === "REJECTED" && seller?.rejectionReason && (
-                        <div className="md:col-span-2 bg-red-50 border border-red-200 rounded-2xl p-4 sm:p-5">
-                            <h2 className="text-red-500 font-semibold mb-2">
-                                Rejection Reason
-                            </h2>
-                            <p className="text-sm text-red-500 break-words">
-                                {seller?.rejectionReason}
-                            </p>
-                        </div>
-                    )}
-
-                    {/* TIMELINE */}
-                    <div className="card md:col-span-2">
-                        <h2 className="card-title">Timeline</h2>
-
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-foreground/70">
-                            <p>
-                                <b>Created:</b>{" "}
-                                {seller?.createdAt
-                                    ? new Date(seller.createdAt).toLocaleString()
-                                    : "N/A"}
-                            </p>
-                            <p>
-                                <b>Updated:</b>{" "}
-                                {seller?.updatedAt
-                                    ? new Date(seller.updatedAt).toLocaleString()
-                                    : "N/A"}
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
+                )}
             </div>
-
-            {/* REUSABLE TAILWIND CLASSES */}
-            <style jsx>{`
-                .card {
-                    @apply bg-foreground/5 border border-foreground/10 rounded-2xl p-4 sm:p-5 shadow-sm hover:shadow-md transition;
-                }
-
-                .card-title {
-                    @apply text-blue-500 font-semibold mb-3;
-                }
-
-                .btn-blue {
-                    @apply px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 text-sm font-medium transition;
-                }
-
-                .btn-green {
-                    @apply px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 text-sm font-medium transition;
-                }
-            `}</style>
         </div>
     );
 }

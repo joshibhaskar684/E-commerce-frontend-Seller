@@ -1,8 +1,8 @@
 import ReduxProvider from "@/redux-store/ReduxProvider";
 import "./globals.css";
 import { ToastContainer } from "react-toastify";
-import AiModal from "@/components/Modal/AiModal";
 import AiBot from "../components/ai/AiBoat";
+import NextTopLoader from 'nextjs-toploader';
 
 
 export const metadata = {
@@ -28,6 +28,17 @@ export default function RootLayout({ children }) {
         className={` antialiased`}
       >
 
+        <NextTopLoader 
+          color="#eab308" 
+          initialPosition={0.08}
+          crawlSpeed={200}
+          height={3}
+          crawl={true}
+          showSpinner={false}
+          easing="ease"
+          speed={200}
+          shadow="0 0 10px #eab308,0 0 5px #eab308"
+        />
 
         <ToastContainer
   position="bottom-center"           // bottom center

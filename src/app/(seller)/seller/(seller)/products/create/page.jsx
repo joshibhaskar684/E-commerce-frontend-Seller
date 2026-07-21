@@ -219,19 +219,19 @@ export default function page() {
 
                 <div className="space-y-1 md:col-span-2">
                   <label className={labelClass}>Product Name</label>
-                  <input name="name" placeholder="E.g. Wireless Noise-Cancelling Headphones" className={`${inputClass} ${errors.name ? 'border-red-500' : ''}`} required />
+                  <input name="name" placeholder="E.g. Wireless Noise-Cancelling Headphones" className={`${inputClass} ${errors.name ? 'border-red-500' : ''}`} required minLength={3} title="Product name must be at least 3 characters." />
                   {errors.name && <span className="text-red-500 text-xs">{errors.name}</span>}
                 </div>
 
                 <div className="space-y-1">
                   <label className={labelClass}>Brand</label>
-                  <input name="brand" placeholder="Brand Name" className={`${inputClass} ${errors.brand ? 'border-red-500' : ''}`} required />
+                  <input name="brand" placeholder="Brand Name" className={`${inputClass} ${errors.brand ? 'border-red-500' : ''}`} required minLength={2} title="Brand is required." />
                   {errors.brand && <span className="text-red-500 text-xs">{errors.brand}</span>}
                 </div>
 
                 <div className="space-y-1">
                   <label className={labelClass}>Color</label>
-                  <input name="color" placeholder="Primary Color" className={`${inputClass} ${errors.color ? 'border-red-500' : ''}`} required />
+                  <input name="color" placeholder="Primary Color" className={`${inputClass} ${errors.color ? 'border-red-500' : ''}`} required minLength={2} title="Color is required." />
                   {errors.color && <span className="text-red-500 text-xs">{errors.color}</span>}
                 </div>
               </div>
@@ -243,11 +243,12 @@ export default function page() {
               
               <div className="flex gap-3">
                 <input
-                  type="text"
+                  type="url"
                   placeholder="Paste Image URL here..."
                   className={`${inputClass} ${errors.images ? 'border-red-500' : ''}`}
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
+                  title="Must be a valid web URL."
                 />
                 <button
                   onClick={() => { if(imageUrl) { setImages([...images, imageUrl]); setImageUrl(""); } }}
@@ -284,25 +285,25 @@ export default function page() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="space-y-1">
                   <label className={labelClass}>Original Price</label>
-                  <input type="number" name="originalPrice" placeholder="0.00" min="0" step="0.01" className={`${inputClass} ${errors.originalPrice ? 'border-red-500' : ''}`} required />
+                  <input type="number" name="originalPrice" placeholder="0.00" min="0.01" step="0.01" className={`${inputClass} ${errors.originalPrice ? 'border-red-500' : ''}`} required title="Original price must be greater than 0." />
                   {errors.originalPrice && <span className="text-red-500 text-xs">{errors.originalPrice}</span>}
                 </div>
                 
                 <div className="space-y-1">
                   <label className={labelClass}>Selling Price</label>
-                  <input type="number" name="price" placeholder="0.00" min="0" step="0.01" className={`${inputClass} ${errors.price ? 'border-red-500' : ''}`} required />
+                  <input type="number" name="price" placeholder="0.00" min="0.01" step="0.01" className={`${inputClass} ${errors.price ? 'border-red-500' : ''}`} required title="Selling price must be greater than 0." />
                   {errors.price && <span className="text-red-500 text-xs">{errors.price}</span>}
                 </div>
                 
                 <div className="space-y-1">
                   <label className={labelClass}>Available Quantity</label>
-                  <input type="number" name="quantity" placeholder="0" min="0" className={`${inputClass} ${errors.quantity ? 'border-red-500' : ''}`} required />
+                  <input type="number" name="quantity" placeholder="0" min="0" className={`${inputClass} ${errors.quantity ? 'border-red-500' : ''}`} required title="Quantity must be a valid number." />
                   {errors.quantity && <span className="text-red-500 text-xs">{errors.quantity}</span>}
                 </div>
 
                 <div className="space-y-1">
                   <label className={labelClass}>Return Days</label>
-                  <input type="number" name="returnDay" placeholder="e.g. 7 or 14" min="0" className={`${inputClass} ${errors.returnDay ? 'border-red-500' : ''}`} required />
+                  <input type="number" name="returnDay" placeholder="e.g. 7 or 14" min="0" max="365" className={`${inputClass} ${errors.returnDay ? 'border-red-500' : ''}`} required title="Return days must be a valid number (0-365)." />
                   {errors.returnDay && <span className="text-red-500 text-xs">{errors.returnDay}</span>}
                 </div>
 
@@ -388,6 +389,8 @@ export default function page() {
                 placeholder="Write a detailed description of the product..."
                 className={`flex min-h-[120px] w-full rounded-md border ${errors.description ? 'border-red-500' : 'border-zinc-200 dark:border-zinc-800'} bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 resize-y dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300`}
                 required
+                minLength={10}
+                title="Description must be at least 10 characters."
               />
               {errors.description && <span className="text-red-500 text-xs">{errors.description}</span>}
             </div>

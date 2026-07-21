@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -9,255 +9,165 @@ import {
   MenuButton,
   MenuItem,
   MenuItems,
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-  Tab,
-  TabGroup,
-  TabList,
-  TabPanel,
-  TabPanels,
 } from '@headlessui/react'
-import { Bars3Icon, MagnifyingGlassIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
-
+import { Menu as MenuIcon, X, LogOut, User } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { Avatar, Modal } from '@mui/material'
-import Cookies from 'js-cookie'
-import { FaUserCircle } from 'react-icons/fa'
-import Link from 'next/link'
-// import AuthModal from '../Modal/AuthModal'
 import axios from 'axios'
-
-import { menuItems } from "../NavRoute/menuitems";
-
+import Link from 'next/link'
+import { menuItems } from "../NavRoute/menuitems"
 
 export default function Navbar({tokenPresent}) {
   const [open, setOpen] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-   const router = useRouter();
+  const router = useRouter();
 
-   const handlelogout = async () => {
-  try {
-    await axios.post("/api/logout-admin", {}, {
-      withCredentials: true,   // 🔥 important for cookies
-    });
-
-  router.push("/");
-router.refresh();
-
-  } catch (error) {
-    console.error("Logout failed", error);
-  }
-};
-
- 
-  const [openModal, setOpenModal] = useState(false);
-  const [page, setPage] = useState('');
-
-  const handleClose = () => {
-    setOpenModal(false);
+  const handlelogout = async () => {
+    try {
+      await axios.post("/api/logout-admin", {}, { withCredentials: true });
+      router.push("/");
+      router.refresh();
+    } catch (error) {
+      console.error("Logout failed", error);
+    }
   };
 
-   const NavData = [{ label: "Home", link: "/" },
- 
-  
-];
-
-
-  const LoginData = menuItems;
+  const NavData = [{ label: "Home", link: "/" }];
+  const LoginData = menuItems.filter(item => item.name); // Filter out empty items
 
   return (
     <>
-      <div className="bg-background border-b text-foreground  fixed w-full top-0 z-1">
-        {/* Mobile menu */}
-        <Dialog open={open} onClose={setOpen} className="relative z-40 lg:hidden ">
-          <DialogBackdrop
-            transition
-            className="fixed inset-0 bg-black/25 transition-opacity duration-300 ease-linear data-closed:opacity-0"
-          />
-          <div className="fixed inset-0 z-40 flex ">
-            <DialogPanel
-              transition
-              className="relative hide-scrollbar flex w-full max-w-xs transform flex-col overflow-y-auto bg-background text-foreground  pb-12 shadow-xl transition duration-300 ease-in-out data-closed:-translate-x-full "
-            >
-              <div className="flex px-4 pt-5 pb-2">
-                <button
-                  type="button"
-                  onClick={() => setOpen(false)}
-                  className="relative -m-2 inline-flex items-center justify-center rounded-md p-2 text-foreground"
-                >
-                  <span className="absolute -inset-0.5" />
-                  <span className="sr-only">Close menu</span>
-                  <XMarkIcon aria-hidden="true" className="size-6" />
-                </button>
-              </div>
+      <header className="fixed top-0 z-[50] w-full border-b border-zinc-200 dark:border-zinc-800 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-sm">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between">
+            <div className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="inline-flex items-center justify-center rounded-md p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 lg:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950"
+              >
+                <span className="sr-only">Open menu</span>
+                <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+              
+              {/* Logo */}
+              <Link href="/" className="flex items-center gap-2">
+                <img
+                  alt="Logo"
+                  src="/QuickLogo.png"
+                  className="h-8 w-auto"
+                />
+                <span className="hidden font-bold sm:inline-block tracking-tight text-foreground">Admin Portal</span>
+              </Link>
+            </div>
 
-             
-   <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-             <div className="flow-root">
-                  {
-                    NavData.map((item, index) => (
-                      <a key={index} href={item.link} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
-                        {item.label}
-                      </a>
-                    ))
-                  }
+            <div className="flex flex-1 items-center justify-end space-x-4">
+              {tokenPresent ? (
+                <Menu as="div" className="relative inline-block text-left">
+                  <MenuButton className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-background text-sm font-medium transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950">
+                    <User className="h-5 w-5 text-foreground" />
+                    <span className="sr-only">Open user menu</span>
+                  </MenuButton>
+                  
+                  <MenuItems
+                    transition
+                    className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-zinc-100 dark:divide-zinc-800 rounded-md border border-zinc-200 dark:border-zinc-800 bg-background text-foreground shadow-md outline-none data-[closed]:scale-95 data-[closed]:opacity-0 transition duration-100 ease-out z-[100]"
+                  >
+                    <div className="px-4 py-3">
+                      <p className="text-sm font-medium">Administrator</p>
+                      <p className="text-xs text-zinc-500 truncate">admin@system.local</p>
+                    </div>
+                    <div className="py-1">
+                      <MenuItem>
+                        {({ active }) => (
+                          <button
+                            onClick={handlelogout}
+                            className={`group flex w-full items-center px-4 py-2 text-sm text-red-600 transition-colors ${active ? 'bg-zinc-100 dark:bg-zinc-800' : ''}`}
+                          >
+                            <LogOut className="mr-2 h-4 w-4" />
+                            Log out
+                          </button>
+                        )}
+                      </MenuItem>
+                    </div>
+                  </MenuItems>
+                </Menu>
+              ) : (
+                <div className="hidden lg:flex items-center gap-4">
+                   <Link href="/admin-login" className="text-sm font-medium hover:underline underline-offset-4 text-foreground">Sign In</Link>
                 </div>
-              </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </header>
 
-              {
-                tokenPresent ? (
-                  <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-                    <div className="flex flex-col space-y-3">
-                      {LoginData.map((item, index) => <div className="flow-root" key={index}>
-                        <a
-                          href={item.href}
-                          className="-m-2 cursor-pointer block p-2 font-medium text-foreground"  >
-                          {item.name}
-                        </a>
-                      </div>)}
-
-                      <div className="flow-root">
-
-                        <button
-                          onClick={() => { handlelogout() }}
-                          className="-m-2 cursor-pointer block p-2 font-medium text-foreground  text-left text-red-600 hover:text-red-800"        >
-                          Logout
-                        </button>
-                      </div>
-
-
-
+      {/* Mobile menu (Sheet) */}
+      <Dialog open={open} onClose={setOpen} className="relative z-[100] lg:hidden">
+        <DialogBackdrop
+          transition
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-300 data-[closed]:opacity-0"
+        />
+        <div className="fixed inset-0 z-[100] flex">
+          <DialogPanel
+            transition
+            className="relative flex w-3/4 max-w-sm flex-col bg-background shadow-xl transition-transform duration-300 data-[closed]:-translate-x-full border-r border-zinc-200 dark:border-zinc-800"
+          >
+            <div className="flex items-center justify-between px-4 py-4 border-b border-zinc-200 dark:border-zinc-800 bg-background/95 backdrop-blur sticky top-0">
+              <span className="font-semibold tracking-tight text-foreground">Admin Menu</span>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded-sm opacity-70 hover:opacity-100 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 text-foreground"
+              >
+                <span className="sr-only">Close menu</span>
+                <X className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto px-4 py-6 bg-background">
+              <nav className="flex flex-col gap-4">
+                {NavData.map((item, index) => (
+                  <Link
+                    key={index}
+                    href={item.link}
+                    onClick={() => setOpen(false)}
+                    className="text-sm font-medium hover:underline underline-offset-4 text-foreground"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+                
+                {tokenPresent && (
+                  <div className="mt-4 pt-4 border-t border-zinc-200 dark:border-zinc-800 flex flex-col gap-4">
+                    <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">Management</p>
+                    {LoginData.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={item.href}
+                        onClick={() => setOpen(false)}
+                        className="text-sm font-medium hover:underline underline-offset-4 text-zinc-600 dark:text-zinc-400 hover:text-foreground"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                    <div className="mt-6 pt-4 border-t border-zinc-200 dark:border-zinc-800">
+                      <button
+                        onClick={() => {
+                          setOpen(false);
+                          handlelogout();
+                        }}
+                        className="text-sm font-medium text-red-600 hover:text-red-700 flex items-center"
+                      >
+                        <LogOut className="mr-2 h-4 w-4" />
+                        Logout
+                      </button>
                     </div>
                   </div>
-
-                ) : (
-                  <div className="space-y-6 border-t border-gray-200 px-4 py-6">
-
-
-                    <div className="flow-root">
-                      <button onClick={() => { setOpenModal(true), setPage('login') }} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
-                        Sign in
-                      </button>
-                    </div>
-                    <div className="flow-root">
-                      <button onClick={() => { setOpenModal(true), setPage('signup') }} className="-m-2 cursor-pointer block p-2 font-medium text-foreground">
-                        Create account
-                      </button>
-                    </div>
-                  </div>)
-              }
-
-   
-
-            </DialogPanel>
-          </div>
-        </Dialog>
-
-        <header className="relative bg-background text-foreground ">
-
-
-          <nav aria-label="Top" className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className=" border-gray-200">
-              <div className="flex h-16 items-center">
-                <button
-                  type="button"
-                  onClick={() => setOpen(true)}
-                  className="relative rounded-md bg-background text-foreground  p-2 text-foreground lg:hidden"
-                >
-                  <span className="absolute -inset-0.5" />
-                  <span className="sr-only">Open menu</span>
-                  <Bars3Icon aria-hidden="true" className="size-6" />
-                </button>
-
-                {/* Logo */}
-                <div className="ml-4 flex lg:ml-0">
-                  <a href="/">
-                    <span className="sr-only">Your Company</span>
-                    <img
-                      alt=""
-                      src="/QuickLogo.png"
-                      className="h-8 w-auto"
-                    />
-                  </a>
-                </div>
-
-               
-                <div className="ml-auto flex justify-end items-center">
-                    
-                  {tokenPresent ? (
-                    <div className="hidden lg:flex  overflow-visible">
-                    <Menu as="div" className="relative ml-3 ">
-                      <MenuButton className="relative flex rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">
-                        <span className="absolute -inset-1.5" />
-                        <span className="sr-only">Open user menu</span>
-
-
-<FaUserCircle
- className="w-8 h-8 rounded-full outline outline-1 outline-white/10 text-foreground border font-bold text-2xl"
-                
-/>
-                    
-                      </MenuButton>
-                      <MenuItems
-                        transition
-                        className="absolute right-0 z-100 mt-2 w-48 origin-top-right rounded-md bg-foreground py-1 shadow-lg outline outline-black/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
-                      >
-                       
-                        
-                        <MenuItem>
-                          <button
-                            onClick={()=>handlelogout()}
-                          
-                            className="block  w-full px-4 py-2 text-sm text-red-700 data-focus:bg-red-100 overflow-hidden data-focus:outline-hidden flex items-center cursor-pointer"
-                          >
-                           Log Out
-                          </button>
-                        </MenuItem>
-                      </MenuItems>
-                    </Menu></div>
-                  ) : (
-                    <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
-
-
-
-                      <button
-                        onClick={() => {
-                          setOpenModal(true);
-                          setPage('login');
-                        }}
-                        className="text-sm font-medium text-foreground cursor-pointer hover:text-foreground"
-                      >
-                        Sign in
-                      </button>
-                      <span aria-hidden="true" className="h-6 w-px bg-gray-200" />
-                      <button
-                        onClick={() => {
-                          setOpenModal(true);
-                          setPage('signup');
-                        }}
-                        className="text-sm font-medium cursor-pointer text-foreground hover:text-foreground"
-                      >
-                        Create account
-                      </button>
-                    </div>
-                  )}
-
-                
-
-                  {/* Cart */}
-                  
-                </div>
-              </div>
+                )}
+              </nav>
             </div>
-          </nav>
-        </header>
-
-      </div>
-
-      {/* <AuthModal openModal={openModal} setOpenModal={setOpenModal} page={page} setPage={setPage} /> */}
+          </DialogPanel>
+        </div>
+      </Dialog>
     </>
-
   )
 }

@@ -1,47 +1,18 @@
 import { formatLabel, getIcon } from "./utils/Utility";
 
-
-const StatCard = ({ label, value, index }) => {
-  const gradients = [
-    "from-yellow-400/20 to-yellow-600/20",
-    "from-indigo-400/20 to-indigo-600/20",
-    "from-green-400/20 to-green-600/20",
-    "from-red-400/20 to-red-600/20",
-    "from-purple-400/20 to-purple-600/20",
-  ];
-
+const StatCard = ({ label, value }) => {
   return (
-    <div
-      className={`relative group rounded-2xl p-[1px] bg-gradient-to-br ${
-        gradients[index % gradients.length]
-      }`}
-    >
-      {/* Glass Card */}
-      <div
-        className="rounded-2xl p-5 backdrop-blur-xl bg-white/70 
-        border border-white/40 shadow-sm
-        transition-all duration-300
-        group-hover:shadow-xl group-hover:-translate-y-1"
-      >
-        {/* Glow effect */}
-        <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition duration-300 bg-gradient-to-br from-yellow-400/10 to-transparent"></div>
-
-        <div className="flex items-center justify-between">
-          <div className="text-gray-600 text-sm">
-            {formatLabel(label)}
-          </div>
-
-          <div className="text-lg text-gray-400 group-hover:text-yellow-500 transition">
-            {getIcon(label)}
-          </div>
+    <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background text-foreground shadow-sm transition-all hover:shadow-md">
+      <div className="p-6 flex flex-row items-center justify-between space-y-0 pb-2">
+        <h3 className="tracking-tight text-sm font-medium text-zinc-500 dark:text-zinc-400">
+          {formatLabel(label)}
+        </h3>
+        <div className="text-zinc-400 dark:text-zinc-500 flex items-center justify-center [&>svg]:w-4 [&>svg]:h-4">
+          {getIcon(label)}
         </div>
-
-        <div className="mt-3 text-3xl font-bold text-gray-800">
-          {value}
-        </div>
-
-        {/* subtle divider */}
-        <div className="mt-3 h-[2px] w-10 bg-gradient-to-r from-yellow-400 to-transparent rounded-full"></div>
+      </div>
+      <div className="p-6 pt-0">
+        <div className="text-2xl font-bold">{value}</div>
       </div>
     </div>
   );

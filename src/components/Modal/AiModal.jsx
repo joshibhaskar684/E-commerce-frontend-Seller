@@ -3,7 +3,7 @@
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { useState, useRef, useEffect } from "react";
-import { FaTimes } from "react-icons/fa";
+import { X, Bot, SendHorizonal } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -19,7 +19,7 @@ export default function AiModal({ openModal, setOpenModal }) {
   }, [messages, isLoading]);
 
   const handleClose = () => {
-    setOpenModal(false); // Simplified: explicitly close the modal
+    setOpenModal(false);
   };
 
   const sendMessage = async () => {
@@ -60,29 +60,38 @@ export default function AiModal({ openModal, setOpenModal }) {
 
   return (
     <Modal open={openModal} onClose={handleClose}>
-      <div className="flex items-center justify-center min-h-screen p-4">
+      <div className="flex items-end sm:items-center justify-center min-h-screen sm:p-4 bg-black/40 backdrop-blur-sm">
         {/* Modal Box */}
-        <div className="bg-background text-foreground w-full max-w-2xl h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 dark:border-gray-800">
+        <div className="bg-background text-foreground w-full sm:max-w-xl h-[90vh] sm:h-[85vh] sm:rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-zinc-200 dark:border-zinc-800 rounded-t-2xl sm:rounded-b-2xl">
           
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800 bg-background">
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🤖</span>
-              <p className="text-xl font-semibold">AI Assistant</p>
+          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-800 bg-background/95 backdrop-blur z-10 sticky top-0">
+            <div className="flex items-center gap-3">
+              <div className="bg-yellow-500/20 p-2 rounded-full text-yellow-600 dark:text-yellow-500">
+                <Bot className="w-5 h-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-semibold tracking-tight">AI Assistant</h2>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Online and ready to help</p>
+              </div>
             </div>
             <button 
               onClick={handleClose}
-              className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="p-2 rounded-full opacity-70 hover:opacity-100 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500"
             >
-              <FaTimes className="text-foreground text-lg" />
+              <X className="w-5 h-5" />
+              <span className="sr-only">Close</span>
             </button>
           </div>
 
           {/* Chat Area */}
-          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6 bg-gray-50/50 dark:bg-background">
+          <div className="flex-1 overflow-y-auto px-4 sm:px-6 py-6 space-y-6 bg-zinc-50/50 dark:bg-background">
             {messages.length === 0 && (
-              <div className="text-center text-gray-400 dark:text-gray-500 mt-10">
-                How can I help you today?
+              <div className="text-center text-zinc-500 dark:text-zinc-400 mt-20 flex flex-col items-center gap-3">
+                <div className="w-12 h-12 rounded-full bg-zinc-100 dark:bg-zinc-900 flex items-center justify-center mb-2">
+                  <Bot className="w-6 h-6 text-zinc-400" />
+                </div>
+                <p className="text-sm">How can I help you today?</p>
               </div>
             )}
 
@@ -92,17 +101,17 @@ export default function AiModal({ openModal, setOpenModal }) {
                 className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`px-4 py-3 rounded-2xl max-w-[85%] md:max-w-[75%] whitespace-pre-wrap ${
+                  className={`px-4 py-3 max-w-[85%] md:max-w-[75%] whitespace-pre-wrap text-sm ${
                     msg.sender === "user"
-                      ? "bg-blue-600 text-white rounded-br-sm shadow-md"
-                      : "bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-bl-sm"
+                      ? "bg-yellow-500 text-zinc-950 rounded-2xl rounded-tr-sm shadow-sm"
+                      : "bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100 rounded-2xl rounded-tl-sm shadow-sm"
                   }`}
                 >
-                  <div className="prose dark:prose-invert max-w-none">
-  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-    {msg.text}
-  </ReactMarkdown>
-</div>
+                  <div className="prose dark:prose-invert prose-sm max-w-none">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {msg.text}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
@@ -110,10 +119,10 @@ export default function AiModal({ openModal, setOpenModal }) {
             {/* Real-time Typing Indicator */}
             {isLoading && (
               <div className="flex justify-start">
-                <div className="bg-gray-200 dark:bg-gray-800 px-4 py-4 rounded-2xl rounded-bl-sm flex gap-1.5 items-center">
-                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce"></span>
-                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                  <span className="w-2 h-2 bg-gray-500 rounded-full animate-bounce [animation-delay:0.4s]"></span>
+                <div className="bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 px-4 py-4 rounded-2xl rounded-tl-sm shadow-sm flex gap-1.5 items-center">
+                  <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce"></span>
+                  <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
+                  <span className="w-1.5 h-1.5 bg-zinc-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
                 </div>
               </div>
             )}
@@ -123,22 +132,27 @@ export default function AiModal({ openModal, setOpenModal }) {
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-gray-200 dark:border-gray-800 p-4 bg-background flex gap-2 items-end">
-            <textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask anything..."
-              rows={1}
-              className="flex-1 bg-transparent border border-gray-300 dark:border-gray-700 rounded-xl text-foreground px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none overflow-hidden min-h-[48px] max-h-32"
-            />
-            <button
-              onClick={sendMessage}
-              disabled={isLoading || !input.trim()}
-              className="bg-yellow-600 hover:bg-yellow-700 disabled:bg-yellow-400 disabled:cursor-not-allowed text-white px-6 py-3 rounded-xl transition-colors font-medium h-[48px] flex items-center justify-center shadow-sm"
-            >
-              {isLoading ? "Sending..." : "Send"}
-            </button>
+          <div className="border-t border-zinc-200 dark:border-zinc-800 p-4 bg-background">
+            <div className="relative flex items-end gap-2">
+              <textarea
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Message AI Assistant..."
+                rows={1}
+                className="flex-1 bg-zinc-100 dark:bg-zinc-900 border-transparent focus:border-transparent rounded-2xl text-foreground px-4 py-3 pr-12 focus:outline-none focus:ring-2 focus:ring-yellow-500 resize-none overflow-y-auto min-h-[48px] max-h-32 text-sm"
+              />
+              <button
+                onClick={sendMessage}
+                disabled={isLoading || !input.trim()}
+                className="absolute right-1 bottom-1 w-10 h-10 bg-yellow-500 hover:bg-yellow-400 disabled:bg-zinc-200 disabled:dark:bg-zinc-800 disabled:text-zinc-400 disabled:cursor-not-allowed text-zinc-950 rounded-full transition-all flex items-center justify-center shadow-sm"
+              >
+                <SendHorizonal className="w-4 h-4 ml-0.5" />
+              </button>
+            </div>
+            <div className="text-center mt-3">
+              <p className="text-[11px] text-zinc-400">AI can make mistakes. Consider verifying important information.</p>
+            </div>
           </div>
         </div>
       </div>
