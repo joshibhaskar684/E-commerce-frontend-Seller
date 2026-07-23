@@ -1,5 +1,6 @@
 import ReduxProvider from "@/redux-store/ReduxProvider";
 import "./globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
 import AiBot from "../components/ai/AiBoat";
 import NextTopLoader from 'nextjs-toploader';

@@ -1,6 +1,5 @@
 "use client";
 
-import { Modal } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { RegisterSeller } from "@/redux-store/authstore/seller/action";
@@ -140,24 +139,21 @@ export default function SellerForm() {
         </div>
       </div>
 
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="seller-registration-modal"
-      >
-        {/* Backdrop override wrapper to allow scrolling and proper centering */}
-        <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6 outline-none pointer-events-none">
-          <div className="pointer-events-auto w-full max-w-3xl max-h-[90vh] overflow-y-auto rounded-xl scrollbar-hide">
-            <RegisterComponent
-              handleSubmit={handleSubmit}
-              handleChange={handleChange}
-              handleFileUpload={handleFileUpload}
-              loading={loading}
-              handleClose={handleClose}
-            />
+      {open && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4 py-10 sm:p-6">
+            <div className="w-full max-w-3xl bg-background rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-lg relative mx-auto transition-all duration-300">
+              <RegisterComponent
+                handleSubmit={handleSubmit}
+                handleChange={handleChange}
+                handleFileUpload={handleFileUpload}
+                loading={loading}
+                handleClose={handleClose}
+              />
+            </div>
           </div>
         </div>
-      </Modal>
+      )}
     </>
   );
 }

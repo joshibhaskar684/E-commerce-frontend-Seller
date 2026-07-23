@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { Mail, Lock, Loader2, X } from "lucide-react";
 
-export default function Login({ handleClose, setPage }) {
+export default function Verify({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
@@ -21,18 +21,17 @@ export default function Login({ handleClose, setPage }) {
         try {
             await dispatch(VerifyForSeller(data));
         } catch (e) {
-            // handle error if needed
+            console.error(e);
         } finally {
             setLoading(false);
             window.location.reload();
         }
     }
 
-    // Determine if it's rendered as a modal (has handleClose prop) or a standalone page
     const isModal = typeof handleClose === 'function';
 
     const content = (
-        <div className="w-full max-w-md bg-background rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-lg p-5 sm:p-8 relative mx-auto">
+        <div className="w-full max-w-md bg-background rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-lg p-5 sm:p-8 relative mx-auto transition-all duration-300">
             {isModal && (
                 <button 
                     onClick={handleClose}
@@ -54,7 +53,7 @@ export default function Login({ handleClose, setPage }) {
 
             <form onSubmit={handlesubmit} className="space-y-4">
                 <div className="space-y-2 text-left">
-                    <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                    <label htmlFor="email" className="text-sm font-medium leading-none text-foreground">
                         Email
                     </label>
                     <div className="relative">
@@ -65,13 +64,13 @@ export default function Login({ handleClose, setPage }) {
                             name="email"
                             required
                             placeholder="name@example.com"
-                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-background !py-2 !pr-3 !pl-10 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors"
+                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-background px-3 py-2 pl-10 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors"
                         />
                     </div>
                 </div>
 
                 <div className="space-y-2 text-left">
-                    <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-foreground">
+                    <label htmlFor="password" className="text-sm font-medium leading-none text-foreground">
                         Password
                     </label>
                     <div className="relative">
@@ -82,7 +81,7 @@ export default function Login({ handleClose, setPage }) {
                             name="password"
                             required
                             placeholder="Enter your password"
-                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-background !py-2 !pr-3 !pl-10 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors"
+                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-background px-3 py-2 pl-10 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors"
                         />
                     </div>
                 </div>
