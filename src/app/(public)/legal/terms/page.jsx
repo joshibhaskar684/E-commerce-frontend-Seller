@@ -1,183 +1,99 @@
 export default function page() {
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 bg-background text-foreground">
-      <h1 className="text-3xl font-bold mb-4 text-center">
-        Terms & Conditions
-      </h1>
+      <div className="text-center mb-12">
+        <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 rounded-full mb-3">
+          Terms of Service
+        </span>
+        <h1 className="text-4xl font-extrabold text-foreground tracking-tight sm:text-5xl">
+          Marketplace Terms & Conditions
+        </h1>
+        <p className="mt-3 text-sm opacity-80">
+          Last updated: August 19, 2026 | Governing Quick Seller Portal (quicksin.in)
+        </p>
+      </div>
 
-      <p className="text-center mb-10 text-sm opacity-80">
-        Last updated: {new Date().toLocaleDateString()}
-      </p>
-
-      <section className="space-y-8">
-
+      <section className="space-y-8 text-foreground">
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            1. Acceptance of Terms
-          </h2>
-          <p>
-            By accessing or using <strong>Quick (quicksin.in)</strong>,
-            you agree to comply with these Terms & Conditions.
-            If you do not agree, please do not use our platform.
+          <h2 className="text-xl font-semibold mb-2">1. Acceptance of Terms</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            By accessing, creating a merchant account, listing inventory, or utilizing any services provided by <strong>Quick (quicksin.in)</strong> (“Platform”, “We”, “Us”), you agree to be bound by these Terms & Conditions. These terms constitute a legally binding agreement under the Information Technology Act, 2000 and rules promulgated thereunder.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            2. About Quick
-          </h2>
-          <p>
-            Quick is a multi-vendor eCommerce marketplace that connects
-            independent sellers with buyers. Quick does not manufacture,
-            own, or directly sell products unless explicitly stated.
+          <h2 className="text-xl font-semibold mb-2">2. Intermediary Role & Legal Status</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Quick operates as an e-commerce marketplace intermediary facilitating commercial transactions between independent third-party sellers and purchasing consumers. In accordance with Section 79 of the Information Technology Act, 2000 and Rule 5 of the Consumer Protection (E-Commerce) Rules, 2020, Quick does not own, manufacture, store, or sell listed products unless explicitly stated in writing.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            3. User Accounts
-          </h2>
-          <p>Users agree to:</p>
-          <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>Provide accurate and updated information</li>
-            <li>Maintain account confidentiality</li>
-            <li>Be responsible for activities under their account</li>
-            <li>Not engage in fraudulent or unlawful activities</li>
+          <h2 className="text-xl font-semibold mb-2">3. Seller Account Security & Operational Responsibilities</h2>
+          <p className="text-sm leading-relaxed opacity-90 mb-2">
+            Registered merchant account holders agree to:
+          </p>
+          <ul className="list-disc pl-6 text-sm space-y-1.5 opacity-90">
+            <li>Maintain accurate, up-to-date business entity, GSTIN, PAN, and banking information.</li>
+            <li>Safeguard account passwords and API credentials against unauthorized access.</li>
+            <li>Bear complete responsibility for all operations, listings, price entries, and transactions conducted under their seller credentials.</li>
+            <li>Notify Quick immediately at <code>support@quicksin.in</code> upon suspecting any security compromise.</li>
           </ul>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            4. Buyer Responsibilities
-          </h2>
-          <p>
-            Buyers are responsible for reviewing product details carefully
-            before purchase and providing accurate shipping information.
-            Buyers must comply with return and refund policies.
+          <h2 className="text-xl font-semibold mb-2">4. Catalog Pricing, MRP & Tax Transparency</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Sellers guarantee that all product pricing displayed on Quick does not exceed the Maximum Retail Price (MRP) mandated by Legal Metrology rules. Displayed prices must be inclusive of all GST taxes and charges. Artificial price manipulation, deceptive discounts, or hidden charges are strictly illegal and prohibited.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            5. Seller Responsibilities
-          </h2>
-          <p>
-            Sellers are responsible for:
-          </p>
-          <ul className="list-disc list-inside mt-2 space-y-1">
-            <li>Accurate product listings</li>
-            <li>Order fulfillment and shipping</li>
-            <li>Product quality and legality</li>
-            <li>Handling returns and refunds as per policy</li>
-          </ul>
-          <p className="mt-2">
-            Sellers must comply with applicable laws and marketplace guidelines.
+          <h2 className="text-xl font-semibold mb-2">5. Service Level Agreement (SLA) & Order Fulfillment</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Sellers are obligated to confirm and pack orders within <strong>24 to 48 hours</strong> of order placement. Failure to comply with processing timelines or persistent order cancellations due to inventory stockouts will result in financial penalties and merchant account rating degradation.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            6. Payments & Fees
-          </h2>
-          <p>
-            All payments are processed via secure third-party payment gateways.
-            Quick may charge commission or service fees to sellers.
-          </p>
-          <p className="mt-2">
-            In case of fraudulent transactions or chargebacks, Quick reserves
-            the right to suspend accounts or recover losses.
+          <h2 className="text-xl font-semibold mb-2">6. Intellectual Property & Brand Rules</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Sellers warrant that product images, trademarks, brand names, and description texts uploaded to the seller portal do not infringe on any third-party copyrights or registered trademarks. Quick reserves the right to immediately delist any product flagged for trademark or copyright infringement.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            7. Returns & Refunds
-          </h2>
-          <p>
-            Returns and refunds are governed by our Cancellation & Refund Policy.
-            Quick may assist in dispute resolution but final responsibility
-            lies with the seller unless otherwise stated.
+          <h2 className="text-xl font-semibold mb-2">7. System Access & Security Restrictions</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Users shall not attempt to reverse engineer, scrape, introduce malware, conduct unauthorized vulnerability scans, or bypass security controls of the Quick Seller API or dashboard.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            8. Intellectual Property
-          </h2>
-          <p>
-            All platform content including logos, branding, website design,
-            and software is owned by Quick.
-            Unauthorized use is prohibited.
+          <h2 className="text-xl font-semibold mb-2">8. Account Suspension & Termination</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Quick reserves the right to suspend or terminate seller accounts that breach platform guidelines, list counterfeit items, engage in fraudulent transactions, or maintain unacceptable customer satisfaction ratings.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            9. Limitation of Liability
-          </h2>
-          <p>
-            Quick is not liable for product defects, delays, losses,
-            or damages caused by third-party sellers.
-            The platform is provided “as-is” without warranties of any kind.
+          <h2 className="text-xl font-semibold mb-2">9. Governing Law & Dispute Jurisdiction</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            These Terms & Conditions shall be governed by and construed in accordance with the laws of India. Any legal disputes or proceedings arising hereunder shall be subject to the exclusive jurisdiction of the competent courts in India.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            10. Account Suspension
-          </h2>
-          <p>
-            We reserve the right to suspend or terminate accounts
-            involved in policy violations, fraudulent activity,
-            or misuse of the platform.
+          <h2 className="text-xl font-semibold mb-2">10. Contact Information</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            For questions regarding these Terms & Conditions, please contact us at:
           </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            11. Governing Law
-          </h2>
-          <p>
-            These Terms shall be governed by and interpreted
-            in accordance with the laws of India.
-            Any disputes shall be subject to the jurisdiction
-            of the appropriate courts in India.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            12. Changes to Terms
-          </h2>
-          <p>
-            We may update these Terms at any time.
-            Continued use of the platform indicates acceptance
-            of the revised Terms.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            13. Contact Us
-          </h2>
-          <p>
-            For questions regarding these Terms, contact us at:
-          </p>
-          <ul>
-            <li>
-              Email:{" "}
-              <a
-                href="mailto:support@quicksin.in"
-                className="underline"
-              >
-                support@quicksin.in
-              </a>
-            </li>
-            <li>Website: https://quicksin.in</li>
+          <ul className="mt-2 text-sm space-y-1">
+            <li>Email: <a href="mailto:support@quicksin.in" className="underline font-medium">support@quicksin.in</a></li>
+            <li>Website: <a href="https://quicksin.in" className="underline font-medium">https://quicksin.in</a></li>
           </ul>
         </div>
-
       </section>
     </main>
   );
-}
+}

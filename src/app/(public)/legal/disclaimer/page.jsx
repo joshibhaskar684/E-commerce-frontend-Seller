@@ -1,141 +1,70 @@
 export default function page() {
   return (
     <main className="max-w-5xl mx-auto px-6 py-16 bg-background text-foreground">
-      <h1 className="text-3xl font-bold mb-4 text-center">
-        Disclaimer
-      </h1>
+      <div className="text-center mb-12">
+        <span className="inline-block px-3 py-1 text-xs font-semibold uppercase tracking-wider bg-yellow-100 dark:bg-yellow-900/40 text-yellow-800 dark:text-yellow-300 rounded-full mb-3">
+          Legal Liability & IP
+        </span>
+        <h1 className="text-4xl font-extrabold text-foreground tracking-tight sm:text-5xl">
+          Marketplace Disclaimer & IP Policy
+        </h1>
+        <p className="mt-3 text-sm opacity-80">
+          Intermediary Exemption under Section 79 of IT Act, 2000 & Intellectual Property Takedown Mechanism
+        </p>
+      </div>
 
-      <p className="text-center mb-10 text-sm opacity-80">
-        Last updated: {new Date().toLocaleDateString()}
-      </p>
-
-      <section className="space-y-8">
-
+      <section className="space-y-8 text-foreground">
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            1. General Information
-          </h2>
-          <p>
-            The information provided by <strong>Quick (quicksin.in)</strong>
-            (“we”, “our”, or “us”) on this website is for general informational
-            purposes only. While we strive to keep information accurate and
-            updated, we make no guarantees regarding completeness, reliability,
-            or accuracy.
+          <h2 className="text-xl font-semibold mb-2">1. Intermediary Status & Exemption</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            <strong>Quick (quicksin.in)</strong> is an e-commerce marketplace platform providing technical infrastructure to connect independent merchants with buying customers. Under Section 79 of the Information Technology Act, 2000, Quick functions as an intermediary and is exempt from third-party product liability, seller representations, or merchant warranty breaches.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            2. Marketplace Platform
-          </h2>
-          <p>
-            Quick operates as a multi-vendor eCommerce platform that connects
-            buyers and independent sellers. We do not manufacture, store, or
-            directly sell the products listed by third-party sellers unless
-            explicitly stated.
+          <h2 className="text-xl font-semibold mb-2">2. Product Warranty & Description Disclaimer</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            Product listings, technical specifications, warranty duration, ingredient declarations, and promotional images are uploaded directly by independent registered sellers. Quick makes no warranties, express or implied, regarding product fitness, commercial merchantability, or listing accuracy. All purchases are executed directly between buyer and seller.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            3. Product Information
-          </h2>
-          <p>
-            Product descriptions, images, pricing, and specifications are
-            provided by individual sellers. Quick is not responsible for
-            inaccuracies, misrepresentations, or errors in product listings.
+          <h2 className="text-xl font-semibold mb-2">3. Intellectual Property (IP) Infringement & Takedown Policy</h2>
+          <p className="text-sm leading-relaxed opacity-90 mb-2">
+            Quick respects the intellectual property rights of brand owners, trademark holders, and copyright creators. If you believe a product listed on Quick infringes your registered trademark or copyright:
+          </p>
+          <div className="p-5 border border-border rounded-xl bg-card">
+            <h3 className="font-bold text-sm text-yellow-600 dark:text-yellow-400 mb-2">
+              Notice & Takedown Filing Procedure:
+            </h3>
+            <p className="text-xs opacity-90 mb-2">Submit a formal Infringement Notice to <code>support@quicksin.in</code> containing:</p>
+            <ul className="list-disc pl-5 text-xs space-y-1 opacity-90">
+              <li>Name and contact details of the Trademark / Copyright Owner or authorized agent.</li>
+              <li>Proof of Registered Trademark / Copyright Certificate issued by the Indian IP Office.</li>
+              <li>Specific Product URLs / Product Listing IDs hosted on Quick suspected of infringement.</li>
+              <li>A declaration stating that the information provided in the notice is accurate under penalty of perjury.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-xl font-semibold mb-2">4. Technical & Platform Disclaimers</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            While Quick strives to maintain 99.9% server uptime, we do not warrant uninterrupted, error-free portal operation. Quick shall not be liable for losses caused by server downtime, internet gateway outages, or cyber attacks beyond our reasonable control.
           </p>
         </div>
 
         <div>
-          <h2 className="text-xl font-semibold mb-2">
-            4. No Guarantees
-          </h2>
-          <p>
-            We do not guarantee product availability, delivery timelines,
-            quality, or suitability for a specific purpose. All purchases are
-            made at your own discretion and risk.
+          <h2 className="text-xl font-semibold mb-2">5. Contact Information</h2>
+          <p className="text-sm leading-relaxed opacity-90">
+            For IP infringement complaints or legal disclaimers queries, contact:
           </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            5. External Links
-          </h2>
-          <p>
-            Our website may contain links to third-party websites. We are not
-            responsible for their content, policies, or practices. Accessing
-            such links is done at your own risk.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            6. Limitation of Liability
-          </h2>
-          <p>
-            Quick shall not be held liable for any direct, indirect,
-            incidental, or consequential damages arising from the use of our
-            platform, including issues related to products sold by third-party
-            sellers.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            7. Technical Issues
-          </h2>
-          <p>
-            We do not guarantee uninterrupted or error-free access to the
-            platform. Temporary downtime may occur due to maintenance or
-            technical reasons.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            8. Intellectual Property
-          </h2>
-          <p>
-            All platform content including logos, design elements, and website
-            structure are the property of Quick. Unauthorized use,
-            reproduction, or distribution is prohibited.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            9. User Responsibility
-          </h2>
-          <p>
-            Users agree to use the platform lawfully and responsibly. Any
-            misuse, fraudulent activity, or violation of terms may result in
-            account suspension or termination.
-          </p>
-        </div>
-
-        <div>
-          <h2 className="text-xl font-semibold mb-2">
-            10. Contact Us
-          </h2>
-          <p className="mb-2">
-            If you have any questions regarding this Disclaimer, contact us at:
-          </p>
-          <ul className="space-y-1">
-            <li>
-              Email:{" "}
-              <a
-                href="mailto:support@quicksin.in"
-                className="underline"
-              >
-                support@quicksin.in
-              </a>
-            </li>
-            <li>Website: https://quicksin.in</li>
+          <ul className="mt-2 text-sm space-y-1">
+            <li>Email: <a href="mailto:support@quicksin.in" className="underline font-medium">support@quicksin.in</a></li>
+            <li>Website: <a href="https://quicksin.in" className="underline font-medium">https://quicksin.in</a></li>
           </ul>
         </div>
-
       </section>
     </main>
   );
-}
+}

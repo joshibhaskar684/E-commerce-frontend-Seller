@@ -37,11 +37,19 @@ export default function Footer() {
         </FooterSection>
 
         {/* Legal */}
-        <FooterSection title="Legal">
+        <FooterSection title="Seller Legal & Policies">
           {[
-            { label: 'Privacy Policy', href: '/legal/privacy' },
+            { label: 'Legal & Compliance Hub', href: '/legal' },
+            { label: 'Seller Agreement', href: '/legal/selleragreement' },
+            { label: 'Seller KYC Policy', href: '/legal/kyc' },
+            { label: 'Commission & Payouts', href: '/legal/comission-policy' },
+            { label: 'Prohibited Goods Policy', href: '/legal/product-policy' },
             { label: 'Terms of Service', href: '/legal/terms' },
-            { label: 'Disclaimer', href: '/legal/disclaimer' },
+            { label: 'Privacy Policy', href: '/legal/privacy' },
+            { label: 'Shipping & Delivery', href: '/legal/shipping-policy' },
+            { label: 'Cancellation & SAFE Fund', href: '/legal/cancellation-policy' },
+            { label: 'Grievance Redressal', href: '/legal/grievanceofficer' },
+            { label: 'Disclaimer & IP Notice', href: '/legal/disclaimer' },
           ].map((item, idx) => (
             <FooterLink key={idx} {...item} />
           ))}
