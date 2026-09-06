@@ -6,7 +6,7 @@ import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useDispatch } from "react-redux";
 
-export default function page({ handleClose, setPage }) {
+export default function Page({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
     const router=useRouter();
 

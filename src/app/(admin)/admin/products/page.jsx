@@ -58,6 +58,7 @@ export default function ProductsPage() {
 
     const products = useSelector((state) => state?.productReducer?.products);
     const loading = useSelector((state) => state?.productReducer?.loading);
+    const loadError = useSelector((state) => state?.productReducer?.error);
 
     const [pageno, setPageno] = useState(Number(searchParams.get("pageno")) || 1);
     const [pagesize, setPagesize] = useState(Number(searchParams.get("pagesize")) || 12);
@@ -162,7 +163,12 @@ export default function ProductsPage() {
     };
 
     const filtersActive = Boolean(search) || sort !== "default" || stockFilter !== "all";
-    const firstLoad = loading && items.length === 0;
+    // Before the first request settles there is no page object yet, so gate on
+    // that too — otherwise the empty state shows for a frame on first paint,
+    // between mount and the effect that starts the fetch. `error` releases the
+    // gate so a failed request falls through to the empty state instead of
+    // spinning forever.
+    const firstLoad = items.length === 0 && (loading || (!products && !loadError));
 
     /* --------------------------------- render --------------------------------- */
 

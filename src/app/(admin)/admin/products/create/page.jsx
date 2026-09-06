@@ -1,9 +1,10 @@
 "use client";
 
 import { createProduct, getCategorytree } from "@/redux-store/authstore/product/action";
-import { useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { CategorySelect } from './M';
+import { Skeleton } from "@/components/Admin/shared/Skeleton";
 import { Plus, X, Image as ImageIcon, Tag, IndianRupee, Store, Palette, Package } from "lucide-react";
 import Cookies from "js-cookie";
 
@@ -19,6 +20,7 @@ export default function CreateProductPage() {
   const dispatch = useDispatch();
   const [categoryId, SetCategoryId] = useState("");
   const CategoriesList = useSelector((state) => state.productReducer.categories);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   const addSpec = (e) => {
     e.preventDefault();
@@ -31,9 +33,18 @@ export default function CreateProductPage() {
     setValue("");
   };
 
-  useEffect(() => {
-    dispatch(getCategorytree({}));
+  const loadCategories = useCallback(async () => {
+    setCategoriesLoading(true);
+    try {
+      await dispatch(getCategorytree({}));
+    } finally {
+      setCategoriesLoading(false);
+    }
   }, [dispatch]);
+
+  useEffect(() => {
+    loadCategories();
+  }, [loadCategories]);
 
   const removeImage = (index) => {
     setImages(images.filter((_, i) => i !== index));
@@ -113,7 +124,7 @@ export default function CreateProductPage() {
 
                             <div className="space-y-2 md:col-span-2">
                                 <label className="text-sm font-medium text-foreground">Category Hierarchy</label>
-                                {CategoriesList && CategoriesList.length > 0 && (
+                                {CategoriesList && CategoriesList.length > 0 ? (
                                     <div className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-900/50">
                                         <CategorySelect
                                             data={CategoriesList}
@@ -122,6 +133,21 @@ export default function CreateProductPage() {
                                             SetCategoryId={SetCategoryId}
                                         />
                                     </div>
+                                ) : categoriesLoading ? (
+                                    <div className="p-4 border border-zinc-200 dark:border-zinc-800 rounded-lg bg-zinc-50 dark:bg-zinc-900/50 space-y-3">
+                                        <Skeleton className="h-3 w-32" />
+                                        <div className="flex flex-wrap gap-2">
+                                            {[0, 1, 2, 3, 4].map((chip) => (
+                                                <Skeleton key={chip} className="h-8 w-24 rounded-md" />
+                                            ))}
+                                        </div>
+                                        <Skeleton className="h-3 w-40" />
+                                    </div>
+                                ) : (
+                                    <p className="rounded-lg border border-dashed border-zinc-200 p-4 text-[13px] text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+                                        No categories are available yet. Create one under Categories
+                                        before listing a product.
+                                    </p>
                                 )}
                                 <input type="hidden" name="categoryId" required value={categoryId} />
                                 <input type="hidden" name="category" required value={categoryPath.join(" / ")} />

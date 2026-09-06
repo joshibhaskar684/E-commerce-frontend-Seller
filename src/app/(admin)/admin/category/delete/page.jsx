@@ -4,7 +4,7 @@ import { deleteCategory } from "@/redux-store/authstore/category/action";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-export default function page(){
+export default function Page(){
     const dispatch = useDispatch();
     const [loading , setLoading] = useState(false);
     const handleSubmit = async (e) => {

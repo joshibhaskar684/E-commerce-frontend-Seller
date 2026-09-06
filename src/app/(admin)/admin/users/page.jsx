@@ -62,6 +62,7 @@ export default function UsersPage() {
 
     const usersList = useSelector((state) => state.userReducer?.usersList);
     const loading = Boolean(useSelector((state) => state.userReducer?.loading));
+    const loadError = useSelector((state) => state.userReducer?.error);
 
     const items = useMemo(() => usersList?.content ?? [], [usersList]);
     const totalPages = usersList?.totalPages || 1;
@@ -138,7 +139,12 @@ export default function UsersPage() {
         [items],
     );
 
-    const firstLoad = loading && items.length === 0;
+    // Before the first request settles there is no page object yet, so gate on
+    // that too — otherwise the empty state shows for a frame on first paint,
+    // between mount and the effect that starts the fetch. `error` releases the
+    // gate so a failed request falls through to the empty state instead of
+    // spinning forever.
+    const firstLoad = items.length === 0 && (loading || (!usersList && !loadError));
 
     /* --------------------------------- render --------------------------------- */
 

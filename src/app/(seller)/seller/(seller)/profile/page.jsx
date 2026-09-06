@@ -12,8 +12,33 @@ import { getSellerProfile } from "@/redux-store/authstore/seller/action";
 
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
+import { FiPlus, FiInbox } from "react-icons/fi";
 
-export default function page() {
+function ProfileSkeleton() {
+  return (
+    <div className="animate-pulse overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+      <div className="flex flex-col items-center gap-5 border-b border-zinc-200 p-6 sm:flex-row sm:items-start dark:border-zinc-800">
+        <div className="h-20 w-20 shrink-0 rounded-full bg-zinc-200 sm:h-24 sm:w-24 dark:bg-zinc-800" />
+        <div className="w-full space-y-3">
+          <div className="h-5 w-1/2 rounded bg-zinc-200 dark:bg-zinc-800" />
+          <div className="h-4 w-2/3 rounded bg-zinc-200 dark:bg-zinc-800" />
+          <div className="h-4 w-1/3 rounded bg-zinc-200 dark:bg-zinc-800" />
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-5 p-6 sm:grid-cols-2">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="space-y-2">
+            <div className="h-3 w-16 rounded bg-zinc-200 dark:bg-zinc-800" />
+            <div className="h-4 w-32 rounded bg-zinc-200 dark:bg-zinc-800" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default function ProfilePage() {
   const dispatch = useDispatch();
 
   const [oldPassword, setOldPassword] = useState("");
@@ -24,11 +49,12 @@ export default function page() {
   const [openModal1, setOpenmodal1] = useState(false);
   const [loading, setLoading] = useState(false);
   const [closingId, setClosingId] = useState("");
-  
+
   const [redirectingId, setRedirectingId] = useState("");
 
   const seller = useSelector((state) => state.sellerReducer.sellerdetails);
   const shops = useSelector((state) => state.ShopsReducer.shopsList);
+  const profileLoading = useSelector((state) => state.sellerReducer.loading);
 
   const changePassword = async (e) => {
     e.preventDefault();
@@ -64,45 +90,60 @@ export default function page() {
 
   return (
     <>
-      <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 font-sans text-zinc-950 dark:text-zinc-50 overflow-y-auto hide-scrollbar">
-        <div className="max-w-5xl mx-auto p-6 md:p-10 space-y-10">
-          
-          {/* User Details Section */}
+      <div className="hide-scrollbar min-h-screen overflow-y-auto bg-zinc-50 font-sans text-zinc-950 dark:bg-zinc-950 dark:text-zinc-50">
+        <div className="mx-auto max-w-5xl space-y-8 p-6 md:p-10">
+
+          {/* Page header */}
+          <div className="flex flex-col space-y-1.5 border-b border-zinc-200 pb-6 dark:border-zinc-800">
+            <h1 className="text-3xl font-bold tracking-tight">Profile</h1>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              Your seller account details and the shops registered under it.
+            </p>
+          </div>
+
+          {/* Seller details */}
           <section>
-            <UserDetails
-              sellerdetails={seller}
-              loading={loading}
-              setOpenmodal={setOpenmodal}
-              setOpenmodal1={setOpenmodal1}
-              openModal={openModal}
-              openModal1={openModal1}
-            />
+            {profileLoading && !seller ? (
+              <ProfileSkeleton />
+            ) : (
+              <UserDetails
+                sellerdetails={seller}
+                loading={loading}
+                setOpenmodal={setOpenmodal}
+                setOpenmodal1={setOpenmodal1}
+                openModal={openModal}
+                openModal1={openModal1}
+              />
+            )}
           </section>
 
-          {/* Divider */}
-          <div className="border-t border-zinc-200 dark:border-zinc-800" />
+          {/* Shops */}
+          <section className="space-y-5">
 
-          {/* Shops Section */}
-          <section className="space-y-6">
-            
-            {/* Header & Actions */}
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+            <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
               <div className="space-y-1">
-                <h2 className="text-2xl font-semibold tracking-tight">Your Shops</h2>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-xl font-semibold tracking-tight">Your Shops</h2>
+                  {shops?.length > 0 && (
+                    <span className="inline-flex items-center rounded-full bg-zinc-100 px-2.5 py-0.5 text-xs font-medium text-zinc-600 ring-1 ring-zinc-500/20 ring-inset dark:bg-zinc-800 dark:text-zinc-400">
+                      {shops.length}
+                    </span>
+                  )}
+                </div>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                  Approval of shops may require 24–48 hrs. After approval, you can add products.
+                  Approval may take 24&ndash;48 hrs. After approval, you can add products.
                 </p>
               </div>
-              
-              <a
+
+              <Link
                 href="/seller/shops/apply"
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 h-9 px-4 py-2 shrink-0 w-full sm:w-auto dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300"
+                className="inline-flex h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-md bg-zinc-900 px-4 text-sm font-medium whitespace-nowrap text-zinc-50 shadow transition-colors hover:bg-zinc-900/90 focus-visible:ring-1 focus-visible:ring-zinc-950 focus-visible:outline-none sm:w-auto dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300"
               >
+                <FiPlus className="h-4 w-4" />
                 Apply for New Shop
-              </a>
+              </Link>
             </div>
 
-            {/* Shop Cards Grid */}
             <div className="grid grid-cols-1 gap-4">
               {shops && shops?.length > 0 ? (
                 shops.map((item, index) => (
@@ -117,10 +158,21 @@ export default function page() {
                   />
                 ))
               ) : (
-                <div className="flex flex-col items-center justify-center p-8 border border-dashed border-zinc-200 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950/50">
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 text-center">
-                    You haven't applied for any shops yet.<br/> Click "Apply for New Shop" to get started.
+                <div className="flex min-h-[240px] flex-col items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-white p-12 dark:border-zinc-800 dark:bg-zinc-900/50">
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
+                    <FiInbox className="h-6 w-6 text-zinc-500 dark:text-zinc-400" />
+                  </div>
+                  <h3 className="text-lg font-semibold tracking-tight">No shops yet</h3>
+                  <p className="mt-1 mb-4 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                    You haven&apos;t applied for any shops yet. Apply to start selling.
                   </p>
+                  <Link
+                    href="/seller/shops/apply"
+                    className="inline-flex h-9 items-center justify-center gap-1.5 rounded-md bg-yellow-500 px-4 text-sm font-medium whitespace-nowrap text-zinc-950 shadow-sm transition-colors hover:bg-yellow-400 focus-visible:ring-1 focus-visible:ring-zinc-950 focus-visible:outline-none dark:focus-visible:ring-zinc-300"
+                  >
+                    <FiPlus className="h-4 w-4" />
+                    Apply for your first shop
+                  </Link>
                 </div>
               )}
             </div>

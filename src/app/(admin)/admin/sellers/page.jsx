@@ -96,6 +96,7 @@ export default function SellersPage() {
     const sellerState = useSelector((state) => state.sellerReducer);
     const pageData = sellerState?.[activeTab.stateKey];
     const loading = Boolean(sellerState?.loading);
+    const loadError = sellerState?.error;
 
     const items = useMemo(() => pageData?.content ?? [], [pageData]);
     const totalPages = pageData?.totalPages || 1;
@@ -223,7 +224,12 @@ export default function SellersPage() {
         setCountsNonce((nonce) => nonce + 1);
     };
 
-    const firstLoad = loading && items.length === 0;
+    // Before the first request settles there is no page object yet, so gate on
+    // that too — otherwise the empty state shows for a frame on first paint,
+    // between mount and the effect that starts the fetch. `error` releases the
+    // gate so a failed request falls through to the empty state instead of
+    // spinning forever.
+    const firstLoad = items.length === 0 && (loading || (!pageData && !loadError));
 
     /* --------------------------------- render --------------------------------- */
 
