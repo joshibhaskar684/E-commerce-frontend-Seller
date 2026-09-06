@@ -19,7 +19,6 @@ export default function page(){
     const [subCategory,setSubCategoryName]=useState('');
     const MainCategories=useSelector((state)=>state.categoryReducer.maincategories);
 
-    console.log(subCategory)
     const createSubCategory=async(e,id)=>{
     e.preventDefault();
     setParentId(id)
@@ -37,7 +36,6 @@ export default function page(){
     setTotalPages(MainCategories?.totalPages)
    },[MainCategories]);
    useEffect(()=>{
-    console.log("new1 category")
     getCategory();
    },[]);
 
@@ -47,7 +45,6 @@ export default function page(){
 
     const getCategory=async()=>{
     try{
-        console.log("getcategory function")
 await dispatch(getCategoriesWhereIdNotNull({pageno:pageno-1,pagesize}))
     }catch(error){
 

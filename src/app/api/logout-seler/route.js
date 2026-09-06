@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 export async function POST() {
   const response = NextResponse.json({ success: true });
 
-  response.cookies.set("admintoken", "", {
+  response.cookies.set("sellerToken", "", {
     expires: new Date(0),
     path: "/",
     // domain: ".quicksin.in", // ✅ must match original

@@ -115,7 +115,6 @@ export const getCategoriesWhereIdNotNull =(data) => async (dispatch) => {
     pagesize: pagesize
   }
 });
-console.log(respose.data,"maincategories");
         dispatch({ type: GET_CATEGORIES_SUCCESS, payload: respose.data });
     } catch (error) {
 
@@ -135,7 +134,6 @@ export const getCategoryMain = (data) => async (dispatch) => {
     pagesize: pagesize
   }
 });
-console.log(respose.data,"maincategories");
         dispatch({ type: GET_CATEGORIES_SUCCESS, payload: respose.data });
     } catch (error) {
 

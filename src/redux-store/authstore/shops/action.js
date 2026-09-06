@@ -85,7 +85,6 @@ export const totalShopCountForAdmin=(data)=>async(dispatch)=>{
                 }
             }
         );
-console.log(response,"respomse")
         dispatch({
             type:TOTAL_SHOPS_COUNT_DATA_SUCCESS,
             payload:response.data
@@ -93,7 +92,6 @@ console.log(response,"respomse")
 
 
     }catch(e){
-        console.log(e.message,"error")
          const message =
     e.response?.data?.error ||
     e.response?.data ||
@@ -136,7 +134,6 @@ export const closeShopWithId=(data)=>async(dispatch)=>{
         toast.success("Shop closed successfully");
         
         getShopListIntro({token})(dispatch);
-console.log(response,"respomse")
         dispatch({
             type:REJECT_SHOPS_BY_ID_SUCCESS,
             payload:response.data
@@ -144,7 +141,6 @@ console.log(response,"respomse")
 
 
     }catch(e){
-        console.log(e.message,"error")
          const message =
     e.response?.data?.error ||
     e.response?.data ||

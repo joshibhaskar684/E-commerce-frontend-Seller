@@ -90,7 +90,6 @@ export const getSellerIdAndShopIdList = (data) => async (dispatch) => {
                 }
             }
         );
-        console.log(response, "respomse sellerid and shopid list")
         dispatch({
             type: GET_SELLER_ID_AND_SHOP_ID_LIST_SUCCESS,
             payload: response.data
@@ -98,7 +97,6 @@ export const getSellerIdAndShopIdList = (data) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log(e.message, "error")
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -134,7 +132,6 @@ export const totalShopsCountForSellerDashBoard = (data) => async (dispatch) => {
                 }
             }
         );
-        console.log(response, "respomse")
         dispatch({
             type: GET_TOTAL_DATA_OF_AUTH_SERVICE_SUCCESS,
             payload: response.data
@@ -142,7 +139,6 @@ export const totalShopsCountForSellerDashBoard = (data) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log(e.message, "error")
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -180,7 +176,6 @@ export const totalSellerCountForAdmin = (data) => async (dispatch) => {
                 }
             }
         );
-        console.log(response, "respomse")
         dispatch({
             type: TOTAL_SELLER_COUNT_DATA_SUCCESS,
             payload: response.data
@@ -188,7 +183,6 @@ export const totalSellerCountForAdmin = (data) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log(e.message, "error")
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -206,7 +200,6 @@ export const totalSellerCountForAdmin = (data) => async (dispatch) => {
 
 export const getSellerProfile = (data) => async (dispatch) => {
     const token = data.token;
-    console.log(token, data, "token in action");
     try {
         dispatch({
             type: GET_SELLER_PROFILE_REQUEST,
@@ -225,7 +218,6 @@ export const getSellerProfile = (data) => async (dispatch) => {
             }
         );
 
-        console.log(response, "kjnjknkjnkjn");
         dispatch({
             type: GET_SELLER_PROFILE_SUCCESS,
             payload: response.data
@@ -233,8 +225,6 @@ export const getSellerProfile = (data) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -277,7 +267,6 @@ export const getRejectedSeller = (data, token) => async (dispatch) => {
             }
         );
 
-        console.log(response, "kjnjknkjnkjn");
         dispatch({
             type: GET_REJECTED_SELLER_PAGE_SUCCESS,
             payload: response.data
@@ -285,8 +274,6 @@ export const getRejectedSeller = (data, token) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -329,7 +316,6 @@ export const getSuspendedSeller = (data, token) => async (dispatch) => {
             }
         );
 
-        console.log(response, "kjnjknkjnkjn");
         dispatch({
             type: GET_SUSPENDED_SELLER_PAGE_SUCCESS,
             payload: response.data
@@ -337,8 +323,6 @@ export const getSuspendedSeller = (data, token) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -374,15 +358,12 @@ export const rejectSellerById = (data, token) => async (dispatch) => {
                 }
             });
 
-        console.log(res, "kjnjknkjnkjn");
         dispatch({
             type: REJECT_SELLER_BY_ID_SUCCESS,
             payload: res.data
         })
         toast.success("Seller rejected successfully");
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -415,7 +396,6 @@ export const ReApproveSellerById = (data, token) => async (dispatch) => {
                 }
             });
 
-        console.log(res, "kjnjknkjnkjn");
         dispatch({
             type: APPROVE_SELLER_BY_ID_SUCCESS,
             payload: res.data
@@ -423,8 +403,6 @@ export const ReApproveSellerById = (data, token) => async (dispatch) => {
         toast.success("Seller Approved successfully");
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -463,8 +441,6 @@ export const SuspendSellerById = (data, token) => async (dispatch) => {
         toast.success("Seller suspended successfully");
 
     } catch (e) {
-        console.log("error in suspend seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -496,7 +472,6 @@ export const ApproveSellerById = (data, token) => async (dispatch) => {
                 }
             });
 
-        console.log(res, "kjnjknkjnkjn");
         dispatch({
             type: APPROVE_SELLER_BY_ID_SUCCESS,
             payload: res.data
@@ -504,8 +479,6 @@ export const ApproveSellerById = (data, token) => async (dispatch) => {
         toast.success("Seller Approved successfully");
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -525,7 +498,6 @@ export const ApproveSellerById = (data, token) => async (dispatch) => {
 
 export const getSellerById = (data, token) => async (dispatch) => {
 
-    console.log(data)
     const id = data.id;
     try {
         dispatch({
@@ -540,7 +512,6 @@ export const getSellerById = (data, token) => async (dispatch) => {
                 }
             });
 
-        console.log(res, "kjnjknkjnkjn");
         dispatch({
             type: GET_SELLER_BY_ID_SUCCESS,
             payload: res.data
@@ -548,8 +519,6 @@ export const getSellerById = (data, token) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -592,7 +561,6 @@ export const getApprovedSeller = (data, token) => async (dispatch) => {
             }
         );
 
-        console.log(response, "kjnjknkjnkjn");
         dispatch({
             type: GET_APPROVED_SELLER_PAGE_SUCCESS,
             payload: response.data
@@ -600,8 +568,6 @@ export const getApprovedSeller = (data, token) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -642,7 +608,6 @@ export const getUnApprovedSeller = (data, token) => async (dispatch) => {
             }
         );
 
-        console.log(response, "kjnjknkjnkjn");
         dispatch({
             type: GET_UNAPPROVED_SELLER_PAGE_SUCCESS,
             payload: response.data
@@ -650,8 +615,6 @@ export const getUnApprovedSeller = (data, token) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -686,7 +649,6 @@ export const LoginSeller = (data) => async (dispatch) => {
             {
                 withCredentials: true
             });
-        console.log(res);
         dispatch({
             type: LOGIN_SELLER_SUCCESS,
             payload: res.data
@@ -718,7 +680,6 @@ export const RegisterSeller = (data, token) => async (dispatch) => {
                 }
             });
 
-        console.log(res, "kjnjknkjnkjn");
         dispatch({
             type: REGISTER_SELLER_SUCCESS,
             payload: res.data
@@ -727,8 +688,6 @@ export const RegisterSeller = (data, token) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log("error in register seller action");
-        console.log(e)
         const message =
             e.response?.data?.error ||
             e.response?.data ||

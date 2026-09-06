@@ -45,12 +45,10 @@ export const createProduct = (data) => async (dispatch) => {
 };
 export const getProductsForSeller = (data) => async (dispatch) => {
 
-    console.log("getproducts action called with data:", data);      
     dispatch({ type: GET_PRODUCTS_REQUEST});
     const pageno=data.pageno-1;
     const pagesize=data.pagesize||12;
     const token = data.token;
-    console.log("getproducts")
     try {
         // const token = Cookies.get("token");
         const respose= await axios.get(`${backend_url}/products/page/seller`,
@@ -65,7 +63,6 @@ export const getProductsForSeller = (data) => async (dispatch) => {
                 }}
         );
 
-        console.log(respose,"getproducts  vs")
         dispatch({ type: GET_PRODUCTS_SUCCESS, payload: respose.data });
        
     } catch (error) {
@@ -75,11 +72,9 @@ export const getProductsForSeller = (data) => async (dispatch) => {
 };
 
 export const getProducts = (data) => async (dispatch) => {
-    console.log("getproducts action called with data:", data);      
     dispatch({ type: GET_PRODUCTS_REQUEST});
     const pageno=data.pageno-1;
     const pagesize=data.pagesize||12;
-    console.log("getproducts")
     try {
         // const token = Cookies.get("token");
         const respose= await axios.get(`${backend_url}/products/page`,
@@ -95,7 +90,6 @@ export const getProducts = (data) => async (dispatch) => {
             // },}
         );
 
-        console.log(respose,"getproducts  vs")
         dispatch({ type: GET_PRODUCTS_SUCCESS, payload: respose.data });
        
     } catch (error) {
@@ -109,7 +103,6 @@ export const getProductsByIdSeller = (data) => async (dispatch) => {
     dispatch({ type: GET_PRODUCTS_BY_ID_REQUEST});
     const id=data.productId;
     const token = data.token;
-    console.log("getproducts id" ,id)
     try {
         // const token = Cookies.get("token");
         const respose= await axios.get(`${backend_url}/products/seller/${id}`,
@@ -118,7 +111,6 @@ export const getProductsByIdSeller = (data) => async (dispatch) => {
                 Authorization: `Bearer ${token}`,
             },}
         );
-        console.log(respose, "product by id ")
         dispatch({ type: GET_PRODUCTS_BY_ID_SUCCESS, payload: respose.data });
        
     } catch (error) {
@@ -130,7 +122,6 @@ export const getProductsByIdSeller = (data) => async (dispatch) => {
 export const getProductsById = (data) => async (dispatch) => {
     dispatch({ type: GET_PRODUCTS_BY_ID_REQUEST});
     const id=data.productId;
-    console.log("getproducts id" ,id)
     try {
         // const token = Cookies.get("token");
         const respose= await axios.get(`${backend_url}/products/${id}`
@@ -139,7 +130,6 @@ export const getProductsById = (data) => async (dispatch) => {
             //     Authorization: `Bearer ${token}`,
             // },}
         );
-        console.log(respose, "product by id ")
         dispatch({ type: GET_PRODUCTS_BY_ID_SUCCESS, payload: respose.data });
        
     } catch (error) {
@@ -150,7 +140,6 @@ export const getProductsById = (data) => async (dispatch) => {
 export const updateProductsById = (data) => async (dispatch) => {
     dispatch({ type:UPDATE_PRODUCTS_REQUEST});
     const id=data.id;
-    console.log("update products id")
     try {
         // const token = Cookies.get("token");
         const respose= await axios.put(`${backend_url}/products/update/${id}`, data
@@ -170,7 +159,6 @@ export const updateProductsById = (data) => async (dispatch) => {
 export const deleteProductsById = (data) => async (dispatch) => {
     dispatch({ type:DELETE_PRODUCTS_REQUEST});
     const id=data.id;
-    console.log("DELETE products id")
     try {
         // const token = Cookies.get("token");
         const respose= await axios.put(`${backend_url}/products/delete/${id}`, data
@@ -191,7 +179,6 @@ export const getCategorytree = (data) => async (dispatch) => {
     dispatch({ type: GET_CATEGORIES_REQUEST});
     try {
         const respose= await axios.get(`${backend_url}/products/category/tree`);
-console.log(respose.data,"categories");
         dispatch({ type: GET_CATEGORIES_SUCCESS, payload: respose.data });
     } catch (error) {
 

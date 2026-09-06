@@ -36,7 +36,6 @@ export const totalCountForAdminDashBoard=(data)=>async(dispatch)=>{
                 }
             }
         );
-console.log(response,"respomse")
         dispatch({
             type:GET_TOTAL_DATA_OF_AUTH_SERVICE_SUCCESS,
             payload:response.data
@@ -44,7 +43,6 @@ console.log(response,"respomse")
 
 
     }catch(e){
-        console.log(e.message,"error")
          const message =
     e.response?.data?.error ||
     e.response?.data ||

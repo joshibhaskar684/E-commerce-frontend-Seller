@@ -31,7 +31,6 @@ export default function page() {
 
   useEffect(() => {
     setSellerId(sellerIdAndShopIdList?.sellerId || "");
-    console.log("Seller ID set to:", sellerIdAndShopIdList?.sellerId);
   }, [sellerIdAndShopIdList]);
 
   const addSpec = () => {
@@ -45,13 +44,11 @@ export default function page() {
   };
 
   useEffect(() => {
-    console.log("useEffect called")
     getCategories()
     getSellerAndShopIdData()
   }, []);
 
   const getCategories = async () => {
-    console.log("getCategories called")
     try {
       await dispatch(getCategorytree({}))
     } catch (error) {
@@ -60,7 +57,6 @@ export default function page() {
   };
 
   const getSellerAndShopIdData = async () => {
-    console.log("getSellerAndShopIdData called")
     const token = Cookies.get("sellerToken")
     try {
       await dispatch(getSellerIdAndShopIdList({ token }))
@@ -69,9 +65,6 @@ export default function page() {
     }
   };
 
-  console.log(categoryId, "categoriesId")
-  console.log("categoryshopId", shopId)
-  console.log(categoryPath.toLocaleString(), "categoriesList")
 
   const removeImage = (index) => {
     setImages(images.filter((_, i) => i !== index));
@@ -144,7 +137,6 @@ export default function page() {
     } finally {
       setLoading(false)
     }
-    console.log(data, "formData")
   }
 
   // Common Tailwind classes for standard shadcn appearance

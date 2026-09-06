@@ -32,7 +32,6 @@ export default function page() {
     useEffect(() => {
       
           const token=Cookies.get("sellerToken");
-          console.log("token", token);
         dispatch(getProductsByIdSeller({ productId , token}));
     }
         , []

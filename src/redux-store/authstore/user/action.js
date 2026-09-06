@@ -68,7 +68,6 @@ export const getUserListPage = (data) => async (dispatch) => {
                 }
             }
         );
-        console.log(response, "respomse sellerid and shopid list")
         dispatch({
             type: GET_ALL_USERS_PAGE_SUCCESS,
             payload: response.data
@@ -76,7 +75,6 @@ export const getUserListPage = (data) => async (dispatch) => {
 
 
     } catch (e) {
-        console.log(e.message, "error")
         const message =
             e.response?.data?.error ||
             e.response?.data ||
@@ -105,7 +103,6 @@ export const getUserDetails=(data)=>async(dispatch)=>{
             payload:data
         })
         const res=await axios.post(`${backend_url}/api/user/getuserdetails`,data);
-        console.log(res);
         dispatch({
             type:GET_USER_DETAILS_SUCCESS,
             payload:res.data
@@ -128,7 +125,6 @@ export const LoginSeller=(data)=>async(dispatch)=>{
             payload:data
         })
         const res=await axios.post(`${backend_url}/auth/login`,data);
-        console.log(res);
     
         dispatch({
             type:LOGIN_USER_SUCCESS,
@@ -149,7 +145,6 @@ export const LogOutSeller=(data)=>async(dispatch)=>{
             payload:data
         })
         Cookies.remove("sellerToken");
-        console.log(res);
         dispatch({
             type:LOGOUT_USER_SUCCESS,
             payload:res.data

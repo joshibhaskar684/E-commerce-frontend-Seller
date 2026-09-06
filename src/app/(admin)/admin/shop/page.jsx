@@ -21,13 +21,11 @@ export default function page(){
        
     const seller=useSelector((state)=>state.ShopsReducer.approveShops);
 
-    console.log(seller,"products");
     useEffect(()=>{
 handleSellerLoading();
     },[pageno,pagesize]
     );
     const handleSellerLoading=()=>{
-        console.log("approved shop")
         const token=Cookies.get("adminToken");
        dispatch(getApprovedSHOPS({pageno,pagesize},token));
                

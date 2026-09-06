@@ -20,11 +20,9 @@ export default function page(){
             dispatch(deleteCategory(data));
         
         }catch(error){
-            console.log(error.message);
         }finally{
            
         }
-        console.log(data);
     }
     return (
         <>

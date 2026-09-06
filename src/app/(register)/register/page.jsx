@@ -68,7 +68,6 @@ export default function SellerForm() {
     
     try {
       await dispatch(RegisterSeller(form, token));
-      console.log("Submitting:", form, token);
       handleClose(); // Optionally close modal on success
     } catch (error) {
       console.error(error);

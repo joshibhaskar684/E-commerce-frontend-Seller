@@ -29,7 +29,6 @@ export const VerifyForSeller=(data)=>async(dispatch)=>{
             {
   withCredentials: true
 });
-        console.log(res);
     toast.success("Email verified successfully");
         dispatch({
             type:LOGIN_USER_SUCCESS,

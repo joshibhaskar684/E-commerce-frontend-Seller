@@ -19,7 +19,6 @@ export default function page(){
        
     const seller=useSelector((state)=>state.sellerReducer.rejectedseller);
 
-    console.log(seller,"products");
     useEffect(()=>{
 handleSellerLoading();
     },[pageno,pagesize]

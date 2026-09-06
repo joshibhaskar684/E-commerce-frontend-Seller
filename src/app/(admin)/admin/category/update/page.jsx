@@ -20,11 +20,9 @@ export default function page(){
             dispatch(updateCategory(data));
         
         }catch(error){
-            console.log(error.message);
         }finally{
            
         }
-        console.log(data);
     }
     return (
         <>

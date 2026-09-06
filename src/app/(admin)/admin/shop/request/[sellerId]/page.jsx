@@ -30,7 +30,6 @@ export default function page() {
     }
 
     const ApproveRequest = async() => { 
-        console.log("approve shop")
         setLoading(true);
         try{
             const token = Cookies.get("adminToken");

@@ -21,7 +21,6 @@ export default function page(){
             const router=useRouter();
            
         const UsersList=useSelector((state)=>state.userReducer.usersList);
-        console.log(UsersList,"products");
 
 
         useEffect(()=>{

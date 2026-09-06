@@ -31,7 +31,6 @@ export const LoginADMIN=(data)=>async(dispatch)=>{
             {
   withCredentials: true
 });
-        console.log(res);
         dispatch({
             type:LOGIN_ADMIN_SUCCESS,
             payload:res.data
@@ -64,7 +63,6 @@ export const RegisterADMIN=(data,token)=>async(dispatch)=>{
     }
 });
 
-        console.log(res,"kjnjknkjnkjn");
         dispatch({
             type:REGISTER_ADMIN_SUCCESS,
             payload:res.data
@@ -72,8 +70,6 @@ export const RegisterADMIN=(data,token)=>async(dispatch)=>{
 
 
     }catch(e){
-        console.log("error in register ADMIN action");
-        console.log(e)
          const message =
     e.response?.data?.error ||
     e.response?.data ||

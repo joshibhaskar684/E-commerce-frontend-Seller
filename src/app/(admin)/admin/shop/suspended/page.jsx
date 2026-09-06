@@ -20,7 +20,6 @@ export default function page(){
        
     const seller=useSelector((state)=>state.ShopsReducer.suspendedShops);
 
-    console.log(seller,"products");
     useEffect(()=>{
 handleSellerLoading();
     },[pageno,pagesize]

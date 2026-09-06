@@ -36,7 +36,6 @@ export default function Page() {
       // dispatch update action here
 
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }

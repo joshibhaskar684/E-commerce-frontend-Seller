@@ -13,7 +13,6 @@ export default function page(){
 const dispatch=useDispatch();
 
 const totalCountData=useSelector((state)=>state.AdminDashBoardReducer.AdminTotalData);
-console.log(totalCountData,"total count data");
 
 const loadData=()=>{
     const token=Cookies.get("adminToken");
