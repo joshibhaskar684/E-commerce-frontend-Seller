@@ -273,6 +273,9 @@ export const getRejectedSeller = (data, token) => async (dispatch) => {
         })
 
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -280,11 +283,14 @@ export const getRejectedSeller = (data, token) => async (dispatch) => {
             e.message ||
             "Unknown error";
 
-        toast.error(message);
+        // Background refreshes pass `silent` so only the queue on screen reports.
+        if (!data?.silent) toast.error(message);
         dispatch({
             type: GET_REJECTED_SELLER_PAGE_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -322,6 +328,9 @@ export const getSuspendedSeller = (data, token) => async (dispatch) => {
         })
 
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -329,11 +338,14 @@ export const getSuspendedSeller = (data, token) => async (dispatch) => {
             e.message ||
             "Unknown error";
 
-        toast.error(message);
+        // Background refreshes pass `silent` so only the queue on screen reports.
+        if (!data?.silent) toast.error(message);
         dispatch({
             type: GET_SUSPENDED_SELLER_PAGE_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -363,6 +375,9 @@ export const rejectSellerById = (data, token) => async (dispatch) => {
             payload: res.data
         })
         toast.success("Seller rejected successfully");
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -375,6 +390,8 @@ export const rejectSellerById = (data, token) => async (dispatch) => {
             type: REJECT_SELLER_BY_ID_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -402,6 +419,9 @@ export const ReApproveSellerById = (data, token) => async (dispatch) => {
         })
         toast.success("Seller Approved successfully");
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -414,6 +434,8 @@ export const ReApproveSellerById = (data, token) => async (dispatch) => {
             type: APPROVE_SELLER_BY_ID_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -440,6 +462,9 @@ export const SuspendSellerById = (data, token) => async (dispatch) => {
         })
         toast.success("Seller suspended successfully");
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -452,6 +477,8 @@ export const SuspendSellerById = (data, token) => async (dispatch) => {
             type: APPROVE_SELLER_BY_ID_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -478,6 +505,9 @@ export const ApproveSellerById = (data, token) => async (dispatch) => {
         })
         toast.success("Seller Approved successfully");
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -490,6 +520,8 @@ export const ApproveSellerById = (data, token) => async (dispatch) => {
             type: APPROVE_SELLER_BY_ID_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -518,6 +550,9 @@ export const getSellerById = (data, token) => async (dispatch) => {
         })
 
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -530,6 +565,8 @@ export const getSellerById = (data, token) => async (dispatch) => {
             type: GET_SELLER_BY_ID_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -567,6 +604,9 @@ export const getApprovedSeller = (data, token) => async (dispatch) => {
         })
 
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -574,11 +614,14 @@ export const getApprovedSeller = (data, token) => async (dispatch) => {
             e.message ||
             "Unknown error";
 
-        toast.error(message);
+        // Background refreshes pass `silent` so only the queue on screen reports.
+        if (!data?.silent) toast.error(message);
         dispatch({
             type: GET_APPROVED_SELLER_PAGE_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }
@@ -614,6 +657,9 @@ export const getUnApprovedSeller = (data, token) => async (dispatch) => {
         })
 
 
+
+        return true;
+
     } catch (e) {
         const message =
             e.response?.data?.error ||
@@ -621,11 +667,14 @@ export const getUnApprovedSeller = (data, token) => async (dispatch) => {
             e.message ||
             "Unknown error";
 
-        toast.error(message);
+        // Background refreshes pass `silent` so only the queue on screen reports.
+        if (!data?.silent) toast.error(message);
         dispatch({
             type: GET_UNAPPROVED_SELLER_PAGE_FAILURE,
             payload: e.message
         })
+
+        return false;
     }
 
 }

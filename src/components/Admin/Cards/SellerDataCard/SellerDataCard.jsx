@@ -1,6 +1,10 @@
 import { MapPin, Phone, CreditCard, FileText, FileBadge2, AlertCircle } from "lucide-react";
 
-export default function SellerDataCard({ seller }) {
+/**
+ * `showHeader` is off on screens that already show the business name, id and
+ * status in their own page header, so the two do not repeat each other.
+ */
+export default function SellerDataCard({ seller, showHeader = true }) {
     const statusStyles = {
         APPROVED: "border-transparent bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
         PENDING: "border-transparent bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400",
@@ -10,6 +14,7 @@ export default function SellerDataCard({ seller }) {
     return (
         <div className="w-full space-y-6">
             {/* HEADER CARD */}
+            {showHeader && (
             <div className="rounded-xl border border-zinc-200 dark:border-zinc-800 bg-background text-foreground shadow-sm p-6 flex flex-col sm:flex-row justify-between gap-4 sm:items-center">
                 <div className="min-w-0">
                     <h1 className="text-2xl font-semibold tracking-tight text-foreground break-words">
@@ -23,6 +28,7 @@ export default function SellerDataCard({ seller }) {
                     {seller?.status}
                 </span>
             </div>
+            )}
 
             {/* GRID */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

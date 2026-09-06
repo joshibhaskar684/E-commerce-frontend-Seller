@@ -225,6 +225,9 @@ export const SuspendShopByid=(data,token)=>async(dispatch)=>{
             payload:res.data
         })
         toast.success("SHOPS rejected successfully");
+
+        return true;
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -237,6 +240,8 @@ export const SuspendShopByid=(data,token)=>async(dispatch)=>{
             type:SUSPEND_SHOP_BY_ID_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
 
 
@@ -275,6 +280,11 @@ export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
         })
 
 
+
+        return true;
+
+
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -282,11 +292,16 @@ export const getRejectedSHOPS=(data,token)=>async(dispatch)=>{
     e.message ||
     "Unknown error";
 
-  toast.error(message);
+  // Background refreshes pass `silent` so only the queue on screen reports.
+
+
+  if (!data?.silent) toast.error(message);
         dispatch({
             type:GET_REJECTED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }
@@ -324,6 +339,11 @@ export const getSuspendedSHOPS=(data,token)=>async(dispatch)=>{
         })
 
 
+
+        return true;
+
+
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -331,11 +351,16 @@ export const getSuspendedSHOPS=(data,token)=>async(dispatch)=>{
     e.message ||
     "Unknown error";
 
-  toast.error(message);
+  // Background refreshes pass `silent` so only the queue on screen reports.
+
+
+  if (!data?.silent) toast.error(message);
         dispatch({
             type:GET_SUSPENDED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }
@@ -365,6 +390,9 @@ export const rejectShopById=(data,token)=>async(dispatch)=>{
             payload:res.data
         })
         toast.success("SHOPS rejected successfully");
+
+        return true;
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -377,6 +405,8 @@ export const rejectShopById=(data,token)=>async(dispatch)=>{
             type:REJECT_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }
@@ -404,6 +434,10 @@ export const ApproveShopById=(data,token)=>async(dispatch)=>{
         })
 toast.success("SHOPS Approved successfully");
 
+
+        return true;
+
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -416,6 +450,8 @@ toast.success("SHOPS Approved successfully");
             type: APPROVE_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }
@@ -445,6 +481,11 @@ export const getShopById=(data,token)=>async(dispatch)=>{
         })
 
 
+
+        return true;
+
+
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -457,6 +498,8 @@ export const getShopById=(data,token)=>async(dispatch)=>{
             type:GET_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }
@@ -494,6 +537,11 @@ export const getApprovedSHOPS=(data,token)=>async(dispatch)=>{
         })
 
 
+
+        return true;
+
+
+
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -501,11 +549,16 @@ export const getApprovedSHOPS=(data,token)=>async(dispatch)=>{
     e.message ||
     "Unknown error";
 
-  toast.error(message);
+  // Background refreshes pass `silent` so only the queue on screen reports.
+
+
+  if (!data?.silent) toast.error(message);
         dispatch({
             type:GET_APPROVED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }
@@ -541,6 +594,11 @@ export const getUnApprovedSHOPS=(data,token)=>async(dispatch)=>{
         })
 
 
+
+        return true;
+
+
+
     }catch(e){
 
          const message =
@@ -549,11 +607,16 @@ export const getUnApprovedSHOPS=(data,token)=>async(dispatch)=>{
     e.message ||
     "Unknown error";
 
-  toast.error(message);
+  // Background refreshes pass `silent` so only the queue on screen reports.
+
+
+  if (!data?.silent) toast.error(message);
         dispatch({
             type:GET_UNAPPROVED_SHOPS_PAGE_FAILURE,
             payload:e.message
         })
+
+        return false;
     }
    
 }

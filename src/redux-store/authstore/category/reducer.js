@@ -10,12 +10,19 @@ UPDATE_CATEGORY_SUCCESS,
 UPDATE_CATEGORY_FAILURE,
 DELETE_CATEGORY_REQUEST,
 DELETE_CATEGORY_SUCCESS,
-DELETE_CATEGORY_FAILURE            } from "./actiontype";
+DELETE_CATEGORY_FAILURE,
+GET_DELETED_CATEGORIES_REQUEST,
+GET_DELETED_CATEGORIES_SUCCESS,
+GET_DELETED_CATEGORIES_FAILURE,
+RESTORE_CATEGORY_REQUEST,
+RESTORE_CATEGORY_SUCCESS,
+RESTORE_CATEGORY_FAILURE            } from "./actiontype";
 
 
 const initialState = {
     categories: [],
     maincategories:[],
+    deletedcategories:[],
     loading: false,
     error: null,
 };
@@ -26,6 +33,8 @@ const categoryReducer = (state = initialState, action) => {
         case GET_CATEGORIES_REQUEST:
         case UPDATE_CATEGORY_REQUEST:
         case DELETE_CATEGORY_REQUEST:
+        case GET_DELETED_CATEGORIES_REQUEST:
+        case RESTORE_CATEGORY_REQUEST:
             return {
                 ...state,
                 loading: true,
@@ -43,24 +52,37 @@ const categoryReducer = (state = initialState, action) => {
                 loading: false, 
                 maincategories: action.payload,
             };
+        case GET_DELETED_CATEGORIES_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+                deletedcategories: action.payload,
+            };
+        case RESTORE_CATEGORY_SUCCESS:
+            return {
+                ...state,
+                loading: false,
+            };
         case UPDATE_CATEGORY_SUCCESS:
             return {
                 ...state,
                 loading: false,
                 categories: state.categories.map((category) =>
-                    category._id === action.payload._id ? action.payload : category
+                    category?.id === action.payload?.id ? action.payload : category
                 ),
             };
         case DELETE_CATEGORY_SUCCESS:
             return {
                 ...state,
                 loading: false,
-                categories: state.categories.filter((category) => category._id !== action.payload),
+                categories: state.categories.filter((category) => category?.id !== action.payload),
             };
         case CREATE_CATEGORY_FAILURE:
         case GET_CATEGORIES_FAILURE:
         case UPDATE_CATEGORY_FAILURE:
         case DELETE_CATEGORY_FAILURE:
+        case GET_DELETED_CATEGORIES_FAILURE:
+        case RESTORE_CATEGORY_FAILURE:
             return {
                 ...state,
                 loading: false,

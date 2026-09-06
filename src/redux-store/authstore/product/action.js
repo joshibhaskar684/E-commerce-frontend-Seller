@@ -64,10 +64,12 @@ export const getProductsForSeller = (data) => async (dispatch) => {
         );
 
         dispatch({ type: GET_PRODUCTS_SUCCESS, payload: respose.data });
+        return true;
        
     } catch (error) {
         toast.error("Failed to fetch Products",error.message);
         dispatch({ type: GET_PRODUCTS_FAILURE, payload: error.message });
+        return false;
           }
 };
 
@@ -91,10 +93,12 @@ export const getProducts = (data) => async (dispatch) => {
         );
 
         dispatch({ type: GET_PRODUCTS_SUCCESS, payload: respose.data });
+        return true;
        
     } catch (error) {
         toast.error("Failed to fetch Products",error.message);
         dispatch({ type: GET_PRODUCTS_FAILURE, payload: error.message });
+        return false;
           }
 };
 
@@ -168,10 +172,13 @@ export const deleteProductsById = (data) => async (dispatch) => {
             // },}
         );
         dispatch({ type: DELETE_PRODUCTS_SUCCESS, payload: respose.data });
+        toast.success("Product deleted successfully");
+        return true;
        
     } catch (error) {
         toast.error("Failed to delete Product By ID",error.message);
         dispatch({ type:DELETE_PRODUCTS_FAILURE, payload: error.message });
+        return false;
           }
 };
 export const getCategorytree = (data) => async (dispatch) => {
