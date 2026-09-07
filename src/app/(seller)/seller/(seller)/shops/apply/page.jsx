@@ -1,18 +1,15 @@
 "use client";
 
-import { FaCloudUploadAlt } from "react-icons/fa";
+import { CreateShop, Request2Shop } from "@/redux-store/authstore/shops/action";
+import Cookies from "js-cookie";
+import { ArrowLeft, Clock, Image as ImageIcon, Loader2, MapPin, Store } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import { CreateShop, Request2Shop } from "@/redux-store/authstore/shops/action";
 
-export default function ShopForm() {
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [loading1, setLoading1] = useState(false);
-
-  const [form, setForm] = useState({
+const EMPTY = {
     shopName: "",
     description: "",
     logoUrl: "",
@@ -21,215 +18,355 @@ export default function ShopForm() {
     city: "",
     state: "",
     pincode: "",
-  });
+};
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+const isHttpUrl = (value) => /^https?:\/\/\S+$/i.test(value.trim());
 
-  const handleFileUpload = (e) => {
-    e.preventDefault();
-    // TODO: implement upload logic (Cloudinary / S3 etc.)
-    toast.info("Upload feature coming soon");
-  };
+/** Everything the backend rejects, caught here instead of after a round trip. */
+function validate(form) {
+    const errors = {};
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (!form.shopName.trim()) errors.shopName = "Give your shop a name.";
+    else if (form.shopName.trim().length < 3) errors.shopName = "Use at least 3 characters.";
 
-    if (!form.shopName) {
-      toast.error("Shop Name is required");
-      return;
-    }
+    if (!form.address.trim()) errors.address = "Customers need an address for this shop.";
+    if (!form.city.trim()) errors.city = "City is required.";
+    if (!form.state.trim()) errors.state = "State is required.";
 
-    const token = Cookies.get("sellerToken");
-    if (!token) {
-      toast.error("Seller Login Required");
-      return;
-    }
+    if (!form.pincode.trim()) errors.pincode = "Pincode is required.";
+    else if (!/^\d{6}$/.test(form.pincode.trim())) errors.pincode = "Use a 6 digit pincode.";
 
-    setLoading(true);
+    if (form.logoUrl.trim() && !isHttpUrl(form.logoUrl))
+        errors.logoUrl = "Use a full URL starting with http:// or https://";
+    if (form.bannerUrl.trim() && !isHttpUrl(form.bannerUrl))
+        errors.bannerUrl = "Use a full URL starting with http:// or https://";
 
-    try {
-      await dispatch(CreateShop(form, token));
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to create shop");
-    } finally {
-      setLoading(false);
-    }
-  };
+    return errors;
+}
 
-  const handleSubmit1 = async () => {
-    if (!form.shopName) {
-      toast.error("Shop Name is required");
-      return;
-    }
+export default function ApplyForShopPage() {
+    const dispatch = useDispatch();
+    const router = useRouter();
 
-    const token = Cookies.get("sellerToken");
-    if (!token) {
-      toast.error("Seller Login Required");
-      return;
-    }
+    const [form, setForm] = useState(EMPTY);
+    const [errors, setErrors] = useState({});
+    const [submitting, setSubmitting] = useState("");
 
-    setLoading1(true);
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setForm((prev) => ({ ...prev, [name]: value }));
+        // Clear a field's error the moment the seller starts fixing it.
+        setErrors((prev) => (prev[name] ? { ...prev, [name]: undefined } : prev));
+    };
 
-    try {
-      await dispatch(Request2Shop(form, token));
-    } catch (error) {
-      console.error(error);
-      toast.error("Failed to Request shop");
-    } finally {
-      setLoading1(false);
-    }
-  };
+    const submit = async (mode) => {
+        const found = validate(form);
+        setErrors(found);
 
-  return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 p-6 md:p-12 font-sans text-zinc-950 dark:text-zinc-50">
-      <div className="max-w-3xl mx-auto">
-        
-        {/* Main Card Wrapper */}
-        <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl shadow-sm overflow-hidden">
-          
-          {/* Header */}
-          <div className="flex flex-col space-y-1.5 p-6 border-b border-zinc-200 dark:border-zinc-800">
-            <h2 className="text-2xl font-semibold leading-none tracking-tight">
-              Create Your Shop
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Fill in the details below to set up your new storefront or request access.
-            </p>
-          </div>
+        if (Object.keys(found).length > 0) {
+            toast.error("Check the highlighted fields");
+            return;
+        }
 
-          {/* Form Body */}
-          <form onSubmit={handleSubmit} className="flex flex-col">
-            <div className="p-6 space-y-8">
-              
-              {/* Shop Info */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Shop Information
-                </h3>
-                <div className="grid grid-cols-1 gap-4">
-                  <input
-                    name="shopName"
-                    placeholder="Shop Name"
-                    className="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                    onChange={handleChange}
-                    required
-                  />
-                  <textarea
-                    name="description"
-                    placeholder="Shop Description"
-                    className="flex min-h-[80px] w-full rounded-md border border-zinc-200 bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 resize-none dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                    rows={3}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
+        const token = Cookies.get("sellerToken");
+        if (!token) {
+            toast.error("Seller login required");
+            router.push("/seller-login");
+            return;
+        }
 
-              {/* Media Upload */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Shop Media
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="flex w-full gap-2">
-                    <input
-                      name="logoUrl"
-                      placeholder="Logo URL"
-                      className="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                      onChange={handleChange}
-                    />
-                    <button
-                      type="button"
-                      onClick={handleFileUpload}
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 border border-zinc-200 bg-white hover:bg-zinc-100 hover:text-zinc-900 shadow-sm h-9 px-3 shrink-0 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
+        setSubmitting(mode);
+        try {
+            const payload = { ...form, pincode: form.pincode.trim() };
+            const thunk = mode === "create" ? CreateShop : Request2Shop;
+            const ok = await dispatch(thunk(payload, token));
+
+            // The thunks report their own errors through toasts; only navigate
+            // away once one actually succeeded.
+            if (ok === false) return;
+
+            router.push("/seller/shops?status=review");
+        } finally {
+            setSubmitting("");
+        }
+    };
+
+    const busy = Boolean(submitting);
+
+    return (
+        <div className="hide-scrollbar min-h-screen w-full overflow-y-auto">
+            <div className="mx-auto w-full max-w-3xl space-y-6 p-6 md:p-10">
+                <Link
+                    href="/seller/shops"
+                    className="inline-flex items-center gap-1.5 text-sm text-zinc-500 transition-colors hover:text-yellow-600 dark:text-zinc-400 dark:hover:text-yellow-500"
+                >
+                    <ArrowLeft className="h-4 w-4" />
+                    Back to your shops
+                </Link>
+
+                <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900/50">
+                    {/* Header */}
+                    <div className="space-y-1.5 border-b border-zinc-200 p-6 dark:border-zinc-800">
+                        <h1 className="flex items-center gap-2 text-2xl font-semibold leading-none tracking-tight">
+                            <Store className="h-6 w-6 text-yellow-500" />
+                            Apply for a shop
+                        </h1>
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                            Tell us about the storefront you want to run. An admin reviews every
+                            application.
+                        </p>
+                    </div>
+
+                    {/* What happens next — sets the expectation before they type */}
+                    <div className="flex gap-3 border-b border-zinc-200 bg-yellow-50 p-4 text-[13px] text-yellow-900 dark:border-zinc-800 dark:bg-yellow-950/20 dark:text-yellow-300">
+                        <Clock className="mt-0.5 h-4 w-4 shrink-0" />
+                        <p className="leading-relaxed">
+                            Approval usually takes 24 to 48 hours. Until then the shop sits in{" "}
+                            <span className="font-medium">Under review</span> and cannot hold
+                            products.
+                        </p>
+                    </div>
+
+                    <form
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            submit("create");
+                        }}
+                        noValidate
                     >
-                      <FaCloudUploadAlt className="h-4 w-4" />
-                    </button>
-                  </div>
+                        <div className="space-y-8 p-6">
+                            {/* Shop info */}
+                            <Section title="Shop information" icon={Store}>
+                                <Field
+                                    label="Shop name"
+                                    name="shopName"
+                                    required
+                                    value={form.shopName}
+                                    onChange={handleChange}
+                                    error={errors.shopName}
+                                    placeholder="e.g. Kadam Appliances"
+                                    className="sm:col-span-2"
+                                />
+                                <Field
+                                    label="Description"
+                                    name="description"
+                                    as="textarea"
+                                    rows={3}
+                                    value={form.description}
+                                    onChange={handleChange}
+                                    error={errors.description}
+                                    placeholder="What do you sell? Customers see this on your shop page."
+                                    className="sm:col-span-2"
+                                />
+                            </Section>
 
-                  <div className="flex w-full gap-2">
-                    <input
-                      name="bannerUrl"
-                      placeholder="Banner URL"
-                      className="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                      onChange={handleChange}
-                    />
-                    <button
-                      type="button"
-                      onClick={handleFileUpload}
-                      className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 border border-zinc-200 bg-white hover:bg-zinc-100 hover:text-zinc-900 shadow-sm h-9 px-3 shrink-0 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
-                    >
-                      <FaCloudUploadAlt className="h-4 w-4" />
-                    </button>
-                  </div>
+                            {/* Media */}
+                            <Section title="Shop media" icon={ImageIcon}>
+                                <Field
+                                    label="Logo URL"
+                                    name="logoUrl"
+                                    value={form.logoUrl}
+                                    onChange={handleChange}
+                                    error={errors.logoUrl}
+                                    placeholder="https://…"
+                                    hint="Optional. Square images look best."
+                                />
+                                <Field
+                                    label="Banner URL"
+                                    name="bannerUrl"
+                                    value={form.bannerUrl}
+                                    onChange={handleChange}
+                                    error={errors.bannerUrl}
+                                    placeholder="https://…"
+                                    hint="Optional. Shown across the top of your shop."
+                                />
+
+                                {/* Live preview beats a broken image after submit */}
+                                {(isHttpUrl(form.logoUrl) || isHttpUrl(form.bannerUrl)) && (
+                                    <div className="sm:col-span-2">
+                                        <p className="mb-2 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                                            Preview
+                                        </p>
+                                        <div className="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800">
+                                            <div className="h-20 w-full bg-zinc-100 dark:bg-zinc-800">
+                                                {isHttpUrl(form.bannerUrl) && (
+                                                    // eslint-disable-next-line @next/next/no-img-element
+                                                    <img
+                                                        src={form.bannerUrl}
+                                                        alt=""
+                                                        className="h-full w-full object-cover"
+                                                    />
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-3 p-3">
+                                                <span className="-mt-8 flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-white bg-zinc-100 dark:border-zinc-900 dark:bg-zinc-800">
+                                                    {isHttpUrl(form.logoUrl) ? (
+                                                        // eslint-disable-next-line @next/next/no-img-element
+                                                        <img
+                                                            src={form.logoUrl}
+                                                            alt=""
+                                                            className="h-full w-full object-cover"
+                                                        />
+                                                    ) : (
+                                                        <Store className="h-5 w-5 text-zinc-400" />
+                                                    )}
+                                                </span>
+                                                <p className="truncate text-sm font-medium">
+                                                    {form.shopName || "Your shop"}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </Section>
+
+                            {/* Address */}
+                            <Section title="Shop address" icon={MapPin}>
+                                <Field
+                                    label="Full address"
+                                    name="address"
+                                    as="textarea"
+                                    rows={2}
+                                    required
+                                    value={form.address}
+                                    onChange={handleChange}
+                                    error={errors.address}
+                                    placeholder="Street, area, landmark"
+                                    className="sm:col-span-2"
+                                />
+                                <Field
+                                    label="City"
+                                    name="city"
+                                    required
+                                    value={form.city}
+                                    onChange={handleChange}
+                                    error={errors.city}
+                                />
+                                <Field
+                                    label="State"
+                                    name="state"
+                                    required
+                                    value={form.state}
+                                    onChange={handleChange}
+                                    error={errors.state}
+                                />
+                                <Field
+                                    label="Pincode"
+                                    name="pincode"
+                                    required
+                                    inputMode="numeric"
+                                    maxLength={6}
+                                    value={form.pincode}
+                                    onChange={handleChange}
+                                    error={errors.pincode}
+                                    placeholder="6 digits"
+                                    className="sm:col-span-2"
+                                />
+                            </Section>
+                        </div>
+
+                        {/* Actions */}
+                        <div className="flex flex-col-reverse gap-3 border-t border-zinc-200 bg-zinc-50 p-4 sm:flex-row sm:justify-end dark:border-zinc-800 dark:bg-zinc-900/50">
+                            <button
+                                type="button"
+                                onClick={() => submit("request")}
+                                disabled={busy}
+                                title="Ask an admin to grant you an additional shop"
+                                className="inline-flex h-10 items-center justify-center rounded-md border border-zinc-300 px-4 text-sm font-medium transition-colors hover:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-700 dark:hover:bg-zinc-800"
+                            >
+                                {submitting === "request" ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Requesting...
+                                    </>
+                                ) : (
+                                    "Request an additional shop"
+                                )}
+                            </button>
+
+                            {/* Deliberately not type="submit": the seller shell currently
+                                fails hydration, and an un-hydrated submit button does a
+                                native GET that pushes the address into the URL and wipes
+                                the form. onSubmit below still covers Enter. */}
+                            <button
+                                type="button"
+                                onClick={() => submit("create")}
+                                disabled={busy}
+                                className="inline-flex h-10 items-center justify-center rounded-md bg-yellow-500 px-6 text-sm font-medium text-zinc-950 shadow-sm transition-colors hover:bg-yellow-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-500 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                            >
+                                {submitting === "create" ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Submitting...
+                                    </>
+                                ) : (
+                                    "Submit application"
+                                )}
+                            </button>
+                        </div>
+                    </form>
                 </div>
-              </div>
-
-              {/* Address */}
-              <div className="space-y-4">
-                <h3 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-                  Shop Address
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <textarea
-                    name="address"
-                    placeholder="Full Address"
-                    className="flex min-h-[60px] w-full rounded-md border border-zinc-200 bg-transparent px-3 py-2 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2 resize-none dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                    rows={2}
-                    onChange={handleChange}
-                    required
-                  />
-                  <input
-                    name="city"
-                    placeholder="City"
-                    className="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                    onChange={handleChange}
-                    required
-                  />
-                  <input
-                    name="state"
-                    placeholder="State"
-                    className="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                    onChange={handleChange}
-                    required
-                  />
-                  <input
-                    name="pincode"
-                    placeholder="Pincode"
-                    className="flex h-9 w-full rounded-md border border-zinc-200 bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:cursor-not-allowed disabled:opacity-50 sm:col-span-2 dark:border-zinc-800 dark:placeholder:text-zinc-400 dark:focus-visible:ring-zinc-300"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
             </div>
-
-            {/* Actions Footer */}
-            <div className="flex flex-col-reverse sm:flex-row justify-end items-center gap-3 bg-zinc-50 dark:bg-zinc-900/50 px-6 py-4 border-t border-zinc-200 dark:border-zinc-800">
-              <button
-                type="button"
-                onClick={handleSubmit1}
-                disabled={loading1}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 border border-zinc-200 bg-white hover:bg-zinc-100 hover:text-zinc-900 shadow-sm h-9 px-4 py-2 w-full sm:w-auto disabled:pointer-events-none disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:bg-zinc-800 dark:hover:text-zinc-50"
-              >
-                {loading1 ? "Requesting..." : "Request For Other Shop"}
-              </button>
-              <button
-                type="submit"
-                disabled={loading}
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 h-9 px-4 py-2 w-full sm:w-auto disabled:pointer-events-none disabled:opacity-50 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300"
-              >
-                {loading ? "Creating..." : "Create Shop"}
-              </button>
-            </div>
-          </form>
         </div>
-      </div>
-    </div>
-  );
+    );
+}
+
+function Section({ title, icon: Icon, children }) {
+    return (
+        <div className="space-y-4">
+            <h2 className="flex items-center gap-2 border-b border-zinc-100 pb-3 text-sm font-semibold dark:border-zinc-800">
+                <Icon className="h-4 w-4 text-zinc-400" />
+                {title}
+            </h2>
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">{children}</div>
+        </div>
+    );
+}
+
+function Field({
+    label,
+    name,
+    as = "input",
+    error,
+    hint,
+    required,
+    className = "",
+    ...rest
+}) {
+    const Tag = as;
+    const describedBy = error ? `${name}-error` : hint ? `${name}-hint` : undefined;
+
+    return (
+        <div className={`space-y-1.5 ${className}`}>
+            <label htmlFor={name} className="text-sm font-medium">
+                {label}
+                {required && <span className="ml-0.5 text-red-500">*</span>}
+            </label>
+
+            <Tag
+                id={name}
+                name={name}
+                aria-invalid={Boolean(error)}
+                aria-describedby={describedBy}
+                className={`w-full rounded-md border bg-background px-3 py-2 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 ${
+                    as === "textarea" ? "resize-none" : "h-10"
+                } ${
+                    error
+                        ? "border-red-400 focus-visible:ring-red-500"
+                        : "border-zinc-300 focus-visible:ring-yellow-500 dark:border-zinc-700"
+                }`}
+                {...rest}
+            />
+
+            {error ? (
+                <p id={`${name}-error`} className="text-xs text-red-600 dark:text-red-400">
+                    {error}
+                </p>
+            ) : hint ? (
+                <p id={`${name}-hint`} className="text-xs text-zinc-500 dark:text-zinc-400">
+                    {hint}
+                </p>
+            ) : null}
+        </div>
+    );
 }

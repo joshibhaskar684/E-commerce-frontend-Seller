@@ -140,6 +140,7 @@ export const closeShopWithId=(data)=>async(dispatch)=>{
         })
 
 
+        return true;
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -152,6 +153,7 @@ export const closeShopWithId=(data)=>async(dispatch)=>{
             type:REJECT_SHOPS_BY_ID_FAILURE,
             payload:e.message
         })
+        return false;
     }
    
 }
@@ -186,6 +188,7 @@ export const getShopListIntro=(data)=>async(dispatch)=>{
         })
 
 
+        return true;
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -198,6 +201,7 @@ export const getShopListIntro=(data)=>async(dispatch)=>{
             type:GET_SHOPS_LIST_FAILURE,
             payload:e.message
         })
+        return false;
     }
    
 }
@@ -679,6 +683,7 @@ export const Request2Shop=(data,token)=>async(dispatch)=>{
         })
         toast.success("Application Submitted successfully");
         
+        return true;
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -691,6 +696,7 @@ export const Request2Shop=(data,token)=>async(dispatch)=>{
             type:REGISTER_SHOPS_FAILURE,
             payload:e.message
         })
+        return false;
     }
   
 }
@@ -719,6 +725,7 @@ export const CreateShop=(data,token)=>async(dispatch)=>{
         })
         toast.success("SHOP Registered successfully");
 
+        return true;
     }catch(e){
          const message =
     e.response?.data?.error ||
@@ -731,6 +738,7 @@ export const CreateShop=(data,token)=>async(dispatch)=>{
             type:REGISTER_SHOPS_FAILURE,
             payload:e.message
         })
+        return false;
     }
   
 }
