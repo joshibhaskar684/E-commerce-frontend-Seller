@@ -35,9 +35,16 @@ export default function SellermobileNavbar() {
     const [tokenPresent, setTokenPresent] = useState(false);
     const router = useRouter();
     const routeData = NavRoute;
-     const handleLogOut=()=>{
-        router.push("/")
-    }
+     const handleLogOut = async () => {
+        Cookies.remove("sellerToken");
+        Cookies.remove("sellerToken", { path: "/" });
+        Cookies.remove("verifyToken");
+        Cookies.remove("verifyToken", { path: "/" });
+        try {
+            await fetch("/api/logout-seler", { method: "POST" });
+        } catch (_) {}
+        router.push("/seller");
+    };
 
     // useEffect(() => {  
     //   const usertoken=Cookies.get("usertoken");

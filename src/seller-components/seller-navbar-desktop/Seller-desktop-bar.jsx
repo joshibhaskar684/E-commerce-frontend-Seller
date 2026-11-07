@@ -11,8 +11,14 @@ export default function SellerDesktopBar() {
     const router = useRouter();
     const sidebardata = NavRoute;
 
-    const handleLogOut = () => {
+    const handleLogOut = async () => {
         Cookies.remove("sellerToken");
+        Cookies.remove("sellerToken", { path: "/" });
+        Cookies.remove("verifyToken");
+        Cookies.remove("verifyToken", { path: "/" });
+        try {
+            await fetch("/api/logout-seler", { method: "POST" });
+        } catch (_) {}
         router.push("/seller");
     };
 

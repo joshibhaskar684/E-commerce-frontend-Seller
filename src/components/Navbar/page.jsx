@@ -55,6 +55,19 @@ export default function Navbar({tokenPresent}) {
     setOpenModal(false);
   };
 
+  const handleLogOut = async () => {
+    Cookies.remove("sellerToken");
+    Cookies.remove("sellerToken", { path: "/" });
+    Cookies.remove("verifyToken");
+    Cookies.remove("verifyToken", { path: "/" });
+    Cookies.remove("usertoken");
+    Cookies.remove("usertoken", { path: "/" });
+    try {
+      await fetch("/api/logout-seler", { method: "POST" });
+    } catch (_) {}
+    window.location.reload();
+  };
+
   return (
     <>
       <div className="bg-background text-foreground  sticky top-0 z-111">
@@ -104,8 +117,8 @@ export default function Navbar({tokenPresent}) {
                         Seller
                       </a>
                       <button
-                        
-                        className="font-bold text-xl text-red-600 hover:text-red-800 transition text-left"
+                        onClick={handleLogOut}
+                        className="font-bold text-xl text-red-600 hover:text-red-800 transition text-left cursor-pointer"
                       >
                         Logout
                       </button>
@@ -198,13 +211,12 @@ export default function Navbar({tokenPresent}) {
                               </a>
                             </MenuItem>
                             <MenuItem>
-                              <a
-                                // onClick={handleLogOut}
-                                href="#"
-                                className="block px-4 py-2 text-sm text-red-500  text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                              <button
+                                onClick={handleLogOut}
+                                className="block w-full text-left px-4 py-2 text-sm text-red-500 hover:bg-gray-100 data-focus:bg-gray-100 data-focus:outline-hidden cursor-pointer"
                               >
                                 Log out
-                              </a>
+                              </button>
                             </MenuItem>
                           </MenuItems>
                         </Menu></div>

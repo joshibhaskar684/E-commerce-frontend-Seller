@@ -148,7 +148,11 @@ export const LogOutUser = (data) => async (dispatch) => {
             payload: data
         });
         Cookies.remove("usertoken");
+        Cookies.remove("usertoken", { path: "/" });
         Cookies.remove("sellerToken");
+        Cookies.remove("sellerToken", { path: "/" });
+        Cookies.remove("verifyToken");
+        Cookies.remove("verifyToken", { path: "/" });
         toast.success("Logged out successfully.");
         dispatch({
             type: LOGOUT_USER_SUCCESS,

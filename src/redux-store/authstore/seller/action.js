@@ -829,4 +829,24 @@ export const getSellerApplications = (token) => async (dispatch) => {
     }
 };
 
+export const LogOutSeller = () => async (dispatch) => {
+    dispatch({ type: LOGOUT_SELLER_REQUEST });
+    try {
+        Cookies.remove("sellerToken");
+        Cookies.remove("sellerToken", { path: "/" });
+        Cookies.remove("verifyToken");
+        Cookies.remove("verifyToken", { path: "/" });
+        try {
+            await axios.post("/api/logout-seler");
+        } catch (_) {}
+        toast.success("Logged out successfully.");
+        dispatch({ type: LOGOUT_SELLER_SUCCESS, payload: null });
+        return { success: true };
+    } catch (e) {
+        dispatch({ type: LOGOUT_SELLER_FAILURE, payload: e.message });
+        return { success: false, error: e.message };
+    }
+};
+
+
 

@@ -6,10 +6,17 @@ export async function POST() {
   response.cookies.set("sellerToken", "", {
     expires: new Date(0),
     path: "/",
-    // domain: ".quicksin.in", // ✅ must match original
-    httpOnly: false,       // match original
-    secure: true,          // match original
-    sameSite: "none",      // match original
+    httpOnly: false,
+    secure: true,
+    sameSite: "none",
+  });
+
+  response.cookies.set("verifyToken", "", {
+    expires: new Date(0),
+    path: "/",
+    httpOnly: false,
+    secure: true,
+    sameSite: "none",
   });
 
   return response;
