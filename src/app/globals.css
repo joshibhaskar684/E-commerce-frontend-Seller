@@ -29,10 +29,10 @@
 .hide-scrollbar {
   -ms-overflow-style: none;
 }
-input{
+input:where(:not([class])) {
   padding: 5px;
 }
-textarea{
+textarea:where(:not([class])) {
   padding: 5px;
 }
 /* Hide scrollbar for Firefox */

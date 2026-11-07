@@ -86,43 +86,43 @@ export default function Verify({ handleClose, setPage }) {
 
             {/* Form */}
             <form onSubmit={handlesubmit} className="space-y-4">
-                {/* Email Field */}
+                {/* Email Field with cleanly separated flex icon */}
                 <div className="flex flex-col gap-1.5 text-left">
                     <label htmlFor="verify-email" className="text-sm font-medium text-foreground">
                         Email Address
                     </label>
-                    <div className="relative flex items-center">
-                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                    <div className="flex items-center w-full h-11 px-3.5 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background focus-within:ring-2 focus-within:ring-yellow-500 focus-within:border-transparent transition-all shadow-sm">
+                        <Mail className="h-4 w-4 text-zinc-400 shrink-0 mr-3" />
                         <input
                             id="verify-email"
                             type="email"
                             name="email"
                             required
                             placeholder="seller@example.com"
-                            className="w-full h-11 pl-10 pr-4 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all shadow-sm"
+                            className="w-full h-full bg-transparent border-0 outline-none !p-0 text-foreground text-sm placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
                         />
                     </div>
                 </div>
 
-                {/* Password Field */}
+                {/* Password Field with cleanly separated flex icon and show/hide button */}
                 <div className="flex flex-col gap-1.5 text-left">
                     <label htmlFor="verify-password" className="text-sm font-medium text-foreground">
                         Password
                     </label>
-                    <div className="relative flex items-center">
-                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
+                    <div className="flex items-center w-full h-11 px-3.5 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background focus-within:ring-2 focus-within:ring-yellow-500 focus-within:border-transparent transition-all shadow-sm">
+                        <Lock className="h-4 w-4 text-zinc-400 shrink-0 mr-3" />
                         <input
                             id="verify-password"
                             type={showPassword ? "text" : "password"}
                             name="password"
                             required
                             placeholder="Enter your password"
-                            className="w-full h-11 pl-10 pr-11 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all shadow-sm"
+                            className="w-full h-full bg-transparent border-0 outline-none !p-0 text-foreground text-sm placeholder:text-zinc-400 focus:ring-0 focus:outline-none"
                         />
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-foreground transition-colors p-1"
+                            className="p-1 shrink-0 text-zinc-400 hover:text-foreground transition-colors cursor-pointer ml-2 focus:outline-none"
                             aria-label={showPassword ? "Hide password" : "Show password"}
                         >
                             {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -130,12 +130,12 @@ export default function Verify({ handleClose, setPage }) {
                     </div>
                 </div>
 
-                {/* Actions Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
+                {/* Actions: Distinct spaced buttons */}
+                <div className="flex flex-col sm:flex-row gap-3 pt-3">
                     <button
                         type="submit"
                         disabled={loading}
-                        className="h-11 px-4 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-zinc-950 font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex-1 h-11 px-4 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-zinc-950 font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {loading ? (
                             <>
@@ -150,7 +150,7 @@ export default function Verify({ handleClose, setPage }) {
                     <button
                         type="button"
                         onClick={handleBackOrClose}
-                        className="h-11 px-4 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-foreground font-medium text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                        className="sm:w-28 h-11 px-4 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-foreground font-medium text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         <span>{isModal ? "Cancel" : "Back"}</span>
