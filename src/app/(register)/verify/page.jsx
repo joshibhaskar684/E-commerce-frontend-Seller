@@ -3,14 +3,15 @@ import { VerifyForSeller } from "@/redux-store/authstore/verify/action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Mail, Lock, Loader2, X, AlertCircle } from "lucide-react";
+import { Mail, Lock, Loader2, X, AlertCircle, ArrowLeft, Eye, EyeOff, ShieldCheck } from "lucide-react";
 
 export default function Verify({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
     const dispatch = useDispatch();
     const router = useRouter();
-    
+
     const handlesubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
@@ -41,101 +42,132 @@ export default function Verify({ handleClose, setPage }) {
 
     const isModal = typeof handleClose === 'function';
 
-    const content = (
-        <div className="w-full max-w-md bg-background rounded-xl border border-zinc-200 dark:border-zinc-800 shadow-lg p-5 sm:p-8 relative mx-auto transition-all duration-300">
+    const handleBackOrClose = () => {
+        if (isModal) {
+            handleClose();
+        } else {
+            router.back();
+        }
+    };
+
+    const cardContent = (
+        <div className="w-full max-w-md bg-background rounded-2xl border border-zinc-200 dark:border-zinc-800 shadow-xl p-6 sm:p-8 relative mx-auto transition-all duration-300">
             {isModal && (
-                <button 
+                <button
+                    type="button"
                     onClick={handleClose}
-                    className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-zinc-950 focus:ring-offset-2 dark:focus:ring-zinc-300"
+                    className="absolute right-4 top-4 p-1.5 rounded-lg text-zinc-400 hover:text-foreground hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors focus:outline-none focus:ring-2 focus:ring-yellow-500"
+                    aria-label="Close"
                 >
-                    <X className="h-4 w-4" />
-                    <span className="sr-only">Close</span>
+                    <X className="h-5 w-5" />
                 </button>
             )}
 
-            <div className="flex flex-col space-y-1.5 text-center mb-6 mt-2">
-                <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
-                    Verify Email
+            {/* Badge & Header */}
+            <div className="flex flex-col items-center text-center mb-6">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-500/10 text-yellow-500 ring-8 ring-yellow-500/5">
+                    <ShieldCheck className="h-6 w-6" />
+                </div>
+                <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground">
+                    Verify Seller Email
                 </h1>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2">
-                    Enter your email and password to verify your account
+                <p className="text-sm text-zinc-500 dark:text-zinc-400 mt-2 max-w-sm">
+                    Enter your email and password to verify your identity and start selling.
                 </p>
             </div>
 
+            {/* Error Feedback Banner */}
             {serverError && (
-                <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-sm flex items-start gap-2">
-                    <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
-                    <span>{serverError}</span>
+                <div className="mb-5 p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 text-sm flex items-start gap-2.5 animate-in fade-in duration-200">
+                    <AlertCircle className="h-5 w-5 shrink-0 mt-0.5" />
+                    <span className="leading-snug">{serverError}</span>
                 </div>
             )}
 
+            {/* Form */}
             <form onSubmit={handlesubmit} className="space-y-4">
-                <div className="space-y-2 text-left">
-                    <label htmlFor="email" className="text-sm font-medium leading-none text-foreground">
-                        Email
+                {/* Email Field */}
+                <div className="flex flex-col gap-1.5 text-left">
+                    <label htmlFor="verify-email" className="text-sm font-medium text-foreground">
+                        Email Address
                     </label>
-                    <div className="relative">
-                        <Mail className="absolute left-3 top-2.5 h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                    <div className="relative flex items-center">
+                        <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
                         <input
-                            id="email"
+                            id="verify-email"
                             type="email"
                             name="email"
                             required
-                            placeholder="name@example.com"
-                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-background px-3 py-2 pl-10 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors"
+                            placeholder="seller@example.com"
+                            className="w-full h-11 pl-10 pr-4 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all shadow-sm"
                         />
                     </div>
                 </div>
 
-                <div className="space-y-2 text-left">
-                    <label htmlFor="password" className="text-sm font-medium leading-none text-foreground">
+                {/* Password Field */}
+                <div className="flex flex-col gap-1.5 text-left">
+                    <label htmlFor="verify-password" className="text-sm font-medium text-foreground">
                         Password
                     </label>
-                    <div className="relative">
-                        <Lock className="absolute left-3 top-2.5 h-4 w-4 text-zinc-500 dark:text-zinc-400" />
+                    <div className="relative flex items-center">
+                        <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-zinc-400 pointer-events-none" />
                         <input
-                            id="password"
-                            type="password"
+                            id="verify-password"
+                            type={showPassword ? "text" : "password"}
                             name="password"
                             required
                             placeholder="Enter your password"
-                            className="flex h-10 w-full rounded-md border border-zinc-200 dark:border-zinc-800 bg-background px-3 py-2 pl-10 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors"
+                            className="w-full h-11 pl-10 pr-11 rounded-lg border border-zinc-300 dark:border-zinc-700 bg-background text-foreground text-sm placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all shadow-sm"
                         />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 hover:text-foreground transition-colors p-1"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </button>
                     </div>
                 </div>
 
-                <div className="pt-2">
+                {/* Actions Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3">
                     <button
                         type="submit"
                         disabled={loading}
-                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 h-10 px-4 py-2 w-full"
+                        className="h-11 px-4 rounded-lg bg-yellow-500 hover:bg-yellow-400 text-zinc-950 font-semibold text-sm transition-all shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        {loading ? "Verifying..." : "Verify Account"}
+                        {loading ? (
+                            <>
+                                <Loader2 className="h-4 w-4 animate-spin" />
+                                <span>Verifying...</span>
+                            </>
+                        ) : (
+                            <span>Verify Account</span>
+                        )}
                     </button>
-                    
-                    {isModal && (
-                        <button
-                            type="button"
-                            onClick={handleClose}
-                            className="mt-3 inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-zinc-200 dark:border-zinc-800 bg-background hover:bg-zinc-100 hover:text-zinc-900 dark:hover:bg-zinc-800 dark:hover:text-zinc-50 h-10 px-4 py-2 w-full"
-                        >
-                            Cancel
-                        </button>
-                    )}
+
+                    <button
+                        type="button"
+                        onClick={handleBackOrClose}
+                        className="h-11 px-4 rounded-lg border border-zinc-300 dark:border-zinc-700 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-foreground font-medium text-sm transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                    >
+                        <ArrowLeft className="h-4 w-4" />
+                        <span>{isModal ? "Cancel" : "Back"}</span>
+                    </button>
                 </div>
 
-                <div className="text-center text-xs sm:text-sm text-zinc-500 dark:text-zinc-400 mt-6 px-2">
+                {/* Footer terms */}
+                <p className="text-xs text-zinc-500 dark:text-zinc-400 text-center mt-5 leading-relaxed">
                     By clicking continue, you agree to our{" "}
-                    <a href="/legal/terms" className="underline underline-offset-4 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
+                    <a href="/legal/terms" className="text-yellow-600 dark:text-yellow-400 hover:underline font-medium">
                         Terms of Service
                     </a>{" "}
                     and{" "}
-                    <a href="/legal/privacy" className="underline underline-offset-4 hover:text-zinc-900 dark:hover:text-zinc-50 transition-colors">
+                    <a href="/legal/privacy" className="text-yellow-600 dark:text-yellow-400 hover:underline font-medium">
                         Privacy Policy
-                    </a>
-                    .
-                </div>
+                    </a>.
+                </p>
             </form>
         </div>
     );
@@ -144,15 +176,15 @@ export default function Verify({ handleClose, setPage }) {
         return (
             <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm overflow-y-auto">
                 <div className="flex min-h-full items-center justify-center p-4 py-10 sm:p-6">
-                    {content}
+                    {cardContent}
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4 py-10 bg-zinc-50 dark:bg-zinc-950 overflow-y-auto">
-            {content}
+        <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 bg-zinc-50 dark:bg-zinc-950 overflow-y-auto">
+            {cardContent}
         </div>
     );
 }
