@@ -62,9 +62,14 @@ import {
     GET_SELLER_PROFILE_REQUEST,
     GET_SELLER_PROFILE_SUCCESS,
     GET_SELLER_PROFILE_FAILURE,
+
+    GET_SELLER_APPLICATIONS_REQUEST,
+    GET_SELLER_APPLICATIONS_SUCCESS,
+    GET_SELLER_APPLICATIONS_FAILURE,
 } from "./actiontype";
 
 const initalstate = {
+    sellerApplications: [],
     sellerIdAndShopIdList: null,
     totalShopCount: null,
     sellerCount: null,
@@ -96,7 +101,11 @@ export default function sellerReducer(state = initalstate, action) {
         case REGISTER_SELLER_REQUEST:
         case LOGIN_SELLER_REQUEST:
         case LOGOUT_SELLER_REQUEST:
+        case GET_SELLER_APPLICATIONS_REQUEST:
             return { ...state, loading: true }
+
+        case GET_SELLER_APPLICATIONS_SUCCESS:
+            return { ...state, sellerApplications: action.payload, loading: false }
 
         case GET_SELLER_ID_AND_SHOP_ID_LIST_SUCCESS:
             return { ...state, sellerIdAndShopIdList: action.payload, loading: false }
@@ -148,6 +157,7 @@ export default function sellerReducer(state = initalstate, action) {
         case REGISTER_SELLER_FAILURE:
         case LOGIN_SELLER_FAILURE:
         case LOGOUT_SELLER_FAILURE:
+        case GET_SELLER_APPLICATIONS_FAILURE:
             return { ...state, error: action.payload, loading: false }
 
 

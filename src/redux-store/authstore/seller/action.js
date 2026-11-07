@@ -59,6 +59,9 @@ import {
     LOGOUT_SELLER_REQUEST,
     LOGOUT_SELLER_SUCCESS,
 
+    GET_SELLER_APPLICATIONS_REQUEST,
+    GET_SELLER_APPLICATIONS_SUCCESS,
+    GET_SELLER_APPLICATIONS_FAILURE,
 } from "./actiontype";
 
 import Cookies from "js-cookie";
@@ -787,4 +790,43 @@ export const RegisterSeller = (data, token) => async (dispatch) => {
     }
 
 }
+
+export const getSellerApplications = (token) => async (dispatch) => {
+    const authToken = token || Cookies.get("verifyToken") || Cookies.get("sellerToken") || Cookies.get("usertoken");
+    try {
+        dispatch({
+            type: GET_SELLER_APPLICATIONS_REQUEST
+        });
+
+        const res = await axios.post(
+            `${backend_url}/auth/seller/find/applications`,
+            {},
+            {
+                headers: {
+                    Authorization: `Bearer ${authToken}`
+                }
+            }
+        );
+
+        dispatch({
+            type: GET_SELLER_APPLICATIONS_SUCCESS,
+            payload: res.data || []
+        });
+        return { success: true, data: res.data || [] };
+    } catch (e) {
+        let errorMsg =
+            e.response?.data?.message ||
+            e.response?.data?.error ||
+            (typeof e.response?.data === "string" ? e.response?.data : null) ||
+            e.message ||
+            "Failed to load seller applications";
+
+        dispatch({
+            type: GET_SELLER_APPLICATIONS_FAILURE,
+            payload: errorMsg
+        });
+        return { success: false, error: errorMsg };
+    }
+};
+
 
