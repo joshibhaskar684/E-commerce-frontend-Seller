@@ -698,23 +698,47 @@ export const LoginSeller = (data) => async (dispatch) => {
             {
                 withCredentials: true
             });
+
+        const successMsg = res.data?.message || "Seller login successful! Welcome back.";
+        toast.success(successMsg);
+
         dispatch({
             type: LOGIN_SELLER_SUCCESS,
             payload: res.data
         })
+        return { success: true, message: successMsg, data: res.data };
     } catch (e) {
-        toast.error(e.message, "error");
+        let errorMsg =
+            e.response?.data?.message ||
+            e.response?.data?.error ||
+            (typeof e.response?.data === "string" ? e.response?.data : null);
+
+        if (!errorMsg) {
+            if (e.response?.status === 401) {
+                errorMsg = "Invalid email or password. Please try again.";
+            } else if (e.response?.status === 400) {
+                errorMsg = "Seller login failed. Ensure your account has active seller access.";
+            } else if (e.message === "Network Error") {
+                errorMsg = "Unable to connect to server. Please check your internet connection.";
+            } else {
+                errorMsg = e.message || "Seller login failed. Please try again.";
+            }
+        } else if (typeof errorMsg === "string" && errorMsg.toLowerCase().includes("bad credentials")) {
+            errorMsg = "Invalid email or password. Please try again.";
+        }
+
+        toast.error(errorMsg);
         dispatch({
             type: LOGIN_SELLER_FAILURE,
-            payload: e.message
+            payload: errorMsg
         })
+        return { success: false, error: errorMsg };
     }
 
 }
 
 
 export const RegisterSeller = (data, token) => async (dispatch) => {
-
 
     try {
         dispatch({
@@ -729,25 +753,37 @@ export const RegisterSeller = (data, token) => async (dispatch) => {
                 }
             });
 
+        const successMsg = res.data?.message || "Seller registered successfully! Application submitted for review.";
+        toast.success(successMsg);
+
         dispatch({
             type: REGISTER_SELLER_SUCCESS,
             payload: res.data
         })
-        toast.success("Seller Registered successfully");
-
+        return { success: true, message: successMsg, data: res.data };
 
     } catch (e) {
-        const message =
+        let errorMsg =
+            e.response?.data?.message ||
             e.response?.data?.error ||
-            e.response?.data ||
-            e.message ||
-            "Unknown error";
+            (typeof e.response?.data === "string" ? e.response?.data : null);
 
-        toast.error(message);
+        if (!errorMsg) {
+            if (e.response?.status === 409) {
+                errorMsg = "A seller account already exists with these details.";
+            } else if (e.message === "Network Error") {
+                errorMsg = "Unable to connect to server. Please check your internet connection.";
+            } else {
+                errorMsg = e.message || "Seller registration failed. Please try again.";
+            }
+        }
+
+        toast.error(errorMsg);
         dispatch({
             type: REGISTER_SELLER_FAILURE,
-            payload: e.message
+            payload: errorMsg
         })
+        return { success: false, error: errorMsg };
     }
 
 }

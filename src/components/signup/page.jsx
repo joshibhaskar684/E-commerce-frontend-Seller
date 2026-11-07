@@ -1,22 +1,27 @@
 "use client";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, AlertCircle } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { RegisterUser } from "@/redux-store/authstore/user/action";
 
 export default function Signup({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState("");
+
+    const dispatch = useDispatch();
 
     const validate = (data) => {
         let errs = {};
         if (!data.name || data.name.trim().length < 3) errs.name = "Name must be at least 3 characters.";
         if (!data.mobile || !/^[0-9]{10}$/.test(data.mobile)) errs.mobile = "Mobile must be a valid 10-digit number.";
         if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) errs.email = "Please enter a valid email address.";
-        if (!data.password || data.password.length < 8) errs.password = "Password must be at least 8 characters.";
+        if (!data.password || data.password.length < 6) errs.password = "Password must be at least 6 characters.";
         return errs;
     };
 
-    const handlesubmit = (e) => {
+    const handlesubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData(e.target);
         const data = {
@@ -32,10 +37,25 @@ export default function Signup({ handleClose, setPage }) {
             return;
         }
         setErrors({});
+        setServerError("");
         setLoading(true);
-        // Simulate API call
-        setTimeout(() => setLoading(false), 1000);
-    }
+
+        try {
+            const result = await dispatch(RegisterUser(data));
+            if (result?.success) {
+                // Switch to login tab so user can immediately sign in
+                if (typeof setPage === "function") {
+                    setPage("login");
+                }
+            } else if (result?.error) {
+                setServerError(result.error);
+            }
+        } catch (err) {
+            setServerError("An unexpected error occurred. Please try again.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm overflow-y-auto">
@@ -59,6 +79,13 @@ export default function Signup({ handleClose, setPage }) {
                         </p>
                     </div>
 
+                    {serverError && (
+                        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-sm flex items-start gap-2">
+                            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                            <span>{serverError}</span>
+                        </div>
+                    )}
+
                     <form onSubmit={handlesubmit} className="space-y-4">
                         <div className="space-y-2 text-left">
                             <label className="text-sm font-medium leading-none text-foreground">Name</label>
@@ -78,7 +105,7 @@ export default function Signup({ handleClose, setPage }) {
                                 type="text"
                                 name="mobile"
                                 required
-                                placeholder="Enter mobile number"
+                                placeholder="Enter 10-digit mobile number"
                                 className={`flex h-10 w-full rounded-md border ${errors.mobile ? 'border-red-500' : 'border-zinc-200 dark:border-zinc-800'} bg-background px-3 py-2 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors`}
                             />
                             {errors.mobile && <span className="text-red-500 text-xs">{errors.mobile}</span>}
@@ -102,7 +129,7 @@ export default function Signup({ handleClose, setPage }) {
                                 type="password"
                                 name="password"
                                 required
-                                placeholder="Create a password"
+                                placeholder="Create a password (min. 6 characters)"
                                 className={`flex h-10 w-full rounded-md border ${errors.password ? 'border-red-500' : 'border-zinc-200 dark:border-zinc-800'} bg-background px-3 py-2 text-sm text-foreground ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-zinc-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 dark:focus-visible:ring-zinc-300 transition-colors`}
                             />
                             {errors.password && <span className="text-red-500 text-xs">{errors.password}</span>}
@@ -115,7 +142,7 @@ export default function Signup({ handleClose, setPage }) {
                                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-zinc-950 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 hover:bg-zinc-900/90 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 h-10 px-4 py-2 w-full"
                             >
                                 {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                                {loading ? "Submitting..." : "Sign Up"}
+                                {loading ? "Creating account..." : "Sign Up"}
                             </button>
                         </div>
 

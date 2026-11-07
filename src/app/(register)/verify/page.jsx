@@ -3,10 +3,11 @@ import { VerifyForSeller } from "@/redux-store/authstore/verify/action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Mail, Lock, Loader2, X } from "lucide-react";
+import { Mail, Lock, Loader2, X, AlertCircle } from "lucide-react";
 
 export default function Verify({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
+    const [serverError, setServerError] = useState("");
     const dispatch = useDispatch();
     const router = useRouter();
     
@@ -16,17 +17,27 @@ export default function Verify({ handleClose, setPage }) {
         const data = {
             email: formData.get('email'),
             password: formData.get('password')
-        }
+        };
+
         setLoading(true);
+        setServerError("");
+
         try {
-            await dispatch(VerifyForSeller(data));
+            const res = await dispatch(VerifyForSeller(data));
+            if (res?.success) {
+                if (typeof handleClose === 'function') {
+                    handleClose();
+                }
+                router.push("/register");
+            } else if (res?.error) {
+                setServerError(res.error);
+            }
         } catch (e) {
-            console.error(e);
+            setServerError("Verification failed. Please check your credentials.");
         } finally {
             setLoading(false);
-            window.location.reload();
         }
-    }
+    };
 
     const isModal = typeof handleClose === 'function';
 
@@ -50,6 +61,13 @@ export default function Verify({ handleClose, setPage }) {
                     Enter your email and password to verify your account
                 </p>
             </div>
+
+            {serverError && (
+                <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-sm flex items-start gap-2">
+                    <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                    <span>{serverError}</span>
+                </div>
+            )}
 
             <form onSubmit={handlesubmit} className="space-y-4">
                 <div className="space-y-2 text-left">

@@ -20,30 +20,51 @@ import { toast } from "react-toastify";
 const backend_url = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 
-export const LoginADMIN=(data)=>async(dispatch)=>{
- 
-    try{
+export const LoginADMIN = (data) => async (dispatch) => {
+    try {
         dispatch({
-            type:LOGIN_ADMIN_REQUEST
-        })
-        const res=await axios.post(`${backend_url}/auth/login/admin`,
+            type: LOGIN_ADMIN_REQUEST
+        });
+        const res = await axios.post(`${backend_url}/auth/login/admin`,
             data,
             {
-  withCredentials: true
-});
+                withCredentials: true
+            });
+
+        const successMsg = res.data?.message || "Admin login successful! Welcome back.";
+        toast.success(successMsg);
+
         dispatch({
-            type:LOGIN_ADMIN_SUCCESS,
-            payload:res.data
-        })
-    }catch(e){
-        toast.error(e.message,"error");
+            type: LOGIN_ADMIN_SUCCESS,
+            payload: res.data
+        });
+        return { success: true, message: successMsg, data: res.data };
+    } catch (e) {
+        let errorMsg =
+            e.response?.data?.message ||
+            e.response?.data?.error ||
+            (typeof e.response?.data === "string" ? e.response?.data : null);
+
+        if (!errorMsg) {
+            if (e.response?.status === 401) {
+                errorMsg = "Invalid email or password. Please try again.";
+            } else if (e.response?.status === 400 || e.response?.status === 403) {
+                errorMsg = "Admin login failed. Your account does not have administrator privileges.";
+            } else if (e.message === "Network Error") {
+                errorMsg = "Unable to connect to server. Please check your internet connection.";
+            } else {
+                errorMsg = e.message || "Admin login failed. Please try again.";
+            }
+        } else if (typeof errorMsg === "string" && errorMsg.toLowerCase().includes("bad credentials")) {
+            errorMsg = "Invalid email or password. Please try again.";
+        }
+
+        toast.error(errorMsg);
         dispatch({
-            type:LOGIN_ADMIN_FAILURE,
-            payload:e.message
-        })
-    }
-    finally{
-        //  window.location.reload();
+            type: LOGIN_ADMIN_FAILURE,
+            payload: errorMsg
+        });
+        return { success: false, error: errorMsg };
     }
 }
 

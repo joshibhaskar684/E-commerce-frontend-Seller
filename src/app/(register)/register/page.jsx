@@ -53,7 +53,7 @@ export default function SellerForm() {
     e.preventDefault();
 
     if (!form.panNumber) {
-      alert("PAN Number is required");
+      toast.warn("PAN Number is required to register as a seller.");
       return;
     }
 
@@ -61,17 +61,18 @@ export default function SellerForm() {
 
     const token = Cookies.get("verifyToken");
     if (!token) {
-      toast.error("Error! Email Verification Required");
+      toast.error("Email verification is required before seller registration.");
       setLoading(false);
       return;
     }
     
     try {
-      await dispatch(RegisterSeller(form, token));
-      handleClose(); // Optionally close modal on success
+      const res = await dispatch(RegisterSeller(form, token));
+      if (res?.success) {
+        handleClose();
+      }
     } catch (error) {
       console.error(error);
-      alert("Failed to submit seller");
     } finally {
       setLoading(false);
     }

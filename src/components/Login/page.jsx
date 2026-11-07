@@ -4,18 +4,19 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaGoogle } from "react-icons/fa";
 import { useDispatch } from "react-redux";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, AlertCircle } from "lucide-react";
 
 export default function Login({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState("");
     const dispatch = useDispatch();
     const router = useRouter();   
 
     const validate = (data) => {
         let errs = {};
         if (!data.email || !/^\S+@\S+\.\S+$/.test(data.email)) errs.email = "Please enter a valid email address.";
-        if (!data.password || data.password.length < 8) errs.password = "Password must be at least 8 characters.";
+        if (!data.password || data.password.length < 6) errs.password = "Password must be at least 6 characters.";
         return errs;
     };
 
@@ -25,7 +26,7 @@ export default function Login({ handleClose, setPage }) {
         const data = {
             email: formData.get('email'),
             password: formData.get('password')
-        }
+        };
 
         const validationErrors = validate(data);
         if (Object.keys(validationErrors).length > 0) {
@@ -33,17 +34,25 @@ export default function Login({ handleClose, setPage }) {
             return;
         }
         setErrors({});
-
+        setServerError("");
         setLoading(true);
+
         try {
-            await dispatch(LoginSeller(data));
+            const res = await dispatch(LoginSeller(data));
+            if (res?.success) {
+                if (typeof handleClose === "function") {
+                    handleClose();
+                }
+                window.location.reload();
+            } else if (res?.error) {
+                setServerError(res.error);
+            }
         } catch (e) {
-            console.error(e);
+            setServerError("Login failed. Please check your credentials.");
         } finally {
             setLoading(false);
-            window.location.reload();
         }
-    }
+    };
 
     return (
         <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm overflow-y-auto">
@@ -66,6 +75,13 @@ export default function Login({ handleClose, setPage }) {
                             Enter your credentials to login
                         </p>
                     </div>
+
+                    {serverError && (
+                        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-sm flex items-start gap-2">
+                            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                            <span>{serverError}</span>
+                        </div>
+                    )}
 
                     <form onSubmit={handlesubmit} className="space-y-4">
                         <div className="space-y-2 text-left">

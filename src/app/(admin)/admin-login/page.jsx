@@ -1,134 +1,104 @@
 "use client";
 import { LoginADMIN } from "@/redux-store/authstore/admin/action";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaGoogle } from "react-icons/fa";
 import { useDispatch } from "react-redux";
+import { AlertCircle, Loader2 } from "lucide-react";
 
 export default function Page({ handleClose, setPage }) {
     const [loading, setLoading] = useState(false);
-    const router=useRouter();
-
-
+    const [serverError, setServerError] = useState("");
+    const router = useRouter();
     const dispatch = useDispatch();
-        const handlesubmit = async (e) => {
-            e.preventDefault();
-            const formData = new FormData(e.target);
-            const data = {
-                email: formData.get('email'),
-                password: formData.get('password'),
-               
+
+    const handlesubmit = async (e) => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const data = {
+            email: formData.get('email'),
+            password: formData.get('password'),
+        };
+
+        setLoading(true);
+        setServerError("");
+
+        try {
+            const res = await dispatch(LoginADMIN(data));
+            if (res?.success) {
+                router.push("/admin");
+            } else if (res?.error) {
+                setServerError(res.error);
             }
-            setLoading(true);
-            try {
-                await dispatch(LoginADMIN(data));
-            } catch (e) {
-                
-            } finally {
-                setLoading(false);
-                router.push("/admin")
-            }
-    
+        } catch (e) {
+            setServerError("Login failed. Please check your credentials.");
+        } finally {
+            setLoading(false);
         }
-    // const handlesubmit = (e) => {
-    //     e.preventDefault();
-    //     console.log("ghhghgfhf")
-    //     const formData = new FormData(e.target);
-    //     const data = {
-    //         name: formData.get('name'),
-    //         mobile: formData.get('mobile'),
-    //         email: formData.get('email'),
-    //         password: formData.get('password')
-    //     }
-    //     if(data.email=="joshibhaskar684@gmail.com"&&data.password==="admin123"){
-    //         Cookies.set("sellerToken", "2434");
-    //     }
-    //     router.push("/seller");
-    // }
+    };
 
     return (
         <div className="fixed inset-0 bg-background z-50 overflow-y-auto">
-    <div className="flex min-h-full items-center justify-center p-4">
-            <div className="bg-background/70 w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-300 ">
+            <div className="flex min-h-full items-center justify-center p-4">
+                <div className="bg-background/70 w-full max-w-md rounded-2xl shadow-2xl p-6 sm:p-8 transition-all duration-300 border">
+                    <h1 className="text-foreground text-2xl sm:text-3xl font-bold text-center mb-6">
+                        Admin Login
+                    </h1>
 
-                <h1 className="text-foreground text-2xl sm:text-3xl font-bold text-center mb-6">
-                   Admin Login
-                </h1>
+                    {serverError && (
+                        <div className="mb-4 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400 text-sm flex items-start gap-2">
+                            <AlertCircle className="h-4 w-4 mt-0.5 shrink-0" />
+                            <span>{serverError}</span>
+                        </div>
+                    )}
 
-                <form onSubmit={handlesubmit} className="flex flex-col gap-4 w-full">
+                    <form onSubmit={handlesubmit} className="flex flex-col gap-4 w-full">
+                        <div className="flex flex-col gap-1">
+                            <label className="text-foreground text-sm">Email</label>
+                            <input
+                                type="email"
+                                name="email"
+                                required
+                                placeholder="Enter your email"
+                                className="px-4 py-2 rounded-lg border border-foreground/40 bg-transparent text-foreground focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                            />
+                        </div>
 
-                    <div className="flex flex-col gap-1">
-                        <label className="text-foreground text-sm">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            required
-                            placeholder="Enter your email"
-                            className="px-4 py-2 rounded-lg border border-foreground/40 bg-transparent text-foreground focus:outline-none focus:ring-2 focus:ring-yellow transition"
-                        />
-                    </div>
+                        <div className="flex flex-col gap-1">
+                            <label className="text-foreground text-sm">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                required
+                                placeholder="Enter your password"
+                                className="px-4 py-2 rounded-lg border border-foreground/40 bg-transparent text-foreground focus:outline-none focus:ring-2 focus:ring-yellow transition"
+                            />
+                        </div>
 
-                    <div className="flex flex-col gap-1">
-                        <label className="text-foreground text-sm">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            required
-                            placeholder="Enter your password"
-                            className="px-4 py-2 rounded-lg border border-foreground/40 bg-transparent text-foreground focus:outline-none focus:ring-2 focus:ring-yellow transition"
-                        />
-                    </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+                            <button
+                                type="submit"
+                                disabled={loading}
+                                className={loading ? "py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold opacity-50 transition flex items-center justify-center gap-2" : "py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold hover:opacity-90 transition"}
+                            >
+                                {loading && <Loader2 className="h-4 w-4 animate-spin" />}
+                                {loading ? "Signing in..." : "Submit"}
+                            </button>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
-                        <button
-                            type="submit"
-                            disabled={loading}
-                            className={loading?"py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold opacity-50 transition":"py-2 cursor-pointer rounded-lg border border-yellow-200 bg-yellow-500 text-foreground font-semibold hover:opacity-90 transition"}
-                        >
-                            {loading ? "Submitting..." : "Submit"}
-                        </button>
+                            <button
+                                type="button"
+                                onClick={() => router.back()}
+                                className="py-2 rounded-lg border cursor-pointer border-foreground text-foreground hover:bg-background hover:text-foreground transition"
+                            >
+                                Back
+                            </button>
+                        </div>
 
-                        <button
-                            type="button"
-                            onClick={() => router.back()}
-                            className="py-2 rounded-lg border cursor-pointer border-foreground text-foreground hover:bg-background hover:text-foreground transition"
-                        >
-                           Back
-                        </button>
-                    </div>
-{/* 
-                    <div className="relative flex items-center my-4">
-                        <div className="flex-grow border-t border-background/30"></div>
-                        <span className="mx-3 text-background text-sm">OR</span>
-                        <div className="flex-grow border-t border-background/30"></div>
-                    </div> */}
-
-                    {/* <button
-                        type="button"
-                        className="py-2 cursor-pointer rounded-lg border border-background text-background flex items-center justify-center gap-2 hover:bg-background hover:text-foreground transition"
-                    >
-                        <FaGoogle />
-                        Continue with Google
-                    </button> */}
-                     <p className="text-xs text-foreground/70 text-center mt-4 ">
-                        By clicking, you agree to our<a href="/legal/terms" className=" text-yellow-400 cursor-pointer hover:underline"> terms & conditions </a>  and <a className=" text-yellow-400 cursor-pointer hover:underline" href="legal/privacy">privacy policy</a>
-                    </p>
-
-                    {/* <p className="text-sm text-background text-center">
-                        Create New Account?{" "}
-                        <a
-                          href="/register"
-                            className="text-yellow-400 cursor-pointer hover:underline"
-                        >
-                            Create Account
-                        </a>
-                    </p> */}
-
-                </form>
-
+                        <p className="text-xs text-foreground/70 text-center mt-4">
+                            By clicking, you agree to our <a href="/legal/terms" className="text-yellow-400 cursor-pointer hover:underline">terms & conditions</a> and <a className="text-yellow-400 cursor-pointer hover:underline" href="/legal/privacy">privacy policy</a>
+                        </p>
+                    </form>
+                </div>
             </div>
-        </div>
         </div>
     );
 }
