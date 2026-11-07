@@ -104,23 +104,20 @@ export const getProducts = (data) => async (dispatch) => {
 
 
 export const getProductsByIdSeller = (data) => async (dispatch) => {
-    dispatch({ type: GET_PRODUCTS_BY_ID_REQUEST});
-    const id=data.productId;
-    const token = data.token;
+    dispatch({ type: GET_PRODUCTS_BY_ID_REQUEST });
+    const id = data.productId || data.id;
+    const token = data.token || Cookies.get("sellerToken") || Cookies.get("usertoken");
     try {
-        // const token = Cookies.get("token");
-        const respose= await axios.get(`${backend_url}/products/seller/${id}`,
-             {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },}
-        );
+        const respose = await axios.get(`${backend_url}/products/seller/${id}`, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         dispatch({ type: GET_PRODUCTS_BY_ID_SUCCESS, payload: respose.data });
-       
+        return { success: true, data: respose.data };
     } catch (error) {
-        toast.error("Failed to fetch Product By ID",error.message);
-        dispatch({ type:GET_PRODUCTS_BY_ID_FAILURE, payload: error.message });
-          }
+        const errorMsg = error.response?.data?.message || error.message || "Failed to fetch product details";
+        dispatch({ type: GET_PRODUCTS_BY_ID_FAILURE, payload: errorMsg });
+        return { success: false, error: errorMsg };
+    }
 };
 
 export const getProductsById = (data) => async (dispatch) => {
@@ -142,44 +139,41 @@ export const getProductsById = (data) => async (dispatch) => {
           }
 };
 export const updateProductsById = (data) => async (dispatch) => {
-    dispatch({ type:UPDATE_PRODUCTS_REQUEST});
-    const id=data.id;
+    dispatch({ type: UPDATE_PRODUCTS_REQUEST });
+    const id = data?.id || data?.productId;
+    const token = data?.token || Cookies.get("sellerToken") || Cookies.get("usertoken");
     try {
-        // const token = Cookies.get("token");
-        const respose= await axios.put(`${backend_url}/products/update/${id}`, data
-            //  {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,
-            // },}
-        );
+        const respose = await axios.put(`${backend_url}/products/update/${id}`, data, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
         dispatch({ type: UPDATE_PRODUCTS_SUCCESS, payload: respose.data });
-       
+        toast.success("Product updated successfully");
+        return true;
     } catch (error) {
-        toast.error("Failed to UPDATE Product By ID",error.message);
-        dispatch({ type:UPDATE_PRODUCTS_FAILURE, payload: error.message });
-          }
+        const errorMsg = error.response?.data?.message || error.message || "Failed to update product";
+        toast.error(errorMsg);
+        dispatch({ type: UPDATE_PRODUCTS_FAILURE, payload: errorMsg });
+        return false;
+    }
 };
 
 export const deleteProductsById = (data) => async (dispatch) => {
-    dispatch({ type:DELETE_PRODUCTS_REQUEST});
-    const id=data.id;
+    dispatch({ type: DELETE_PRODUCTS_REQUEST });
+    const id = data?.id || data?.productId;
+    const token = data?.token || Cookies.get("sellerToken") || Cookies.get("usertoken");
     try {
-        // const token = Cookies.get("token");
-        const respose= await axios.put(`${backend_url}/products/delete/${id}`, data
-            //  {
-            // headers: {
-            //     Authorization: `Bearer ${token}`,
-            // },}
-        );
+        const respose = await axios.put(`${backend_url}/products/delete/${id}`, data, {
+            headers: token ? { Authorization: `Bearer ${token}` } : {}
+        });
         dispatch({ type: DELETE_PRODUCTS_SUCCESS, payload: respose.data });
         toast.success("Product deleted successfully");
         return true;
-       
     } catch (error) {
-        toast.error("Failed to delete Product By ID",error.message);
-        dispatch({ type:DELETE_PRODUCTS_FAILURE, payload: error.message });
+        const errorMsg = error.response?.data?.message || error.message || "Failed to delete product";
+        toast.error(errorMsg);
+        dispatch({ type: DELETE_PRODUCTS_FAILURE, payload: errorMsg });
         return false;
-          }
+    }
 };
 export const getCategorytree = (data) => async (dispatch) => {
    
