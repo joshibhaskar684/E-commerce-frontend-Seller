@@ -2,11 +2,22 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
 import { RegisterSeller, getSellerApplications } from "@/redux-store/authstore/seller/action";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import RegisterComponent from "@/seller-components/RegisterComponent/RegisterComponent";
-import { Loader2, RefreshCw, FileText, CheckCircle2, Clock, AlertCircle, ShieldAlert } from "lucide-react";
+import {
+  Loader2,
+  RefreshCw,
+  FileText,
+  CheckCircle2,
+  Clock,
+  AlertCircle,
+  ShieldAlert,
+  ArrowRight,
+  Store,
+} from "lucide-react";
 
 export default function SellerForm() {
   const [loading, setLoading] = useState(false);
@@ -16,6 +27,10 @@ export default function SellerForm() {
   const { sellerApplications = [], loading: applicationsLoading } = useSelector(
     (state) => state.sellerReducer || {}
   );
+
+  const isApproved =
+    Array.isArray(sellerApplications) &&
+    sellerApplications.some((app) => String(app.status || "").toUpperCase() === "APPROVED");
 
   const [form, setForm] = useState({
     businessName: "",
@@ -184,7 +199,7 @@ export default function SellerForm() {
                 Track your seller account applications and submit new requests.
               </p>
             </div>
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 type="button"
                 onClick={() => loadApplications(true)}
@@ -195,6 +210,19 @@ export default function SellerForm() {
                 <RefreshCw className={`h-4 w-4 ${refreshing || applicationsLoading ? "animate-spin" : ""}`} />
                 <span className="hidden sm:inline">Refresh</span>
               </button>
+
+              {/* Go to Seller Page button if user is approved */}
+              {isApproved && (
+                <Link
+                  href="/seller"
+                  className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-semibold transition-colors bg-yellow-500 hover:bg-yellow-400 text-zinc-950 h-9 px-4 py-2 shadow-sm cursor-pointer"
+                >
+                  <Store className="h-4 w-4" />
+                  <span>Go to Seller Page</span>
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+              )}
+
               <button
                 onClick={handleOpen}
                 className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-zinc-950 disabled:pointer-events-none disabled:opacity-50 bg-zinc-900 text-zinc-50 shadow hover:bg-zinc-900/90 h-9 px-4 py-2 dark:bg-zinc-50 dark:text-zinc-900 dark:hover:bg-zinc-50/90 dark:focus-visible:ring-zinc-300 cursor-pointer"
@@ -203,6 +231,30 @@ export default function SellerForm() {
               </button>
             </div>
           </div>
+
+          {/* Approved Success Banner */}
+          {isApproved && (
+            <div className="rounded-xl border border-green-200 bg-green-50 p-4 sm:p-5 dark:border-green-900/50 dark:bg-green-950/20 text-green-900 dark:text-green-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-sm animate-in fade-in duration-300">
+              <div className="flex items-start sm:items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/50 flex items-center justify-center text-green-700 dark:text-green-300 shrink-0 mt-0.5 sm:mt-0">
+                  <CheckCircle2 className="h-5 w-5" />
+                </div>
+                <div>
+                  <h4 className="font-semibold text-base">Your Seller Application is Approved!</h4>
+                  <p className="text-sm text-green-800/80 dark:text-green-300/80 mt-0.5">
+                    Your seller account has been verified and approved. You can now access your seller dashboard, create shops, and manage inventory.
+                  </p>
+                </div>
+              </div>
+              <Link
+                href="/seller"
+                className="inline-flex items-center gap-2 rounded-lg bg-green-600 hover:bg-green-700 text-white font-semibold text-sm px-4 py-2.5 transition-colors shadow-sm shrink-0 w-full sm:w-auto justify-center"
+              >
+                <span>Go to Seller Page</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          )}
 
           {/* Real Data Applications Table Section */}
           <div className="rounded-xl border border-zinc-200 bg-white text-zinc-950 shadow-sm dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-50 overflow-hidden">
@@ -245,34 +297,51 @@ export default function SellerForm() {
                       <th className="h-12 px-6 text-left align-middle font-medium text-zinc-500 dark:text-zinc-400">Date Applied</th>
                       <th className="h-12 px-6 text-left align-middle font-medium text-zinc-500 dark:text-zinc-400">Status</th>
                       <th className="h-12 px-6 text-left align-middle font-medium text-zinc-500 dark:text-zinc-400">Remarks / Reason</th>
+                      <th className="h-12 px-6 text-right align-middle font-medium text-zinc-500 dark:text-zinc-400">Action</th>
                     </tr>
                   </thead>
                   <tbody className="[&_tr:last-child]:border-0 divide-y divide-zinc-200 dark:divide-zinc-800">
-                    {sellerApplications.map((req, idx) => (
-                      <tr
-                        key={req.applicationId || idx}
-                        className="transition-colors hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
-                      >
-                        <td className="p-6 align-middle font-medium">
-                          #{req.applicationId || "N/A"}
-                        </td>
-                        <td className="p-6 align-middle text-zinc-600 dark:text-zinc-300">
-                          {formatDate(req.submissionDate)}
-                        </td>
-                        <td className="p-6 align-middle">
-                          {renderStatusBadge(req.status)}
-                        </td>
-                        <td className="p-6 align-middle text-sm text-zinc-600 dark:text-zinc-400 max-w-xs">
-                          {req.reason ? (
-                            <span className={req.status?.toUpperCase() === "REJECTED" ? "text-red-600 dark:text-red-400" : ""}>
-                              {req.reason}
-                            </span>
-                          ) : (
-                            <span className="text-zinc-400 italic">No notes provided</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
+                    {sellerApplications.map((req, idx) => {
+                      const isReqApproved = String(req.status || "").toUpperCase() === "APPROVED";
+                      return (
+                        <tr
+                          key={req.applicationId || idx}
+                          className="transition-colors hover:bg-zinc-100/50 dark:hover:bg-zinc-800/50"
+                        >
+                          <td className="p-6 align-middle font-medium">
+                            #{req.applicationId || "N/A"}
+                          </td>
+                          <td className="p-6 align-middle text-zinc-600 dark:text-zinc-300">
+                            {formatDate(req.submissionDate)}
+                          </td>
+                          <td className="p-6 align-middle">
+                            {renderStatusBadge(req.status)}
+                          </td>
+                          <td className="p-6 align-middle text-sm text-zinc-600 dark:text-zinc-400 max-w-xs">
+                            {req.reason ? (
+                              <span className={req.status?.toUpperCase() === "REJECTED" ? "text-red-600 dark:text-red-400" : ""}>
+                                {req.reason}
+                              </span>
+                            ) : (
+                              <span className="text-zinc-400 italic">No notes provided</span>
+                            )}
+                          </td>
+                          <td className="p-6 align-middle text-right">
+                            {isReqApproved ? (
+                              <Link
+                                href="/seller"
+                                className="inline-flex items-center gap-1.5 rounded-md bg-yellow-500 hover:bg-yellow-400 text-zinc-950 px-3 py-1.5 text-xs font-semibold transition-colors shadow-xs"
+                              >
+                                <span>Go to Seller Page</span>
+                                <ArrowRight className="h-3.5 w-3.5" />
+                              </Link>
+                            ) : (
+                              <span className="text-zinc-400 text-xs">-</span>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>
